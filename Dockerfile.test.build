@@ -1,0 +1,10 @@
+FROM microsoft/aspnetcore-build:2.0.2
+WORKDIR /app
+
+COPY Com.Ambassador.Service.Purchasing.Lib/*.csproj ./Com.Ambassador.Service.Purchasing.Lib/
+COPY Com.Ambassador.Service.Purchasing.WebApi/*.csproj ./Com.Ambassador.Service.Purchasing.WebApi/
+RUN dotnet restore ./Com.Ambassador.Service.Purchasing.WebApi/
+
+COPY Com.Ambassador.Service.Purchasing.Lib/. ./Com.Ambassador.Service.Purchasing.Lib/
+COPY Com.Ambassador.Service.Purchasing.WebApi/. ./Com.Ambassador.Service.Purchasing.WebApi/
+RUN dotnet publish ./Com.Ambassador.Service.Purchasing.WebApi/ --output /out/ --configuration Release
