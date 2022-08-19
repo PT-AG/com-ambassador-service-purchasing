@@ -144,11 +144,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             double maxtotal = 0;
             decimal totalcorrection = 0;
             Dictionary<string, double> units = new Dictionary<string, double>();
-            units.Add("C1A", 0);
-            units.Add("C1B", 0);
-            units.Add("C2A", 0);
-            units.Add("C2B", 0);
-            units.Add("C2C", 0);
+            units.Add("AG1", 0);
+            units.Add("AG2", 0);
+            
             Dictionary<long, decimal> koreksi = new Dictionary<long, decimal>();
             Dictionary<long, double> kurs = new Dictionary<long, double>();
 

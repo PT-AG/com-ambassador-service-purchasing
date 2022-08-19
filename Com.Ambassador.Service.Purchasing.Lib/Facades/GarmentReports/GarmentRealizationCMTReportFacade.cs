@@ -332,7 +332,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     sheet.Cells[$"A2:U2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                     sheet.Cells[$"A2:U2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                     sheet.Cells[$"A2:U2"].Style.Font.Bold = true;
-                    sheet.Cells[$"A3:U3"].Value = string.Format("Konfeksi {0}", string.IsNullOrWhiteSpace(unit) ? "ALL" : unit == "C2A" ? "2A" : unit == "C2B" ? "2B" : unit == "C2C" ? "2C" : unit == "C1A" ? "1A" : "1B");
+                    sheet.Cells[$"A3:U3"].Value = string.Format("Konfeksi {0}", string.IsNullOrWhiteSpace(unit) ? "ALL" : unit == "AG1" ? "AG1" : "AG2");
                     sheet.Cells[$"A3:U3"].Merge = true;
                     sheet.Cells[$"A3:U3"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                     sheet.Cells[$"A3:U3"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
