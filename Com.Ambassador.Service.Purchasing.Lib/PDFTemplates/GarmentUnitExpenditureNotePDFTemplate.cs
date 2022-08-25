@@ -33,7 +33,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             #region Header
 
 
-            string formString = "FM-00-AD-09-006B/R1";
+            string formString = "";
             Paragraph form = new Paragraph(formString, bold_font) { Alignment = Element.ALIGN_RIGHT };
             document.Add(form);
 
@@ -41,7 +41,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             Paragraph title = new Paragraph(titleString, header_font) { Alignment = Element.ALIGN_CENTER };
             document.Add(title);
 
-            string companyNameString = "PT DAN LIRIS";
+            string companyNameString = "PT AMBASSADOR GARMINDO";
             Paragraph companyName = new Paragraph(companyNameString, bold_font) { Alignment = Element.ALIGN_LEFT };
             document.Add(companyName);
 
