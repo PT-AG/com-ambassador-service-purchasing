@@ -110,6 +110,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
                 DRNo = m.DRNo,
                 URNType = m.URNType,
                 UENNo = m.UENNo,
+                DOCurrencyRate = m.DOCurrencyRate,
                 Items = m.Items.Select(i => new GarmentUnitReceiptNoteItem
                 {
                     Id = i.Id,
@@ -171,6 +172,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
                 s.ReceiptDate,
                 Supplier = new { Name = s.SupplierName },
                 s.DONo,
+                s.DOCurrencyRate,
                 Items = new List<GarmentUnitReceiptNoteItem>(s.Items),
                 s.CreatedBy,
                 s.LastModifiedUtc,
