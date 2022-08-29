@@ -2741,68 +2741,68 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentUnitReceiptNoteF
         }
 
         #region GarmentStockReport
-        [Fact]
-        public async void Should_Success_Get_Stock2_Report()
-        {
-            var serviceProvider = GetServiceProvider();
-            var dbContext = _dbContext(GetCurrentMethod());
-            GarmentUnitReceiptNoteFacade facade = new GarmentUnitReceiptNoteFacade(GetServiceProvider(), _dbContext(GetCurrentMethod()));
-            var dataUtilUrn = dataUtil(facade, GetCurrentMethod());
-            GarmentUnitDeliveryOrderFacade facadeUDO = new GarmentUnitDeliveryOrderFacade(dbContext, serviceProvider);
-            var dataUtilUDO = new GarmentUnitDeliveryOrderDataUtil(facadeUDO, dataUtilUrn);
-            GarmentUnitExpenditureNoteFacade facadeUEN = new GarmentUnitExpenditureNoteFacade(serviceProvider, dbContext);
-            var dataUtilUEN = new GarmentUnitExpenditureNoteDataUtil(facadeUEN, dataUtilUDO);
-            GarmentReceiptCorrectionFacade facadeRC = new GarmentReceiptCorrectionFacade(dbContext, serviceProvider);
-            var dataUtilRC = new GarmentReceiptCorrectionDataUtil(facadeRC, dataUtilUrn);
+        //[Fact]
+        //public async void Should_Success_Get_Stock2_Report()
+        //{
+        //    var serviceProvider = GetServiceProvider();
+        //    var dbContext = _dbContext(GetCurrentMethod());
+        //    GarmentUnitReceiptNoteFacade facade = new GarmentUnitReceiptNoteFacade(GetServiceProvider(), _dbContext(GetCurrentMethod()));
+        //    var dataUtilUrn = dataUtil(facade, GetCurrentMethod());
+        //    GarmentUnitDeliveryOrderFacade facadeUDO = new GarmentUnitDeliveryOrderFacade(dbContext, serviceProvider);
+        //    var dataUtilUDO = new GarmentUnitDeliveryOrderDataUtil(facadeUDO, dataUtilUrn);
+        //    GarmentUnitExpenditureNoteFacade facadeUEN = new GarmentUnitExpenditureNoteFacade(serviceProvider, dbContext);
+        //    var dataUtilUEN = new GarmentUnitExpenditureNoteDataUtil(facadeUEN, dataUtilUDO);
+        //    GarmentReceiptCorrectionFacade facadeRC = new GarmentReceiptCorrectionFacade(dbContext, serviceProvider);
+        //    var dataUtilRC = new GarmentReceiptCorrectionDataUtil(facadeRC, dataUtilUrn);
 
-            DateTimeOffset now = DateTimeOffset.Now;
-            long nowTicks = now.Ticks;
-            var dataUrn1 = await dataUtilUrn.GetNewData2(nowTicks);
-            dataUrn1.IsStorage = true;
-            dataUrn1.StorageId = nowTicks;
-            dataUrn1.StorageCode = string.Concat("StorageCode", nowTicks);
-            dataUrn1.StorageName = string.Concat("StorageName", nowTicks);
-            dataUrn1.UENNo = "BUK" + dataUrn1.UnitCode;
-            dataUrn1.ReceiptDate = new DateTime(2019, 12, 25);
-            dataUrn1.CreatedUtc = new DateTime(2019, 12, 25);
-            var dataUrn2 = await dataUtilUrn.GetNewData2(nowTicks);
-            dataUrn2.IsStorage = true;
-            dataUrn2.StorageId = nowTicks;
-            dataUrn2.StorageCode = string.Concat("StorageCode", nowTicks);
-            dataUrn2.StorageName = string.Concat("StorageName", nowTicks);
-            dataUrn2.UENNo = "BUK" + dataUrn1.UnitCode;
-            dataUrn2.UnitCode = dataUrn1.UnitCode;
-            dataUrn2.ReceiptDate = new DateTime(2019, 12, 26);
+        //    DateTimeOffset now = DateTimeOffset.Now;
+        //    long nowTicks = now.Ticks;
+        //    var dataUrn1 = await dataUtilUrn.GetNewData2(nowTicks);
+        //    dataUrn1.IsStorage = true;
+        //    dataUrn1.StorageId = nowTicks;
+        //    dataUrn1.StorageCode = string.Concat("StorageCode", nowTicks);
+        //    dataUrn1.StorageName = string.Concat("StorageName", nowTicks);
+        //    dataUrn1.UENNo = "BUK" + dataUrn1.UnitCode;
+        //    dataUrn1.ReceiptDate = new DateTime(2019, 12, 25);
+        //    dataUrn1.CreatedUtc = new DateTime(2019, 12, 25);
+        //    var dataUrn2 = await dataUtilUrn.GetNewData2(nowTicks);
+        //    dataUrn2.IsStorage = true;
+        //    dataUrn2.StorageId = nowTicks;
+        //    dataUrn2.StorageCode = string.Concat("StorageCode", nowTicks);
+        //    dataUrn2.StorageName = string.Concat("StorageName", nowTicks);
+        //    dataUrn2.UENNo = "BUK" + dataUrn1.UnitCode;
+        //    dataUrn2.UnitCode = dataUrn1.UnitCode;
+        //    dataUrn2.ReceiptDate = new DateTime(2019, 12, 26);
 
-            foreach (var i in dataUrn1.Items)
-            {
-                i.UENItemId = 1;
-                i.ProductCode = "CodeTest123";
-                i.ProductName = "Name123";
-                i.ReceiptQuantity = 5;
-                i.Conversion = 1;
+        //    foreach (var i in dataUrn1.Items)
+        //    {
+        //        i.UENItemId = 1;
+        //        i.ProductCode = "CodeTest123";
+        //        i.ProductName = "Name123";
+        //        i.ReceiptQuantity = 5;
+        //        i.Conversion = 1;
 
-            }
-            foreach (var i in dataUrn2.Items)
-            {
-                i.UENItemId = 1;
-                i.ProductCode = "CodeTestBP123";
-                i.ProductName = "Name123BP";
-                i.ReceiptQuantity = 5;
-                i.Conversion = 1;
-            }
-            await facade.Create(dataUrn1);
-            await facade.Create(dataUrn2);
-            var dataRC = await dataUtilRC.GetNewData(dataUrn1);
-            await facadeRC.Create(dataRC.GarmentReceiptCorrection, USERNAME);
-            var stockreport = new GarmentStockReportFacade(serviceProvider, dbContext);
-            var Response = stockreport.GetStockReport(7, dataUrn1.UnitCode, "BB", 1, 25, "{}", new DateTime(2010, 12, 26), DateTime.Now);
-            var Response2 = stockreport.GetStockReport(7, dataUrn2.UnitCode, "BP", 1, 25, "{}", new DateTime(2010, 12, 26), DateTime.Now);
-            var Response3 = stockreport.GetStockReport(7, null, null, 1, 25, "{}", null, null);
-            Assert.NotNull(Response.Item1);
-            Assert.NotNull(Response.Item1);
+        //    }
+        //    foreach (var i in dataUrn2.Items)
+        //    {
+        //        i.UENItemId = 1;
+        //        i.ProductCode = "CodeTestBP123";
+        //        i.ProductName = "Name123BP";
+        //        i.ReceiptQuantity = 5;
+        //        i.Conversion = 1;
+        //    }
+        //    await facade.Create(dataUrn1);
+        //    await facade.Create(dataUrn2);
+        //    var dataRC = await dataUtilRC.GetNewData(dataUrn1);
+        //    await facadeRC.Create(dataRC.GarmentReceiptCorrection, USERNAME);
+        //    var stockreport = new GarmentStockReportFacade(serviceProvider, dbContext);
+        //    var Response = stockreport.GetStockReport(7, dataUrn1.UnitCode, "BB", 1, 25, "{}", new DateTime(2010, 12, 26), DateTime.Now);
+        //    var Response2 = stockreport.GetStockReport(7, dataUrn2.UnitCode, "BP", 1, 25, "{}", new DateTime(2010, 12, 26), DateTime.Now);
+        //    var Response3 = stockreport.GetStockReport(7, null, null, 1, 25, "{}", null, null);
+        //    Assert.NotNull(Response.Item1);
+        //    Assert.NotNull(Response.Item1);
 
-        }
+        //}
 
         [Fact]
         public async void Should_Success_Get_Stock21_Report_Response()
