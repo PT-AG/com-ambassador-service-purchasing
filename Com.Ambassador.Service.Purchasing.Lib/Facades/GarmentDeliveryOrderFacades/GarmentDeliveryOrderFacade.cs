@@ -196,10 +196,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                 try
                 {
                     EntityExtension.FlagForCreate(m, user, USER_AGENT);
-
+                    var lastPaymentBill = GeneratePaymentBillNo();
                     m.IsClosed = false;
                     m.IsCorrection = false;
                     m.IsCustoms = false;
+                    m.PaymentBill = string.Concat(lastPaymentBill.format, (lastPaymentBill.counterId++).ToString("D3"));
 
                     foreach (var item in m.Items)
                     {
@@ -209,6 +210,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                         m.DOCurrencyId = garmentCurrencyViewModel.Id;
                         m.DOCurrencyCode = garmentCurrencyViewModel.Code;
                         m.DOCurrencyRate = garmentCurrencyViewModel.Rate;
+                        
 
                         foreach (var detail in item.Details)
                         {
@@ -258,6 +260,41 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
             }
 
             return Created;
+        }
+
+        public (string format, int counterId) GeneratePaymentBillNo()
+        {
+            string PaymentBill = null;
+            GarmentDeliveryOrder deliveryOrder = (from data in dbSet
+                                                  orderby data.PaymentBill descending
+                                                  select data).FirstOrDefault();
+            string year = DateTimeOffset.Now.Year.ToString().Substring(2, 2);
+            string month = DateTimeOffset.Now.Month.ToString("D2");
+            string day = DateTimeOffset.Now.Day.ToString("D2");
+            string formatDate = year + month + day;
+            int counterId = 0;
+            if (deliveryOrder.BillNo != null)
+            {
+                PaymentBill = deliveryOrder.PaymentBill;
+                string date = PaymentBill.Substring(2, 6);
+                string number = PaymentBill.Substring(8);
+                if (date == formatDate)
+                {
+                    counterId = Convert.ToInt32(number) + 1;
+                }
+                else
+                {
+                    counterId = 1;
+                }
+            }
+            else
+            {
+                counterId = 1;
+            }
+            //PaymentBill = "BB" + formatDate + counterId.ToString("D3");
+
+            return (string.Concat("BB", formatDate), counterId);
+
         }
 
         public async Task<int> Update(int id, GarmentDeliveryOrderViewModel vm, GarmentDeliveryOrder m, string user, int clientTimeZoneOffset = 7)

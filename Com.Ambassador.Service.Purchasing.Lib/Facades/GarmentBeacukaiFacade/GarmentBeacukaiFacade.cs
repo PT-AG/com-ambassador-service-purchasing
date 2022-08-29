@@ -158,16 +158,20 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentBeacukaiFacade
                         if (deliveryOrder != null)
                         {
 
-                            if (model.BillNo == "" | model.BillNo == null)
-                            {
-                                deliveryOrder.BillNo = GenerateBillNo();
+                            //if (model.BillNo == "" | model.BillNo == null)
+                            //{
+                            //    deliveryOrder.BillNo = GenerateBillNo();
 
-                            }
-                            else
-                            {
-                                deliveryOrder.BillNo = model.BillNo;
-                            }
+                            //}
+                            //else
+                            //{
+                            //    deliveryOrder.BillNo = model.BillNo;
+                            //}
+
                             deliveryOrder.PaymentBill = string.Concat(lastPaymentBill.format, (lastPaymentBill.counterId++).ToString("D3"));
+
+                            //deliveryOrder.BillNo = null;
+                            //deliveryOrder.PaymentBill = null;
                             //deliveryOrder.CustomsId = model.Id;
                             double qty = 0;
                             foreach (var deliveryOrderItem in deliveryOrder.Items)
@@ -181,8 +185,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentBeacukaiFacade
                             item.TotalQty = qty;
                             EntityExtension.FlagForCreate(item, username, USER_AGENT);
                         }
+                        //EntityExtension.FlagForCreate(item, username, USER_AGENT);
                     }
-
+                    model.BillNo = null;
                     this.dbSet.Add(model);
                     Created = await dbContext.SaveChangesAsync();
                     transaction.Commit();
