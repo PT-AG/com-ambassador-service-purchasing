@@ -40,13 +40,15 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates.GarmentCorrectionNo
             var garmentDeliveryOrder = garmentDeliveryOrderFacade.ReadById((int)model.DOId);
 
             #region Header
-            string addressString = "PT. DAN LIRIS\n" +
-                "JL. Merapi No.23\n" +
-                "Banaran, Grogol, Kab. Sukoharjo\n" +
-                "Jawa Tengah 57552 - INDONESIA\n" +
-                "PO.BOX 166 Solo 57100\n" +
-                "Telp. (0271) 740888, 714400\n" +
-                "Fax. (0271) 735222, 740777";
+            //string addressString = "PT. DAN LIRIS\n" +
+            //    "JL. Merapi No.23\n" +
+            //    "Banaran, Grogol, Kab. Sukoharjo\n" +
+            //    "Jawa Tengah 57552 - INDONESIA\n" +
+            //    "PO.BOX 166 Solo 57100\n" +
+            //    "Telp. (0271) 740888, 714400\n" +
+            //    "Fax. (0271) 735222, 740777";
+
+            string addressString = "PT AMBASSADOR GARMINDO" + "\n" + "Banaran, Grogol, Sukoharjo" + "\n" + "Jawa Tengah 57552 - INDONESIA" + "\n" + "Telp. (0271) 732888, 7652913";
             Paragraph addressParagraph = new Paragraph(8f, addressString, bold_font) { Alignment = Element.ALIGN_LEFT };
             document.Add(addressParagraph);
             Paragraph headerParagraph = new Paragraph("NOTA KOREKSI - RETUR", header_font) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 15f };
