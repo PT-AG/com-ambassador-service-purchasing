@@ -58,7 +58,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
 
             #region Header
 
-            string addressString = "PT DAN LIRIS" + "\n" + "JL. Merapi No.23" + "\n" + "Banaran, Grogol, Kab. Sukoharjo" + "\n" + "Jawa Tengah 57552 - INDONESIA" + "\n" + "PO.BOX 166 Solo 57100" + "\n" + "Telp. (0271) 740888, 714400" + "\n" + "Fax. (0271) 735222, 740777";
+            //string addressString = "PT DAN LIRIS" + "\n" + "JL. Merapi No.23" + "\n" + "Banaran, Grogol, Kab. Sukoharjo" + "\n" + "Jawa Tengah 57552 - INDONESIA" + "\n" + "PO.BOX 166 Solo 57100" + "\n" + "Telp. (0271) 740888, 714400" + "\n" + "Fax. (0271) 735222, 740777";
+            string addressString = "PT AMBASSADOR GARMINDO" + "\n" + "Banaran, Grogol, Sukoharjo" + "\n" + "Jawa Tengah 57552 - INDONESIA" + "\n" + "Telp. (0271) 732888, 7652913";
             Paragraph address = new Paragraph(addressString, bold_font) { Alignment = Element.ALIGN_LEFT };
             document.Add(address);
             bold_font.SetStyle(Font.NORMAL);
@@ -144,11 +145,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             double maxtotal = 0;
             decimal totalcorrection = 0;
             Dictionary<string, double> units = new Dictionary<string, double>();
-            units.Add("C1A", 0);
-            units.Add("C1B", 0);
-            units.Add("C2A", 0);
-            units.Add("C2B", 0);
-            units.Add("C2C", 0);
+            units.Add("AG1", 0);
+            units.Add("AG2", 0);
+            
             Dictionary<long, decimal> koreksi = new Dictionary<long, decimal>();
             Dictionary<long, double> kurs = new Dictionary<long, double>();
 

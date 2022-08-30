@@ -504,10 +504,15 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                 "DONo"
             };
 
+
+
             Query = QueryHelper<GarmentDeliveryOrder>.ConfigureSearch(Query, searchAttributes, Keyword); // kalo search setelah Select dengan .Where setelahnya maka case sensitive, kalo tanpa .Where tidak masalah
             Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
             Query = QueryHelper<GarmentDeliveryOrder>.ConfigureFilter(Query, FilterDictionary);
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>("{}");
+
+            bool filterSupplierIsImport = FilterDictionary.ContainsKey("supplierIsImport") ? bool.Parse(FilterDictionary["supplierIsImport"]) : false;
+            FilterDictionary.Remove("supplierIsImport");
 
             if (OrderDictionary.Count > 0 && OrderDictionary.Keys.First().Contains("."))
             {
@@ -522,7 +527,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
             {
 
                 Query = QueryHelper<GarmentDeliveryOrder>.ConfigureOrder(Query, OrderDictionary).Include(m => m.Items)
-                    .ThenInclude(i => i.Details).Where(s => s.IsInvoice == false && s.CustomsId != 0);
+                    .ThenInclude(i => i.Details).Where(s => s.IsInvoice == false 
+                    //&& s.CustomsId != 0
+                    && (filterSupplierIsImport == true ? s.CustomsId != 0 : true)
+                    );
             }
 
             return Query;
@@ -625,11 +633,16 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
             long filterSupplierId = FilterDictionary.ContainsKey("SupplierId") ? long.Parse(FilterDictionary["SupplierId"]) : 0;
             FilterDictionary.Remove("SupplierId");
 
+            bool filterSupplierIsImport = FilterDictionary.ContainsKey("SupplierIsImport") ? bool.Parse(FilterDictionary["SupplierIsImport"]) : false;
+            FilterDictionary.Remove("SupplierIsImport");
+
             var filterUnitId = FilterDictionary.ContainsKey("UnitId") ? FilterDictionary["UnitId"] : string.Empty;
             FilterDictionary.Remove("UnitId");
 
             IQueryable<GarmentDeliveryOrder> Query = dbSet
-                .Where(m => m.DONo.Contains(Keyword ?? "") && (filterSupplierId == 0 ? true : m.SupplierId == filterSupplierId) && m.CustomsId != 0 && m.Items.Any(i => i.Details.Any(d => d.ReceiptQuantity == 0 && (string.IsNullOrWhiteSpace(filterUnitId) ? true : d.UnitId == filterUnitId))))
+                .Where(m => m.DONo.Contains(Keyword ?? "") && (filterSupplierId == 0 ? true : m.SupplierId == filterSupplierId) 
+                && (filterSupplierIsImport == true ? m.CustomsId != 0 : true ) 
+                && m.Items.Any(i => i.Details.Any(d => d.ReceiptQuantity == 0 && (string.IsNullOrWhiteSpace(filterUnitId) ? true : d.UnitId == filterUnitId))))
                 .Select(m => new GarmentDeliveryOrder
                 {
                     Id = m.Id,
