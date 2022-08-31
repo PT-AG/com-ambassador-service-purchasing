@@ -131,7 +131,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
 
             if (viewModel.Supplier.Import)
             {
-                string p1 = "The undersigned below, PT. DAN LIRIS, SOLO (hereinafter referred to as parties Purchasers) and " + viewModel.Supplier.Name + " (hereinafter referred to as seller\'s side) mutually agreed to enter into a sale and purchase contract with the following conditions: ";
+                string p1 = "The undersigned below, PT. Ambassador Garmindo, SOLO (hereinafter referred to as parties Purchasers) and " + viewModel.Supplier.Name + " (hereinafter referred to as seller\'s side) mutually agreed to enter into a sale and purchase contract with the following conditions: ";
                 Paragraph firstParagraph = new Paragraph(p1, normal_font) { Alignment = Element.ALIGN_LEFT };
 
                 firstParagraph.SpacingAfter = 10f;
@@ -139,7 +139,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             }
             else
             {
-                string p1 = "Dengan hormat,\nYang bertanda tangan di bawah ini, PT. DAN LIRIS, SOLO (selanjutnya disebut sebagai pihak Pembeli) dan " + viewModel.Supplier.Name + " (selanjutnya disebut sebagai pihak Penjual) saling menyetujui untuk mengadakan kontrak jual beli dengan ketentuan sebagai berikut: ";
+                string p1 = "Dengan hormat,\nYang bertanda tangan di bawah ini, PT. Ambassador Garmindo, SOLO (selanjutnya disebut sebagai pihak Pembeli) dan " + viewModel.Supplier.Name + " (selanjutnya disebut sebagai pihak Penjual) saling menyetujui untuk mengadakan kontrak jual beli dengan ketentuan sebagai berikut: ";
                 Paragraph firstParagraph = new Paragraph(p1, normal_font) { Alignment = Element.ALIGN_LEFT };
 
                 firstParagraph.SpacingAfter = 10f;
