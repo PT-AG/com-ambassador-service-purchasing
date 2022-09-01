@@ -158,8 +158,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades
             var responseLocalSupplier = await unitPaymentOrderFacade.Create(modelLocalSupplier, USERNAME, false);
 
             var reportService = new UnitPaymentOrderExpeditionReportService(dbContext);
-            var dateTo = DateTime.UtcNow.AddDays(1);
-            var dateFrom = dateTo.AddDays(-30);
+            var dateTo = modelLocalSupplier.Date;
+            var dateFrom = modelLocalSupplier.Date;
             var results = await reportService.GetReport(modelLocalSupplier.UPONo, modelLocalSupplier.SupplierCode, modelLocalSupplier.DivisionCode, modelLocalSupplier.Position, dateFrom, dateTo, "{'Date': 'desc'}", 1, 25);
 
 
