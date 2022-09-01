@@ -35,8 +35,9 @@ namespace Com.Ambassador.Service.Purchasing.Test.DataUtils.GarmentDeliveryOrderD
                 DONo = $"{nowTicksA}",
 
                 SupplierId = nowTicks,
-                SupplierCode = $"BuyerCode{nowTicksA}",
-                SupplierName = $"BuyerName{nowTicksA}",
+                SupplierCode = $"SupplierCode{nowTicksA}",
+                SupplierName = $"SupplierName{nowTicksA}",
+                Country = $"Country{nowTicksA}",
 
                 DODate = DateTimeOffset.Now,
                 ArrivalDate = DateTimeOffset.Now,
@@ -135,8 +136,9 @@ namespace Com.Ambassador.Service.Purchasing.Test.DataUtils.GarmentDeliveryOrderD
                 DONo = $"{nowTicksA}",
 
                 SupplierId = nowTicks,
-                SupplierCode = $"BuyerCode{nowTicksA}",
-                SupplierName = $"BuyerName{nowTicksA}",
+                SupplierCode = $"SupplierCode{nowTicksA}",
+                SupplierName = $"SupplierName{nowTicksA}",
+                Country = $"Country{nowTicksA}",
 
                 DODate = DateTimeOffset.Now,
                 ArrivalDate = DateTimeOffset.Now,
@@ -234,8 +236,9 @@ namespace Com.Ambassador.Service.Purchasing.Test.DataUtils.GarmentDeliveryOrderD
                 DONo = $"{nowTicksA}",
 
                 SupplierId = nowTicks,
-                SupplierCode = $"BuyerCode{nowTicksA}",
-                SupplierName = $"BuyerName{nowTicksA}",
+                SupplierCode = $"SupplierCode{nowTicksA}",
+                SupplierName = $"SupplierName{nowTicksA}",
+                Country = $"Country{nowTicksA}",
 
                 DODate = DateTimeOffset.Now,
                 ArrivalDate = DateTimeOffset.Now,
@@ -333,8 +336,9 @@ namespace Com.Ambassador.Service.Purchasing.Test.DataUtils.GarmentDeliveryOrderD
                 DONo = $"{nowTicksA}",
 
                 SupplierId = nowTicks,
-                SupplierCode = $"BuyerCode{nowTicksA}",
-                SupplierName = $"BuyerName{nowTicksA}",
+                SupplierCode = $"SupplierCode{nowTicksA}",
+                SupplierName = $"SupplierName{nowTicksA}",
+                Country = $"Country{nowTicksA}",
 
                 DODate = DateTimeOffset.Now,
                 ArrivalDate = DateTimeOffset.Now,
@@ -432,8 +436,9 @@ namespace Com.Ambassador.Service.Purchasing.Test.DataUtils.GarmentDeliveryOrderD
                 DONo = $"{nowTicksB}",
 
                 SupplierId = nowTicks,
-                SupplierCode = $"BuyerCode{nowTicksB}",
-                SupplierName = $"BuyerName{nowTicksB}",
+                SupplierCode = $"SupplierCode{nowTicksA}",
+                SupplierName = $"SupplierName{nowTicksA}",
+                Country = $"Country{nowTicksA}",
 
                 DODate = DateTimeOffset.Now,
                 ArrivalDate = DateTimeOffset.Now,
@@ -535,8 +540,9 @@ namespace Com.Ambassador.Service.Purchasing.Test.DataUtils.GarmentDeliveryOrderD
                 DONo = $"{nowTicksB}",
 
                 SupplierId = 1,
-                SupplierCode = $"BuyerCode{nowTicksB}",
-                SupplierName = $"BuyerName{nowTicksB}",
+                SupplierCode = $"SupplierCode{nowTicksA}",
+                SupplierName = $"SupplierName{nowTicksA}",
+                Country = $"Country{nowTicksA}",
 
                 DODate = DateTimeOffset.Now,
                 ArrivalDate = DateTimeOffset.Now,
@@ -645,8 +651,9 @@ namespace Com.Ambassador.Service.Purchasing.Test.DataUtils.GarmentDeliveryOrderD
                 DONo = $"{nowTicksA}",
 
                 SupplierId = nowTicks,
-                SupplierCode = $"BuyerCode{nowTicksA}",
-                SupplierName = $"BuyerName{nowTicksA}",
+                SupplierCode = $"SupplierCode{nowTicksA}",
+                SupplierName = $"SupplierName{nowTicksA}",
+                Country = $"Country{nowTicksA}",
 
                 DODate = DateTimeOffset.Now,
                 ArrivalDate = DateTimeOffset.Now,

@@ -12,6 +12,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewMod
         public bool Import { get; set; }
         public string PIC { get; set; }
         public string Contact { get; set; }
+        public string Country { get; set; }
     }
 
     public class NewSupplierViewModel
@@ -22,5 +23,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewMod
         public bool import { get; set; }
         public string PIC { get; set; }
         public string contact { get; set; }
+        public string country { get; set; }
     }
 }

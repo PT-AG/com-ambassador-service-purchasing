@@ -21,6 +21,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentDeliveryOrderModel
         public string SupplierCode { get; set; }
         [MaxLength(1000)]
         public string SupplierName { get; set; }
+        [MaxLength(255)]
+        public string Country { get; set; }
 
         public string ShipmentType { get; set; }
         public string ShipmentNo { get; set; }
