@@ -648,7 +648,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 }
             };
             Assert.True(nullViewModel.Validate(null).Count() > 0);
@@ -659,7 +660,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name ="test"
+                    Name ="test",
+                    Country = "test"
                 },
 
             };
@@ -676,7 +678,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 }
             };
             Assert.True(nullViewModel.Validate(null).Count() > 0);
@@ -690,7 +693,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 },
             };
             Assert.True(viewModel.Validate(null).Count() > 0);
@@ -706,7 +710,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 }
             };
             Assert.True(nullViewModel.Validate(null).Count() > 0);
@@ -718,7 +723,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 },
                 internNo = "test",
                 billNo = "test",
@@ -773,7 +779,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 }
             };
             Assert.True(nullViewModel.Validate(null).Count() > 0);
@@ -785,7 +792,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 },
                 internNo = "test",
                 billNo = "test",
@@ -821,7 +829,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 }
             };
             Assert.True(nullViewModel.Validate(null).Count() > 0);
@@ -833,7 +842,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 },
                 internNo = "test",
                 billNo = "test",
@@ -884,7 +894,8 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentDeliveryOrderTes
                     Id = 1,
                     Code = "test",
                     Import = true,
-                    Name = "test"
+                    Name = "test",
+                    Country = "test"
                 },
                 incomeTax = new IncomeTaxViewModel(),
                 docurrency = new CurrencyViewModel(),
