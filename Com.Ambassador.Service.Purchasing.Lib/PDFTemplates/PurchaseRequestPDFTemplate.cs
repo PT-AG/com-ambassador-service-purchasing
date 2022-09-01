@@ -26,11 +26,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
 
             #region Header
 
-            string companyNameString = "PT DAN LIRIS";
+            string companyNameString = "PT. AMBASSADOR GARMINDO";
             Paragraph companyName = new Paragraph(companyNameString, header_font) { Alignment = Element.ALIGN_CENTER };
             document.Add(companyName);
 
-            string companyAddressString = "BANARAN, GROGOL, SUKOHARJO";
+            string companyAddressString = "Banaran, Grogol, Sukoharjo, Jawa Tengah";
             Paragraph companyAddress = new Paragraph(companyAddressString, normal_font) { Alignment = Element.ALIGN_CENTER };
             companyAddress.SpacingAfter = 10f;
             document.Add(companyAddress);
