@@ -59,7 +59,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
                 PdfPCell cellHeaderContentRight = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT };
                 PdfPCell cellHeaderContentCenter = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
 
-                cellHeaderContentLeft.Phrase = new Phrase("PT DAN LIRIS", bold_font);
+                cellHeaderContentLeft.Phrase = new Phrase("PT. AMBASSADOR GARMINDO", bold_font);
                 tableHeader.AddCell(cellHeaderContentLeft);
 
                 cellHeaderContentCenter.Phrase = new Phrase("NOTA KOREKSI", bold_font);
@@ -68,7 +68,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
                 cellHeaderContentRight.Phrase = new Phrase("");
                 tableHeader.AddCell(cellHeaderContentRight);
 
-                cellHeaderContentLeft.Phrase = new Phrase("BANARAN, GROGOL, SUKOHARJO", small_normal_font);
+                cellHeaderContentLeft.Phrase = new Phrase("Banaran, Grogol, Sukoharjo, Jawa Tengah" + "\n" + "57552" + "\n" + "Telp (0271) 732888, 7652913", small_normal_font);
                 tableHeader.AddCell(cellHeaderContentLeft);
 
                 cellHeaderContentCenter.Phrase = new Phrase(viewModel.correctionType, small_normal_font);
@@ -479,13 +479,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
                 Paragraph pembeliBkp = new Paragraph("Pembeli PKB", smaller_bold_font) { Alignment = Element.ALIGN_LEFT };
                 document.Add(pembeliBkp);
 
-                Paragraph companyName = new Paragraph("Nama     :  PT DAN LIRIS", smaller_font) { Alignment = Element.ALIGN_LEFT };
+                Paragraph companyName = new Paragraph("Nama     :  PT AMBASSADOR GARMINDO", smaller_font) { Alignment = Element.ALIGN_LEFT };
                 document.Add(companyName);
 
-                Paragraph companyAddress = new Paragraph("Alamat     :  JL. Merapi No.23 Banaran, Grogol, Kab. Sukoharjo Jawa Tengah 57552", smaller_font) { Alignment = Element.ALIGN_LEFT };
+                Paragraph companyAddress = new Paragraph("Alamat     : Banaran, Grogol, Sukoharjo, Jawa Tengah 57552", smaller_font) { Alignment = Element.ALIGN_LEFT };
                 document.Add(companyAddress);
 
-                Paragraph companyNPWP = new Paragraph("N P W P  :  01.139.907.8 - 532.000", smaller_font) { Alignment = Element.ALIGN_LEFT };
+                Paragraph companyNPWP = new Paragraph("N P W P  :  00.000.000.0 - 000.000", smaller_font) { Alignment = Element.ALIGN_LEFT };
                 document.Add(companyNPWP);
 
                 document.Add(space);
