@@ -170,6 +170,12 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentExternalPurcha
                         itemError += "SmallUom: 'Data Satuan Kecil tidak benar', ";
                     }
 
+                    if (string.IsNullOrWhiteSpace(item.Remark))
+                    {
+                        itemErrorCount++;
+                        itemError += "Remark: 'Design/Color/Keterangan tidak boleh kosong', ";
+                    }
+
                     if (item.IsOverBudget && !((PaymentMethod == "CMT" || PaymentMethod == "FREE FROM BUYER") && (PaymentType == "FREE" || PaymentType == "EX MASTER FREE")))
                     {
                         if (string.IsNullOrWhiteSpace(item.OverBudgetRemark))
