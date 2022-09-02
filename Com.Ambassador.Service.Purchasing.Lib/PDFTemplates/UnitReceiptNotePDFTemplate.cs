@@ -29,7 +29,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             Paragraph title = new Paragraph(titleString, bold_font) { Alignment = Element.ALIGN_CENTER };
             document.Add(title);
 
-            string companyNameString = "PT DAN LIRIS";
+            string companyNameString = "PT AMBASSADOR GARMINDO";
             Paragraph companyName = new Paragraph(companyNameString, header_font) { Alignment = Element.ALIGN_LEFT };
             document.Add(companyName);
 
@@ -38,10 +38,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             PdfPCell cellHeaderContentLeft = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_LEFT };
             PdfPCell cellHeaderContentRight = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_RIGHT };
 
-            cellHeaderContentLeft.Phrase = new Phrase("BANARAN, GROGOL, SUKOHARJO", bold_font);
+            cellHeaderContentLeft.Phrase = new Phrase("Banaran, Grogol, Sukoharjo, Jawa Tengah" + "\n" + "57552" + "\n" + "Telp (0271) 732888, 7652913", bold_font);
             tableHeader.AddCell(cellHeaderContentLeft);
 
             cellHeaderContentRight.Phrase = new Phrase("FM-PB-00-06-010/R2", bold_font);
+
             tableHeader.AddCell(cellHeaderContentRight);
 
             PdfPCell cellHeader = new PdfPCell(tableHeader);

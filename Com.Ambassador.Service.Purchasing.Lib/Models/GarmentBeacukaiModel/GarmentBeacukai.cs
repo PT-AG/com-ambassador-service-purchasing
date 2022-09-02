@@ -22,6 +22,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentBeacukaiModel
 		public long CurrencyId { get; set; }
 		public string CurrencyCode { get; set; }
 		public string CustomsType { get; set; }
+		public bool CustomsCategory { get; set; }
         public string ImportValue { get; set; }
         public int ImportValueId { get; set; }
         public DateTimeOffset? ArrivalDate { get; set; }

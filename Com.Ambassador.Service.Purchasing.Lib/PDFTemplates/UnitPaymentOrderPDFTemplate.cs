@@ -47,8 +47,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             tableHeader.SetWidths(new float[] { 1f, 1f, 1f });
 
             PdfPCell cellHeaderContentLeft = new PdfPCell() { Border = Rectangle.NO_BORDER };
-            cellHeaderContentLeft.AddElement(new Phrase("PT DAN LIRIS", header_font));
-            cellHeaderContentLeft.AddElement(new Phrase("BANARAN, GROGOL, SUKOHARJO", normal_font));
+            cellHeaderContentLeft.AddElement(new Phrase("PT. AMBASSADOR GARMINDO", header_font));
+            cellHeaderContentLeft.AddElement(new Phrase("Banaran, Grogol, Sukoharjo, Jawa Tengah" + "\n" + "57552" + "\n" + "Telp (0271) 732888, 7652913", normal_font));
             tableHeader.AddCell(cellHeaderContentLeft);
 
             PdfPCell cellHeaderContentCenter = new PdfPCell() { Border = Rectangle.NO_BORDER };

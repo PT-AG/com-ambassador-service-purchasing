@@ -19,6 +19,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.AutoMapperProfiles
                 .ForPath(d => d.supplier.Code, opt => opt.MapFrom(s => s.SupplierCode))
                 .ForPath(d => d.supplier.Name, opt => opt.MapFrom(s => s.SupplierName))
                 .ForPath(d => d.supplier.Import, opt => opt.MapFrom(s => s.SupplierIsImport))
+                .ForPath(d => d.supplier.Country, opt => opt.MapFrom(s => s.Country))
 
                 .ForPath(d => d.shipmentNo, opt => opt.MapFrom(s => s.ShipmentNo))
                 .ForPath(d => d.shipmentType, opt => opt.MapFrom(s => s.ShipmentType))

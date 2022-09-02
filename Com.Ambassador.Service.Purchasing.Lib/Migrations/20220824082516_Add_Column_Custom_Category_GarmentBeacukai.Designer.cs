@@ -13,9 +13,10 @@ using System;
 namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 {
     [DbContext(typeof(PurchasingDbContext))]
-    partial class PurchasingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220824082516_Add_Column_Custom_Category_GarmentBeacukai")]
+    partial class Add_Column_Custom_Category_GarmentBeacukai
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1793,9 +1794,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<string>("BillNo")
                         .HasMaxLength(50);
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(255);
 
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
