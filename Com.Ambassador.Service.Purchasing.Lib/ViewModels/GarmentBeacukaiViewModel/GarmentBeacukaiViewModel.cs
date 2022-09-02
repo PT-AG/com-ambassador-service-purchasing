@@ -25,6 +25,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentBeacukaiViewMo
         public DateTimeOffset? arrivalDate { get; set; }
         public List<GarmentBeacukaiItemViewModel> items { get; set; }
         public string importValue { get; set; }
+		public bool customCategory { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			if (string.IsNullOrWhiteSpace(beacukaiNo))

@@ -40,7 +40,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates.GarmentUnitReceiptN
             Paragraph companyName = new Paragraph(companyNameString, bold_font) { Alignment = Element.ALIGN_LEFT };
             document.Add(companyName);
 
-            string companyAddressString = "BANARAN, GROGOL, SUKOHARJO";
+            string companyAddressString = "Banaran, Grogol, Sukoharjo, Jawa Tengah" + "\n"+ "57552" + "\n" + "Telp (0271) 732888, 7652913";
             Paragraph companyAddress = new Paragraph(companyAddressString, normal_font) { Alignment = Element.ALIGN_LEFT };
             companyAddress.SpacingAfter = 10f;
             document.Add(companyAddress);

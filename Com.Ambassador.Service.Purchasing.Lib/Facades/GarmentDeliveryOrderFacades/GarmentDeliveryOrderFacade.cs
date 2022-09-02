@@ -196,10 +196,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                 try
                 {
                     EntityExtension.FlagForCreate(m, user, USER_AGENT);
-
+                    var lastPaymentBill = GeneratePaymentBillNo();
                     m.IsClosed = false;
                     m.IsCorrection = false;
                     m.IsCustoms = false;
+                    m.PaymentBill = string.Concat(lastPaymentBill.format, (lastPaymentBill.counterId++).ToString("D3"));
 
                     foreach (var item in m.Items)
                     {
@@ -209,6 +210,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                         m.DOCurrencyId = garmentCurrencyViewModel.Id;
                         m.DOCurrencyCode = garmentCurrencyViewModel.Code;
                         m.DOCurrencyRate = garmentCurrencyViewModel.Rate;
+                        
 
                         foreach (var detail in item.Details)
                         {
@@ -258,6 +260,41 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
             }
 
             return Created;
+        }
+
+        public (string format, int counterId) GeneratePaymentBillNo()
+        {
+            string PaymentBill = null;
+            GarmentDeliveryOrder deliveryOrder = (from data in dbSet
+                                                  orderby data.PaymentBill descending
+                                                  select data).FirstOrDefault();
+            string year = DateTimeOffset.Now.Year.ToString().Substring(2, 2);
+            string month = DateTimeOffset.Now.Month.ToString("D2");
+            string day = DateTimeOffset.Now.Day.ToString("D2");
+            string formatDate = year + month + day;
+            int counterId = 0;
+            if (deliveryOrder.BillNo != null)
+            {
+                PaymentBill = deliveryOrder.PaymentBill;
+                string date = PaymentBill.Substring(2, 6);
+                string number = PaymentBill.Substring(8);
+                if (date == formatDate)
+                {
+                    counterId = Convert.ToInt32(number) + 1;
+                }
+                else
+                {
+                    counterId = 1;
+                }
+            }
+            else
+            {
+                counterId = 1;
+            }
+            //PaymentBill = "BB" + formatDate + counterId.ToString("D3");
+
+            return (string.Concat("BB", formatDate), counterId);
+
         }
 
         public async Task<int> Update(int id, GarmentDeliveryOrderViewModel vm, GarmentDeliveryOrder m, string user, int clientTimeZoneOffset = 7)
@@ -504,10 +541,15 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                 "DONo"
             };
 
+
+
             Query = QueryHelper<GarmentDeliveryOrder>.ConfigureSearch(Query, searchAttributes, Keyword); // kalo search setelah Select dengan .Where setelahnya maka case sensitive, kalo tanpa .Where tidak masalah
             Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
             Query = QueryHelper<GarmentDeliveryOrder>.ConfigureFilter(Query, FilterDictionary);
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>("{}");
+
+            bool filterSupplierIsImport = FilterDictionary.ContainsKey("supplierIsImport") ? bool.Parse(FilterDictionary["supplierIsImport"]) : false;
+            FilterDictionary.Remove("supplierIsImport");
 
             if (OrderDictionary.Count > 0 && OrderDictionary.Keys.First().Contains("."))
             {
@@ -522,7 +564,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
             {
 
                 Query = QueryHelper<GarmentDeliveryOrder>.ConfigureOrder(Query, OrderDictionary).Include(m => m.Items)
-                    .ThenInclude(i => i.Details).Where(s => s.IsInvoice == false && s.CustomsId != 0);
+                    .ThenInclude(i => i.Details).Where(s => s.IsInvoice == false 
+                    //&& s.CustomsId != 0
+                    && (filterSupplierIsImport == true ? s.CustomsId != 0 : true)
+                    );
             }
 
             return Query;
@@ -625,11 +670,16 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
             long filterSupplierId = FilterDictionary.ContainsKey("SupplierId") ? long.Parse(FilterDictionary["SupplierId"]) : 0;
             FilterDictionary.Remove("SupplierId");
 
+            bool filterSupplierIsImport = FilterDictionary.ContainsKey("SupplierIsImport") ? bool.Parse(FilterDictionary["SupplierIsImport"]) : false;
+            FilterDictionary.Remove("SupplierIsImport");
+
             var filterUnitId = FilterDictionary.ContainsKey("UnitId") ? FilterDictionary["UnitId"] : string.Empty;
             FilterDictionary.Remove("UnitId");
 
             IQueryable<GarmentDeliveryOrder> Query = dbSet
-                .Where(m => m.DONo.Contains(Keyword ?? "") && (filterSupplierId == 0 ? true : m.SupplierId == filterSupplierId) && m.CustomsId != 0 && m.Items.Any(i => i.Details.Any(d => d.ReceiptQuantity == 0 && (string.IsNullOrWhiteSpace(filterUnitId) ? true : d.UnitId == filterUnitId))))
+                .Where(m => m.DONo.Contains(Keyword ?? "") && (filterSupplierId == 0 ? true : m.SupplierId == filterSupplierId) 
+                && (filterSupplierIsImport == true ? m.CustomsId != 0 : true ) 
+                && m.Items.Any(i => i.Details.Any(d => d.ReceiptQuantity == 0 && (string.IsNullOrWhiteSpace(filterUnitId) ? true : d.UnitId == filterUnitId))))
                 .Select(m => new GarmentDeliveryOrder
                 {
                     Id = m.Id,

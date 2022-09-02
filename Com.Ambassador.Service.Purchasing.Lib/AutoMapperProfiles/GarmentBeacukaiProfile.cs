@@ -16,6 +16,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.AutoMapperProfiles
 				.ForMember(d => d.beacukaiNo, opt => opt.MapFrom(s => s.BeacukaiNo))
 				.ForMember(d => d.beacukaiDate, opt => opt.MapFrom(s => s.BeacukaiDate))
 				.ForMember(d => d.customType, opt => opt.MapFrom(s => s.CustomsType))
+				.ForMember(d => d.customCategory, opt => opt.MapFrom(s => s.CustomsCategory))
 				.ForMember(d => d.validationDate, opt => opt.MapFrom(s => s.ValidationDate))
 				.ForMember(d => d.billNo, opt => opt.MapFrom(s => s.BillNo))
 			  	.ForPath(d => d.netto, opt => opt.MapFrom(s => s.Netto))
