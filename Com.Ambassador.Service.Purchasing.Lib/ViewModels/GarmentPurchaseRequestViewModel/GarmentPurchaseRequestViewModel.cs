@@ -179,6 +179,12 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentPurchaseReques
                         itemError += "Category: 'Data Kategori tidak benar', ";
                     }
 
+                    if (string.IsNullOrWhiteSpace(item.ProductRemark))
+                    {
+                        itemErrorCount++;
+                        itemError += "ProductRemark: 'Design/Color/Keterangan tidak boleh kosong', ";
+                    }
+
                     if (new string[] { "MASTER", "SAMPLE" }.Contains(PRType))
                     {
                         if (item.Category != null && item.Category.Name == "FABRIC")

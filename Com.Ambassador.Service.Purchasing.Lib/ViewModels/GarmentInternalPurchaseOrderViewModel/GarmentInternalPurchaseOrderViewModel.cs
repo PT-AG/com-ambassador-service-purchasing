@@ -71,6 +71,12 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentInternalPurcha
                             itemError += "Quantity: 'Jumlah sebelumnya tidak diketahui', ";
                         }
                     }
+                    if (string.IsNullOrWhiteSpace(item.ProductRemark))
+                    {
+                        itemErrorCount++;
+                        itemError += "ProductRemark: 'Design/Color/Keterangan tidak boleh kosong', ";
+                    }
+
 
                     itemError += "}, ";
                 }

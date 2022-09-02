@@ -190,11 +190,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
             }
 
             Keyword = (Keyword ?? "").Trim();
-            GarmentDOItemsQuery = GarmentDOItemsQuery.Where(x => x.RemainingQuantity > 0 && (x.RO.Contains(Keyword) || x.POSerialNumber.Contains(Keyword)));
+            GarmentDOItemsQuery = GarmentDOItemsQuery.Where(x => x.RemainingQuantity > 0 && (x.RO.Contains(Keyword) || x.POSerialNumber.Contains(Keyword) || x.ProductName.Contains(Keyword) || x.ProductCode.Contains(Keyword)));
 
             var data = from doi in GarmentDOItemsQuery
                        where doi.RemainingQuantity>0
-                       && (doi.RO.Contains(Keyword) || doi.POSerialNumber.Contains(Keyword))
+                       && (doi.RO.Contains(Keyword) || doi.POSerialNumber.Contains(Keyword)|| doi.ProductName.Contains(Keyword) || doi.ProductCode.Contains(Keyword))
                        select new
                        {
                            doi.URNItemId,
