@@ -839,23 +839,28 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             var Query = GetCentralItemBBReport(dateFrom, dateTo, offset);
             //Query = Query.OrderBy(b => b.ItemCode).ToList();
             DataTable result = new DataTable();
+            result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Barang", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Barang", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Tipe", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Tipe", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Saldo Awal", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Pemasukan", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Pengeluaran", DataType = typeof(Double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Penyesuaian", DataType = typeof(Double) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Penyesuaian", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Saldo Akhir", DataType = typeof(Double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Stock Opname", DataType = typeof(Double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Selisih", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Gudang", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Stock Opname", DataType = typeof(Double) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Selisih", DataType = typeof(Double) });
             //if (Query.ToArray().Count() == 0)
             //    result.Rows.Add("", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             //else
+            var index = 1;
             foreach (var item in Query)
             {
-                result.Rows.Add((item.ItemCode), item.ItemName, item.SupplierType, item.UnitQtyName, item.BeginQty, item.ReceiptQty, item.ExpenditureQty, item.AdjustmentQty, item.LastQty, item.OpnameQty, item.Diff);
+                //result.Rows.Add((item.ItemCode), item.ItemName, item.SupplierType, item.UnitQtyName, item.BeginQty, item.ReceiptQty, item.ExpenditureQty, item.AdjustmentQty, item.LastQty, item.OpnameQty, item.Diff);
+                result.Rows.Add(index++,item.ItemCode, item.ItemName, item.UnitQtyName, item.BeginQty, item.ReceiptQty, item.ExpenditureQty, item.LastQty, "Gudang AG2");
+
             }
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
