@@ -888,9 +888,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             var pengeluaran = new[] { "PROSES", "SAMPLE", "EXTERNAL", "SUBCON" };
             var pemasukan = new[] { "PROSES", "PEMBELIAN", "SISA SUBCON" };
 
-            var categories = GetProductCodes(1, int.MaxValue, "{}", "{}");
+            //var categories = GetProductCodes(1, int.MaxValue, "{}", "{}");
             var coderequirement = new[] { "BP", "BE" };
-            var categories1 = categories.Where(x => coderequirement.Contains(x.CodeRequirement)).Select(x => x.Name).ToArray();
+            //var categories1 = categories.Where(x => coderequirement.Contains(x.CodeRequirement)).Select(x => x.Name).ToArray();
+            var categories1 = new[] { "FABRIC", "SUBKON" };
 
             #region Balance
             //var lastdate = dbContext.BalanceStocks.OrderByDescending(x => x.CreateDate).Select(x => x.CreateDate).FirstOrDefault();
