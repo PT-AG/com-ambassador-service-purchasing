@@ -38,7 +38,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             LineSeparator lineSeparator = new LineSeparator(1f, 100f, BaseColor.Black, Element.ALIGN_CENTER, 1);
             document.Add(lineSeparator);
 
-            string codeNoString = "FM-PB-00-06-006/R1";
+            //string codeNoString = "FM-PB-00-06-006/R1";
+            string codeNoString = "";
             Paragraph codeNo = new Paragraph(codeNoString, bold_font) { Alignment = Element.ALIGN_RIGHT };
             codeNo.SpacingBefore = 5f;
             document.Add(codeNo);
