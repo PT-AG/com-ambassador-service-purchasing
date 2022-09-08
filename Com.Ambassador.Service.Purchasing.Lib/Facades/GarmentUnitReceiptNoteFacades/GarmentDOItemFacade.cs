@@ -124,6 +124,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
                     s.DesignColor,
                     s.POSerialNumber,
                     s.RemainingQuantity,
+                    s.CustomsCategory,
                     RONo = s.RO
                 }).ToList();
             foreach (var item in data)
@@ -157,6 +158,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
                     urnItem.ProductRemark,
                     urnItem.PricePerDealUnit,
                     urnItem.ReceiptCorrection,
+                    doItem.CustomsCategory,
                     urnItem.CorrectionConversion
                 });
             }

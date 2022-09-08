@@ -59,5 +59,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentUnitExpenditureNot
         public string ItemStatus { get; set; }
 		[MaxLength(255)]
 		public string UId { get; set; }
-	}
+        public string CustomsCategory { get; set; }
+    }
 }

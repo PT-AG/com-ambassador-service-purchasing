@@ -54,5 +54,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitReceiptNot
         public long UENItemId { get; set; }
         public string PaymentType { get; set; }
         public string PaymentMethod { get; set; }
+        public string CustomsCategory { get; set; }
     }
 }
