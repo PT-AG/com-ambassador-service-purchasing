@@ -41,5 +41,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentUnitReceiptNoteMod
 		public long URNItemId { get; set; }
 		[MaxLength(255)]
 		public string RO { get; set; }
-	}
+        public string CustomsCategory { get; set; }
+    }
 }
