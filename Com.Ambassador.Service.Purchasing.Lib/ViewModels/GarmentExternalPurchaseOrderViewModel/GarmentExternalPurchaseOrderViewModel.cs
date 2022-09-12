@@ -136,6 +136,16 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentExternalPurcha
                         itemErrorCount++;
                         itemError += "Product: 'Product tidak boleh kosong', ";
                     }
+                    else
+                    {
+                        if (item.Product.Name == "PROCESS")
+                        {
+                            if (String.IsNullOrEmpty(Remark))
+                            {
+                                yield return new ValidationResult("Keterangan Harus Diisi", new List<string> { "Remark" });
+                            }
+                        }
+                    }
 
                     if (item.DealQuantity <= 0)
                     {

@@ -452,6 +452,22 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentExternalPurchase
                         DOQuantity = 0,
                         OverBudgetRemark = null,
                         UENItemId = null
+                    },
+                    new GarmentExternalPurchaseOrderItemViewModel
+                    {
+                        Product = new GarmentProductViewModel{ Name = "PROCESS"},
+                        DealUom = new UomViewModel(),
+                        SmallUom= new UomViewModel(),
+
+                        PRId = 0,
+                        PONo = null,
+                        DefaultQuantity = 0,
+                        DefaultUom = null,
+                        SmallQuantity = 0,
+                        UsedBudget = 0,
+                        DOQuantity = 0,
+                        OverBudgetRemark = null,
+                        UENItemId = null
                     }
                 },
 
@@ -763,6 +779,14 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentExternalPurchase
         {
             var facade = new GarmentExternalPurchaseOrderFacade(ServiceProvider, _dbContext(GetCurrentMethod()));
             var Response = facade.ReadItemByROLoader();
+            Assert.NotNull(Response);
+        }
+
+        [Fact]
+        public void Should_Success_ReadEPOForSubconDeliveryLoader()
+        {
+            var facade = new GarmentExternalPurchaseOrderFacade(ServiceProvider, _dbContext(GetCurrentMethod()));
+            var Response = facade.ReadEPOForSubconDeliveryLoader();
             Assert.NotNull(Response);
         }
     }
