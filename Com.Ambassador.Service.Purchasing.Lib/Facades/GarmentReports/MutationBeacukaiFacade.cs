@@ -767,19 +767,19 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var mutation = mutation1.OrderBy(x => x.ItemCode).ToList();
 
-            var mm = new MutationBBCentralViewModel();
+            //var mm = new MutationBBCentralViewModel();
 
-            mm.AdjustmentQty = Math.Round(mutation.Sum(x => x.AdjustmentQty), 2);
-            mm.BeginQty = Math.Round(mutation.Sum(x => x.BeginQty), 2);
-            mm.ExpenditureQty = Math.Round(mutation.Sum(x => x.ExpenditureQty), 2);
-            mm.ItemCode = "";
-            mm.ItemName = "";
-            mm.LastQty = Math.Round(mutation.Sum(x => x.LastQty), 2);
-            mm.ReceiptQty = Math.Round(mutation.Sum(x => x.ReceiptQty), 2);
-            mm.SupplierType = "";
-            mm.UnitQtyName = "";
-            mm.OpnameQty = 0;
-            mm.Diff = 0;
+            //mm.AdjustmentQty = Math.Round(mutation.Sum(x => x.AdjustmentQty), 2);
+            //mm.BeginQty = Math.Round(mutation.Sum(x => x.BeginQty), 2);
+            //mm.ExpenditureQty = Math.Round(mutation.Sum(x => x.ExpenditureQty), 2);
+            //mm.ItemCode = "";
+            //mm.ItemName = "";
+            //mm.LastQty = Math.Round(mutation.Sum(x => x.LastQty), 2);
+            //mm.ReceiptQty = Math.Round(mutation.Sum(x => x.ReceiptQty), 2);
+            //mm.SupplierType = "";
+            //mm.UnitQtyName = "";
+            //mm.OpnameQty = 0;
+            //mm.Diff = 0;
 
             var mutation2 = new List<MutationBBCentralViewModel>();
 
@@ -815,20 +815,20 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             //mutation2 = mutation2.Where(x => x.LastQty > 0).ToList();
 
             
-
-            mutation2.Add(new MutationBBCentralViewModel {
-                AdjustmentQty = mm.AdjustmentQty,
-                BeginQty = mm.BeginQty,
-                ExpenditureQty = mm.ExpenditureQty,
-                ItemCode = mm.ItemCode,
-                ItemName = mm.ItemName,
-                LastQty = mm.LastQty,
-                ReceiptQty = mm.ReceiptQty,
-                SupplierType = mm.SupplierType,
-                UnitQtyName = mm.UnitQtyName,
-                OpnameQty = mm.OpnameQty,
-                Diff = mm.Diff
-            });
+            //disableSUMMARYallData
+            //mutation2.Add(new MutationBBCentralViewModel {
+            //    AdjustmentQty = mm.AdjustmentQty,
+            //    BeginQty = mm.BeginQty,
+            //    ExpenditureQty = mm.ExpenditureQty,
+            //    ItemCode = mm.ItemCode,
+            //    ItemName = mm.ItemName,
+            //    LastQty = mm.LastQty,
+            //    ReceiptQty = mm.ReceiptQty,
+            //    SupplierType = mm.SupplierType,
+            //    UnitQtyName = mm.UnitQtyName,
+            //    OpnameQty = mm.OpnameQty,
+            //    Diff = mm.Diff
+            //});
 
             return mutation2;
 
