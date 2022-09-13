@@ -62,6 +62,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentUnitDeliveryOrderM
 
         [MaxLength(4000)]
         public string OtherDescription { get; set; }
+        public long SupplierReceiptId { get; set; }
+        [MaxLength(255)]
+        public string SupplierReceiptCode { get; set; }
+        [MaxLength(255)]
+        public string SupplierReceiptName { get; set; }
+        
+        
 
         public virtual List<GarmentUnitDeliveryOrderItem> Items { get; set; }
     }

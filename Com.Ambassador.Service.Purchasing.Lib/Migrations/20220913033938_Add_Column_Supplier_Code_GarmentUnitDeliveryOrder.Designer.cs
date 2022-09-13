@@ -13,9 +13,10 @@ using System;
 namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 {
     [DbContext(typeof(PurchasingDbContext))]
-    partial class PurchasingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220913033938_Add_Column_Supplier_Code_GarmentUnitDeliveryOrder")]
+    partial class Add_Column_Supplier_Code_GarmentUnitDeliveryOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
