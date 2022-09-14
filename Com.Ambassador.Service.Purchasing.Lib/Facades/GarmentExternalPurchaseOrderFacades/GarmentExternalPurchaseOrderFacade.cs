@@ -1343,7 +1343,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentExternalPurchaseO
                     new GarmentExternalPurchaseOrder
                     {
                         Id = i.Id,
-                        EPONo = i.EPONo
+                        EPONo = i.EPONo,
+                        Items = i.Items
                     });
 
             List<GarmentExternalPurchaseOrder> ListData = new List<GarmentExternalPurchaseOrder>(Query.OrderBy(o => o.EPONo).Take(Size));
