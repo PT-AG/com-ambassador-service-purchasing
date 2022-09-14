@@ -1344,7 +1344,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentExternalPurchaseO
                     {
                         Id = i.Id,
                         EPONo = i.EPONo,
-                        Items = i.Items
+                        Items = i.Items.Select(a => new GarmentExternalPurchaseOrderItem
+                        {
+                            DealQuantity = a.DealQuantity,
+                            DealUomUnit = a.DealUomUnit
+                        }).ToList(),
                     });
 
             List<GarmentExternalPurchaseOrder> ListData = new List<GarmentExternalPurchaseOrder>(Query.OrderBy(o => o.EPONo).Take(Size));
