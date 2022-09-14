@@ -24,7 +24,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Interfaces
         GarmentProductViewModel GetProduct(long productId);
         int EPOApprove(List<GarmentExternalPurchaseOrder> ListEPO, string user);
         List<GarmentExternalPurchaseOrder> ReadBySupplier(string Keyword = null, string Filter = "{}");
-
         MemoryStream GenerateExcelEPODODuration(string unit, string supplier, string duration, DateTime? dateFrom, DateTime? dateTo, int offset);
         Tuple<List<GarmentExternalPurchaseOrderDeliveryOrderDurationReportViewModel>, int> GetEPODODurationReport(string unit, string supplier, string duration, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset);
 		MemoryStream GenerateExcelEPOOverBudget(string epono, string unit, string supplier, string status, DateTime? dateFrom, DateTime? dateTo, int page, int size, string Order, int offset);
@@ -35,8 +34,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Interfaces
         List<GarmentExternalPurchaseOrderItem> ReadItemByPOSerialNumberLoader(string Keyword = null, string Filter = "{}", int size = 50);
         List<GarmentExternalPurchaseOrderItem> ReadItemByROLoader(string Keyword = null, string Filter = "{}", int size = 50);
         Tuple<List<GarmentExternalPurchaseOrder>, int, Dictionary<string, string>> ReadItemByEPONoSimply(string EPONo = null, int supplierId = 0, string currencyCode = null, string paymentType = null, string category = null, int Page = 1, int Size = 10);
-
         List<GarmentExternalPurchaseOrderItem> ReadItemForUnitDOByRO(string Keyword = null, string Filter = "{}");
+        List<GarmentExternalPurchaseOrder> ReadEPOForSubconDeliveryLoader(string Keyword = null, string Filter = "{}", int Size = 10);
         bool GetIsUnpost(int Id);
     }
 }

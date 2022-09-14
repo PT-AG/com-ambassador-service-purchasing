@@ -107,13 +107,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNo
                         var unitExSaved = garmentUnitExpenditureNote.Items.FirstOrDefault(d => d.UnitDOItemId == unitDOItem.Id);
                         if (unitExSaved == null || unitExSaved.IsSave == false)
                         {
+                            GarmentDOItems garmentDOItems = dbSetGarmentDOItems.FirstOrDefault(u => u.URNItemId == unitDOItem.URNItemId);
+                            garmentDOItems.RemainingQuantity += (decimal)unitDOItem.Quantity;
+
                             var garmentUnitReceiptNoteItem = dbSetGarmentUnitReceiptNoteItem.FirstOrDefault(u => u.Id == unitDOItem.URNItemId);
                             EntityExtension.FlagForUpdate(garmentUnitReceiptNoteItem, identityService.Username, USER_AGENT);
                             garmentUnitReceiptNoteItem.OrderQuantity = garmentUnitReceiptNoteItem.OrderQuantity - (decimal)unitDOItem.Quantity;
                             unitDOItem.Quantity = 0;
-
-                            GarmentDOItems garmentDOItems= dbSetGarmentDOItems.FirstOrDefault(u => u.URNItemId == unitDOItem.URNItemId);
-                            garmentDOItems.RemainingQuantity += (decimal)unitDOItem.Quantity;
                         }
                     }
                     var garmentUnitExpenditureNoteItems = garmentUnitExpenditureNote.Items.Where(x => x.IsSave).ToList();
@@ -1644,6 +1644,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNo
                         Conversion = i.Conversion,
                         BasicPrice = i.BasicPrice,
                         ReturQuantity = i.ReturQuantity,
+                        CustomsCategory=i.CustomsCategory
                     }).OrderByDescending(i => i.LastModifiedUtc).ToList()
                 });
 

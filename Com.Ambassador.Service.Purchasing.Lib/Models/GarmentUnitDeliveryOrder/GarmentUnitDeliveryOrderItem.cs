@@ -64,6 +64,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentUnitDeliveryOrderM
         public virtual long UnitDOId { get; set; }
         [ForeignKey("UnitDOId")]
         public virtual GarmentUnitDeliveryOrder GarmentUnitDeliveryOrder { get; set; }
+        public string CustomsCategory { get; set; }
     }
 }
 

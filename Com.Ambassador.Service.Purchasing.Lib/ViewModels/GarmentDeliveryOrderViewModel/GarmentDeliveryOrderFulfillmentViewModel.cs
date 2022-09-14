@@ -40,5 +40,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentDeliveryOrderV
         public double priceTotalCorrection { get; set; }
 
         public string codeRequirment { get; set; }
+        public string customsCategory { get; set; }
     }
 }

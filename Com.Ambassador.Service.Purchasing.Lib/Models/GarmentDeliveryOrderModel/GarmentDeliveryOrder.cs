@@ -60,6 +60,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentDeliveryOrderModel
         public long? DOCurrencyId { get; set; }
         public string DOCurrencyCode { get; set; }
         public double? DOCurrencyRate { get; set; }
+        public string CustomsCategory { get; set; }
 
 
         public virtual IEnumerable<GarmentDeliveryOrderItem> Items { get; set; }

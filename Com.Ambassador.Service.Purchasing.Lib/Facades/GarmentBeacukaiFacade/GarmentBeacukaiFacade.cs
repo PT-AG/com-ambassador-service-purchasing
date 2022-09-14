@@ -170,6 +170,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentBeacukaiFacade
 
                             deliveryOrder.PaymentBill = string.Concat(lastPaymentBill.format, (lastPaymentBill.counterId++).ToString("D3"));
 
+                            deliveryOrder.CustomsCategory = model.CustomsCategory == true ? "Fasilitas" : model.CustomsCategory == false ? "Non Fasilitas" : "";
                             //deliveryOrder.BillNo = null;
                             //deliveryOrder.PaymentBill = null;
                             //deliveryOrder.CustomsId = model.Id;
@@ -179,6 +180,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentBeacukaiFacade
                                 foreach (var detail in deliveryOrderItem.Details)
                                 {
                                     qty += detail.DOQuantity;
+                                    detail.CustomsCategory = model.CustomsCategory == true ? "Fasilitas" : model.CustomsCategory == false ? "Non Fasilitas" : "";
                                 }
                             }
                             item.TotalAmount = Convert.ToDecimal(deliveryOrder.TotalAmount);

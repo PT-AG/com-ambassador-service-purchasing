@@ -19,6 +19,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
         public UnitViewModel UnitRequest { get; set; }
 
         public UnitViewModel UnitSender { get; set; }
+        public IntegrationViewModel.SupplierViewModel Supplier { get; set; }
         
         public IntegrationViewModel.StorageViewModel Storage { get; set; }
         public IntegrationViewModel.StorageViewModel StorageRequest { get; set; }
@@ -82,7 +83,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
             {
                 yield return new ValidationResult("Gudang yang mengirim harus diisi", new List<string> { "Storage" });
             }
-
+            if (Supplier == null && UnitDOType == "SUBCON") 
+            {
+                yield return new ValidationResult("Penerima Subcon harus diisi", new List<string> { "Supplier" });
+            }
             if (UnitDOType == "LAIN-LAIN" && string.IsNullOrWhiteSpace(OtherDescription))
             {
                 yield return new ValidationResult("Keterangan Lain-lain harus diisi", new List<string> { "OtherDescription" });

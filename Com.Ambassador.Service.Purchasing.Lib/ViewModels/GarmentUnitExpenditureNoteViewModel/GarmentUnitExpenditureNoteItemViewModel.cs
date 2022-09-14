@@ -36,5 +36,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitExpenditur
         public decimal ReturQuantity { get; set; }
 
         public string ItemStatus { get; set; }
+        public string CustomsCategory { get; set; }
     }
 }

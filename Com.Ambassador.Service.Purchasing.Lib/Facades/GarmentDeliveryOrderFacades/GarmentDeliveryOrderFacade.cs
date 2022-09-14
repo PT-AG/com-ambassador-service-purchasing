@@ -711,6 +711,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                     s.Id,
                     s.doNo,
                     s.LastModifiedUtc,
+                    s.customsCategory,
                     items = s.items.Select(i => new
                     {
                         i.Id,
@@ -746,7 +747,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                             d.conversion,
 
                             d.smallUom,
-
+                            d.customsCategory,
                             buyer = new
                             {
                                 name = dbContext.GarmentPurchaseRequests.Where(m => m.Id == d.pRId).Select(m => m.BuyerName).FirstOrDefault()
