@@ -71,5 +71,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentUnitReceiptNoteMod
         public string SmallUomUnit { get; set; }
         public double DOCurrencyRate { get; set; }
         public long ExpenditureItemId { get; set; }
+        public string CustomsCategory { get; set; }
     }
 }

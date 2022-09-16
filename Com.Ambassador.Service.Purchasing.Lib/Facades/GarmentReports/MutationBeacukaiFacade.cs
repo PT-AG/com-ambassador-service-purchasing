@@ -767,19 +767,19 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var mutation = mutation1.OrderBy(x => x.ItemCode).ToList();
 
-            var mm = new MutationBBCentralViewModel();
+            //var mm = new MutationBBCentralViewModel();
 
-            mm.AdjustmentQty = Math.Round(mutation.Sum(x => x.AdjustmentQty), 2);
-            mm.BeginQty = Math.Round(mutation.Sum(x => x.BeginQty), 2);
-            mm.ExpenditureQty = Math.Round(mutation.Sum(x => x.ExpenditureQty), 2);
-            mm.ItemCode = "";
-            mm.ItemName = "";
-            mm.LastQty = Math.Round(mutation.Sum(x => x.LastQty), 2);
-            mm.ReceiptQty = Math.Round(mutation.Sum(x => x.ReceiptQty), 2);
-            mm.SupplierType = "";
-            mm.UnitQtyName = "";
-            mm.OpnameQty = 0;
-            mm.Diff = 0;
+            //mm.AdjustmentQty = Math.Round(mutation.Sum(x => x.AdjustmentQty), 2);
+            //mm.BeginQty = Math.Round(mutation.Sum(x => x.BeginQty), 2);
+            //mm.ExpenditureQty = Math.Round(mutation.Sum(x => x.ExpenditureQty), 2);
+            //mm.ItemCode = "";
+            //mm.ItemName = "";
+            //mm.LastQty = Math.Round(mutation.Sum(x => x.LastQty), 2);
+            //mm.ReceiptQty = Math.Round(mutation.Sum(x => x.ReceiptQty), 2);
+            //mm.SupplierType = "";
+            //mm.UnitQtyName = "";
+            //mm.OpnameQty = 0;
+            //mm.Diff = 0;
 
             var mutation2 = new List<MutationBBCentralViewModel>();
 
@@ -815,20 +815,20 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             //mutation2 = mutation2.Where(x => x.LastQty > 0).ToList();
 
             
-
-            mutation2.Add(new MutationBBCentralViewModel {
-                AdjustmentQty = mm.AdjustmentQty,
-                BeginQty = mm.BeginQty,
-                ExpenditureQty = mm.ExpenditureQty,
-                ItemCode = mm.ItemCode,
-                ItemName = mm.ItemName,
-                LastQty = mm.LastQty,
-                ReceiptQty = mm.ReceiptQty,
-                SupplierType = mm.SupplierType,
-                UnitQtyName = mm.UnitQtyName,
-                OpnameQty = mm.OpnameQty,
-                Diff = mm.Diff
-            });
+            //disableSUMMARYallData
+            //mutation2.Add(new MutationBBCentralViewModel {
+            //    AdjustmentQty = mm.AdjustmentQty,
+            //    BeginQty = mm.BeginQty,
+            //    ExpenditureQty = mm.ExpenditureQty,
+            //    ItemCode = mm.ItemCode,
+            //    ItemName = mm.ItemName,
+            //    LastQty = mm.LastQty,
+            //    ReceiptQty = mm.ReceiptQty,
+            //    SupplierType = mm.SupplierType,
+            //    UnitQtyName = mm.UnitQtyName,
+            //    OpnameQty = mm.OpnameQty,
+            //    Diff = mm.Diff
+            //});
 
             return mutation2;
 
@@ -839,23 +839,28 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             var Query = GetCentralItemBBReport(dateFrom, dateTo, offset);
             //Query = Query.OrderBy(b => b.ItemCode).ToList();
             DataTable result = new DataTable();
+            result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Barang", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Barang", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Tipe", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Tipe", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Saldo Awal", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Pemasukan", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Pengeluaran", DataType = typeof(Double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Penyesuaian", DataType = typeof(Double) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Penyesuaian", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Saldo Akhir", DataType = typeof(Double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Stock Opname", DataType = typeof(Double) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Selisih", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Gudang", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Stock Opname", DataType = typeof(Double) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Selisih", DataType = typeof(Double) });
             //if (Query.ToArray().Count() == 0)
             //    result.Rows.Add("", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             //else
+            var index = 1;
             foreach (var item in Query)
             {
-                result.Rows.Add((item.ItemCode), item.ItemName, item.SupplierType, item.UnitQtyName, item.BeginQty, item.ReceiptQty, item.ExpenditureQty, item.AdjustmentQty, item.LastQty, item.OpnameQty, item.Diff);
+                //result.Rows.Add((item.ItemCode), item.ItemName, item.SupplierType, item.UnitQtyName, item.BeginQty, item.ReceiptQty, item.ExpenditureQty, item.AdjustmentQty, item.LastQty, item.OpnameQty, item.Diff);
+                result.Rows.Add(index++,item.ItemCode, item.ItemName, item.UnitQtyName, item.BeginQty, item.ReceiptQty, item.ExpenditureQty, item.LastQty, "Gudang AG2");
+
             }
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
@@ -888,9 +893,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             var pengeluaran = new[] { "PROSES", "SAMPLE", "EXTERNAL", "SUBCON" };
             var pemasukan = new[] { "PROSES", "PEMBELIAN", "SISA SUBCON" };
 
-            var categories = GetProductCodes(1, int.MaxValue, "{}", "{}");
+            //var categories = GetProductCodes(1, int.MaxValue, "{}", "{}");
             var coderequirement = new[] { "BP", "BE" };
-            var categories1 = categories.Where(x => coderequirement.Contains(x.CodeRequirement)).Select(x => x.Name).ToArray();
+            //var categories1 = categories.Where(x => coderequirement.Contains(x.CodeRequirement)).Select(x => x.Name).ToArray();
+            var categories1 = new[] { "FABRIC", "SUBKON" };
 
             #region Balance
             //var lastdate = dbContext.BalanceStocks.OrderByDescending(x => x.CreateDate).Select(x => x.CreateDate).FirstOrDefault();

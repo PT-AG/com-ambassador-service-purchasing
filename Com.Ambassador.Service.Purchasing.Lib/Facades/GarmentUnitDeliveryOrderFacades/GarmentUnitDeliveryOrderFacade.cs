@@ -419,6 +419,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
                         FabricType = i.FabricType,
                         DesignColor = i.DesignColor,
                         DOCurrencyRate = i.DOCurrencyRate,
+                        CustomsCategory=i.CustomsCategory
                     }).ToList()
                 });
 
@@ -470,6 +471,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
                         i.URNItemId,
                         i.DesignColor,
                         i.DOCurrency,
+                        i.CustomsCategory,
                         Buyer = new
                         {
                             Id = dbContext.GarmentPurchaseRequests.Where(m => m.RONo == i.RONo).Select(m => m.BuyerId).FirstOrDefault(),

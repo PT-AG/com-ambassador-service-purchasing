@@ -48,5 +48,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
         public double ReturQtyCheck { get; set; }
 
         public int DOItemsId { get; set; }
+        public string CustomsCategory { get; set; }
     }
 }

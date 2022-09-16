@@ -392,7 +392,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
                                 EPOItemId = garmentUnitReceiptNoteItem.EPOItemId,
                                 PRItemId = garmentUnitReceiptNoteItem.PRItemId,
                                 RO = garmentUnitReceiptNoteItem.RONo,
-
+                                CustomsCategory= garmentUnitReceiptNoteItem.CustomsCategory
                             };
                             EntityExtension.FlagForCreate(garmentDOItems, identityService.Username, USER_AGENT);
                             dbSetGarmentDOItems.Add(garmentDOItems);

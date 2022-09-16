@@ -136,6 +136,16 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentExternalPurcha
                         itemErrorCount++;
                         itemError += "Product: 'Product tidak boleh kosong', ";
                     }
+                    else
+                    {
+                        if (item.Product.Name == "PROCESS")
+                        {
+                            if (String.IsNullOrEmpty(Remark))
+                            {
+                                yield return new ValidationResult("Keterangan Harus Diisi", new List<string> { "Remark" });
+                            }
+                        }
+                    }
 
                     if (item.DealQuantity <= 0)
                     {
@@ -168,6 +178,12 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentExternalPurcha
                     {
                         itemErrorCount++;
                         itemError += "SmallUom: 'Data Satuan Kecil tidak benar', ";
+                    }
+
+                    if (string.IsNullOrWhiteSpace(item.Remark))
+                    {
+                        itemErrorCount++;
+                        itemError += "Remark: 'Design/Color/Keterangan tidak boleh kosong', ";
                     }
 
                     if (item.IsOverBudget && !((PaymentMethod == "CMT" || PaymentMethod == "FREE FROM BUYER") && (PaymentType == "FREE" || PaymentType == "EX MASTER FREE")))

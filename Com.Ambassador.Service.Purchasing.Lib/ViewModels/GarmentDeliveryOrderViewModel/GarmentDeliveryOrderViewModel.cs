@@ -42,6 +42,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentDeliveryOrderV
         public string paymentType { get; set; }
         public string paymentMethod { get; set; }
         public CurrencyViewModel docurrency { get; set; }
+        public string customsCategory { get; set; }
         public List<GarmentDeliveryOrderItemViewModel> items { get; set; }
 
         //public List<long> unitReceiptNoteIds { get; set; }
