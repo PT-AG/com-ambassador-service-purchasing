@@ -1133,6 +1133,57 @@ namespace Com.Ambassador.Service.Purchasing.Test.Controllers.GarmentExternalPurc
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(response));
         }
 
+
+        [Fact]
+        public void GetEPOForSubcon_Success()
+        {
+            var validateMock = new Mock<IValidateService>();
+            validateMock.Setup(s => s.Validate(It.IsAny<GarmentExternalPurchaseOrderViewModel>())).Verifiable();
+
+            var mockFacade = new Mock<IGarmentExternalPurchaseOrderFacade>();
+
+            mockFacade.Setup(x => x.ReadEPOForSubconDeliveryLoader(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                 .Returns(new List<GarmentExternalPurchaseOrder>());
+
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(x => x.Map<List<GarmentExternalPurchaseOrderViewModel>>(It.IsAny<List<GarmentExternalPurchaseOrder>>()))
+                .Returns(new List<GarmentExternalPurchaseOrderViewModel> { ViewModel });
+
+            var IPOmockFacade = new Mock<IGarmentInternalPurchaseOrderFacade>();
+
+            GarmentExternalPurchaseOrderController controller = GetController(mockFacade, validateMock, mockMapper, IPOmockFacade);
+            var response = controller.SubconDeliveryLoader();
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(response));
+        }
+
+        [Fact]
+        public void GetEPOForSubcon_Error()
+        {
+            var validateMock = new Mock<IValidateService>();
+
+            var mockFacade = new Mock<IGarmentExternalPurchaseOrderFacade>();
+
+            var mockMapper = new Mock<IMapper>();
+
+            var IPOmockFacade = new Mock<IGarmentInternalPurchaseOrderFacade>();
+
+            var controller = new GarmentExternalPurchaseOrderController(GetServiceProvider().Object, mockMapper.Object, mockFacade.Object, IPOmockFacade.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = new DefaultHttpContext()
+                    { }
+                }
+            };
+
+            controller.ControllerContext.HttpContext.Request.Path = new PathString("/v1/unit-test");
+            controller.ControllerContext.HttpContext.Request.Headers["x-timezone-offset"] = "7";
+
+            var response = controller.SubconDeliveryLoader();
+
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
+        }
+
         [Fact]
         public void GetByPOSerialNumberLoader_Success()
         {

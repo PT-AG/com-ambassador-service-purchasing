@@ -28,6 +28,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.AutoMapperProfiles
                 .ForPath(d => d.StorageRequest.code, opt => opt.MapFrom(s => s.StorageRequestCode))
                 .ForPath(d => d.StorageRequest.name, opt => opt.MapFrom(s => s.StorageRequestName))
 
+                .ForPath(d => d.Supplier._id, opt => opt.MapFrom(s => s.SupplierReceiptId))
+                .ForPath(d => d.Supplier.name, opt => opt.MapFrom(s => s.SupplierReceiptName))
+                .ForPath(d => d.Supplier.code, opt => opt.MapFrom(s => s.SupplierReceiptCode))
+
                 .ReverseMap();
 
             CreateMap<GarmentUnitDeliveryOrderItem, GarmentUnitDeliveryOrderItemViewModel>()

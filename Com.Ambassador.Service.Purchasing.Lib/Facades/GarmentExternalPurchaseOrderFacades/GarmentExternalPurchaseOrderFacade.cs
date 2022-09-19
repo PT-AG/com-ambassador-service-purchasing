@@ -1329,6 +1329,32 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentExternalPurchaseO
             return QueryItem.ToList();
         }
 
+        public List<GarmentExternalPurchaseOrder> ReadEPOForSubconDeliveryLoader(string Keyword = null, string Filter = "{}", int Size = 10)
+        {
+            IQueryable<GarmentExternalPurchaseOrder> Query = this.dbSet.Include(s => s.Items).Where(m => m.IsPosted && m.IsDeleted == false && m.Items.Any(t => t.ProductName.Contains("PROCESS") && t.IsDeleted == false));
+            List<string> searchAttributes = new List<string>()
+            {
+                "EPONo"
+            };
+
+            Query = QueryHelper<GarmentExternalPurchaseOrder>.ConfigureSearch(Query, searchAttributes, Keyword);
+
+            Query = Query.Select(i =>
+                    new GarmentExternalPurchaseOrder
+                    {
+                        Id = i.Id,
+                        EPONo = i.EPONo,
+                        Items = i.Items.Select(a => new GarmentExternalPurchaseOrderItem
+                        {
+                            DealQuantity = a.DealQuantity,
+                            DealUomUnit = a.DealUomUnit
+                        }).ToList(),
+                    });
+
+            List<GarmentExternalPurchaseOrder> ListData = new List<GarmentExternalPurchaseOrder>(Query.OrderBy(o => o.EPONo).Take(Size));
+            return ListData;
+        }
+
         public bool GetIsUnpost(int Id)
         {
             bool response = true;

@@ -41,7 +41,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             cellHeaderContentLeft.Phrase = new Phrase("Banaran, Grogol, Sukoharjo, Jawa Tengah" + "\n" + "57552" + "\n" + "Telp (0271) 732888, 7652913", bold_font);
             tableHeader.AddCell(cellHeaderContentLeft);
 
-            cellHeaderContentRight.Phrase = new Phrase("FM-PB-00-06-010/R2", bold_font);
+            //cellHeaderContentRight.Phrase = new Phrase("FM-PB-00-06-010/R2", bold_font);
+            cellHeaderContentRight.Phrase = new Phrase("  ", bold_font);
 
             tableHeader.AddCell(cellHeaderContentRight);
 

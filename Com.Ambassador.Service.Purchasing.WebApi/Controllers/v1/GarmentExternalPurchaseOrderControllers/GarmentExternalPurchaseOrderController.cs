@@ -93,7 +93,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentExterna
                         s.IsApproved,
                         Items = s.Items.Select(i => new
                         {
-                            i.PRNo,
+                            i.PRNo
                         }),
                         s.CreatedBy,
                         s.IsPosted,
@@ -695,6 +695,28 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentExterna
             try
             {
                 var result = facade.ReadItemByROLoader(keyword, Filter);
+                Dictionary<string, object> Result =
+                        new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                        .Ok(result);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("subcon-delivery-loader")]
+        public IActionResult SubconDeliveryLoader(int size = 10, string keyword = null, string Filter = "{}")
+        {
+            try
+            {
+                identityService.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                var result = facade.ReadEPOForSubconDeliveryLoader(keyword, Filter, size);
                 Dictionary<string, object> Result =
                         new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
                         .Ok(result);
