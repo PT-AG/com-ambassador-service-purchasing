@@ -98,7 +98,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
             GarmentPurchaseRequestFacade facade = new GarmentPurchaseRequestFacade(mockServiceProvider.Object, _dbContext(GetCurrentMethod()));
             var model = dataUtil(facade, GetCurrentMethod()).GetNewData();
             model.PRType = "MASTER";
-            model.UnitCode = "C2A";
+            model.UnitCode = "AG1";
             model.RONo = null;
             foreach (var item in model.Items)
             {
@@ -124,7 +124,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
             GarmentPurchaseRequestFacade facade = new GarmentPurchaseRequestFacade(mockServiceProvider.Object, _dbContext(GetCurrentMethod()));
             var model = dataUtil(facade, GetCurrentMethod()).GetNewData();
             model.PRType = "SAMPLE";
-            model.UnitCode = "C2A";
+            model.UnitCode = "AG1";
             model.RONo = null;
             foreach (var item in model.Items)
             {
@@ -170,7 +170,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
             GarmentPurchaseRequestFacade facade = new GarmentPurchaseRequestFacade(mockServiceProvider.Object, _dbContext(GetCurrentMethod()));
             var model = dataUtil(facade, GetCurrentMethod()).GetNewData();
             //model.PRType = "MASTER";
-            model.UnitCode = "C2A";
+            model.UnitCode = "AG1";
             model.RONo = null;
             foreach (var item in model.Items)
             {
@@ -197,7 +197,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
             GarmentPurchaseRequestFacade facade = new GarmentPurchaseRequestFacade(mockServiceProvider.Object, _dbContext(GetCurrentMethod()));
             var model = dataUtil(facade, GetCurrentMethod()).GetNewData();
             model.PRType = "MASTER";
-            //model.UnitCode = "C2A";
+            //model.UnitCode = "AG1";
             model.RONo = null;
             foreach (var item in model.Items)
             {
@@ -224,7 +224,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
             GarmentPurchaseRequestFacade facade = new GarmentPurchaseRequestFacade(mockServiceProvider.Object, _dbContext(GetCurrentMethod()));
             var model = dataUtil(facade, GetCurrentMethod()).GetNewData();
             //model.PRType = "MASTER";
-            model.UnitCode = "C2A";
+            model.UnitCode = "AG1";
             //model.RONo = null;
             foreach (var item in model.Items)
             {
@@ -251,7 +251,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
             GarmentPurchaseRequestFacade facade = new GarmentPurchaseRequestFacade(mockServiceProvider.Object, _dbContext(GetCurrentMethod()));
             var model = dataUtil(facade, GetCurrentMethod()).GetNewData();
             model.PRType = "MASTER";
-            //model.UnitCode = "C2A";
+            //model.UnitCode = "AG1";
             //model.RONo = null;
             foreach (var item in model.Items)
             {
@@ -278,7 +278,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
             GarmentPurchaseRequestFacade facade = new GarmentPurchaseRequestFacade(mockServiceProvider.Object, _dbContext(GetCurrentMethod()));
             var model = dataUtil(facade, GetCurrentMethod()).GetNewData();
             model.PRType = "SAMPLE";
-            model.UnitCode = "C2A";
+            model.UnitCode = "AG1";
             model.RONo = null;
             foreach (var item in model.Items)
             {
@@ -335,7 +335,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentPurchaseRequestT
                 newModel.Items.Add(dataUtil.CopyDataItem(item));
             }
             newModel.PRType = "SAMPLE";
-            newModel.UnitCode = "C2A";
+            newModel.UnitCode = "AG1";
             var firstItem = newModel.Items.First();
             firstItem.Id = 0;
             firstItem.PO_SerialNumber = null;
