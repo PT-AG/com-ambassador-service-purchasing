@@ -273,7 +273,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
             string day = DateTimeOffset.Now.Day.ToString("D2");
             string formatDate = year + month + day;
             int counterId = 0;
-            if (deliveryOrder.BillNo != null)
+            if (deliveryOrder != null)
             {
                 PaymentBill = deliveryOrder.PaymentBill;
                 string date = PaymentBill.Substring(2, 6);
