@@ -1688,14 +1688,14 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     }
 
                     ////FactBeacukaiViewModel dup1 = Array.Find(docNo, o => o.BCType == a.BCType);
-                    if (bonspan.TryGetValue(a.BonNo, out value))
-                    {
-                        bonspan[a.BonNo]++;
-                    }
-                    else
-                    {
-                        bonspan[a.BonNo] = 1;
-                    }
+                    //if (bonspan.TryGetValue(a.BonNo, out value))
+                    //{
+                    //    bonspan[a.BonNo]++;
+                    //}
+                    //else
+                    //{
+                    //    bonspan[a.BonNo] = 1;
+                    //}
 
                     //if (rojobspan.TryGetValue(a.ROJob + a.ROSample, out value))
                     //{
@@ -1897,13 +1897,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     index += b.Value;
                 }
 
-                index = 2;
-                foreach (KeyValuePair<string, int> c in bonspan)
-                {
-                    sheet.Cells["E" + index + ":E" + (index + c.Value - 1)].Merge = true;
-                    sheet.Cells["E" + index + ":E" + (index + c.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                    index += c.Value;
-                }
+                //index = 2;
+                //foreach (KeyValuePair<string, int> c in bonspan)
+                //{
+                //    sheet.Cells["E" + index + ":E" + (index + c.Value - 1)].Merge = true;
+                //    sheet.Cells["E" + index + ":E" + (index + c.Value - 1)].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                //    index += c.Value;
+                //}
                 index = 2;
                 foreach (KeyValuePair<string, int> c in itemcodespan)
                 {
