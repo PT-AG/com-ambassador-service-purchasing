@@ -838,13 +838,13 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentUnitReceiptNoteF
             var garmentBeaCukaiFacade = new GarmentBeacukaiFacade(_dbContext(GetCurrentMethod()), GetServiceProvider());
             var datautilBC = new GarmentBeacukaiDataUtil(datautilDO, garmentBeaCukaiFacade);
 
-            MonitoringCentralBillReceptionFacade TerimaBP = new MonitoringCentralBillReceptionFacade(_dbContext(GetCurrentMethod()));
+            MonitoringCentralBillReceptionFacade TerimaBP = new MonitoringCentralBillReceptionFacade(_dbContext(GetCurrentMethod()),GetServiceProvider());
 
             var dataDO = await datautilDO.GetTestData();
             var dataBon = await datautilBon.GetTestData();
             var dataBC = await datautilBC.GetTestData(USERNAME, garmentDeliveryOrder);
 
-            var Response = TerimaBP.GetMonitoringTerimaBonPusatReport(null, null, null, 1, 25, "{}", 7);
+            var Response = TerimaBP.GetMonitoringTerimaBonPusatReport(null, null, null, null, 1, 25, "{}", 7);
             Assert.NotNull(Response.Item1);
         }
 
