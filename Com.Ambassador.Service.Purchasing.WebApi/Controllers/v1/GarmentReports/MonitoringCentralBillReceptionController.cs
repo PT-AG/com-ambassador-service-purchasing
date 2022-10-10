@@ -30,7 +30,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
             this.identityService = (IdentityService)serviceProvider.GetService(typeof(IdentityService));
         }
         [HttpGet]
-        public IActionResult GetReport(DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order = "{}")
+        public IActionResult GetReport(DateTime? dateFrom, DateTime? dateTo,bool? isImport, string ctg, int page, int size, string Order = "{}")
         {
             int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
             string accept = Request.Headers["Accept"];
@@ -38,7 +38,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
             try
             {
 
-                var data = facade.GetMonitoringTerimaBonPusatReport(dateFrom, dateTo, jnsBC, page, size, Order, offset);
+                var data = facade.GetMonitoringTerimaBonPusatReport(dateFrom, dateTo, isImport, ctg, page, size, Order, offset);
 
                 return Ok(new
                 {
@@ -58,7 +58,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
             }
         }
         [HttpGet("by-user")]
-        public IActionResult GetReportByUser(string username, DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order = "{}")
+        public IActionResult GetReportByUser(string username, DateTime? dateFrom, DateTime? dateTo, bool? isImport, string ctg, int page, int size, string Order = "{}")
         {
             identityService.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
             username = identityService.Username;
@@ -69,7 +69,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
             try
             {
 
-                var data = facade.GetMonitoringTerimaBonPusatByUserReport(dateFrom, dateTo, jnsBC, page, size, Order, offset);
+                var data = facade.GetMonitoringTerimaBonPusatByUserReport(dateFrom, dateTo, isImport, ctg, page, size, Order, offset);
 
                 return Ok(new
                 {
@@ -89,16 +89,25 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
             }
         }
         [HttpGet("download")]
-        public IActionResult GetXls(DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order = "{}")
+        public IActionResult GetXls(DateTime? dateFrom, DateTime? dateTo, bool? isImport, string ctg, int page, int size, string Order = "{}")
         {
             try
             {
                 byte[] xlsInBytes;
 
                 int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                var xls = facade.GenerateExcelMonitoringTerimaBonPusat(dateFrom, dateTo, jnsBC, page, size, Order, offset);
+                var xls = facade.GenerateExcelMonitoringTerimaBonPusat(dateFrom, dateTo, isImport,ctg, page, size, Order, offset);
 
-                string filename = "Monitoring Peneriman Bon Pusat - " + jnsBC + "-";
+                string import = "";
+                if(isImport == true)
+                {
+                    import = "IMPORT";
+                }
+                else
+                {
+                    import = "LOKAL";
+                }
+                string filename = "Monitoring Peneriman Bon Pusat - " +  import + "-";
                 if (dateFrom != null) filename += " " + ((DateTime)dateFrom).ToString("dd-MM-yyyy");
                 if (dateTo != null) filename += "_" + ((DateTime)dateTo).ToString("dd-MM-yyyy");
                 filename += ".xlsx";
@@ -117,7 +126,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
 
         }
         [HttpGet("by-user/download")]
-        public IActionResult GetXlsByUser(string username, DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order = "{}")
+        public IActionResult GetXlsByUser(string username, DateTime? dateFrom, DateTime? dateTo, bool? isImport, string ctg, int page, int size, string Order = "{}")
         {
             try
             {
@@ -127,7 +136,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
                 byte[] xlsInBytes;
 
                 int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                var xls = facade.GenerateExcelMonitoringTerimaBonPusatByUser(dateFrom, dateTo, jnsBC, page, size, Order, offset);
+                var xls = facade.GenerateExcelMonitoringTerimaBonPusatByUser(dateFrom, dateTo, isImport, ctg, page, size, Order, offset);
 
                 string filename = "Monitoring Penerimaan Bon Pusat - " + username;
                 if (dateFrom != null) filename += " " + ((DateTime)dateFrom).ToString("dd-MM-yyyy");

@@ -2,6 +2,7 @@
 using Com.Ambassador.Service.Purchasing.Lib.Interfaces;
 using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentDeliveryOrderModel;
 using Com.Ambassador.Service.Purchasing.Lib.ViewModels.MonitoringCentralBillReceptionViewModel;
+using Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewModel;
 using Com.Moonlay.Models;
 using Com.Moonlay.NetCore.Lib;
 using Microsoft.EntityFrameworkCore;
@@ -22,27 +23,29 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
 
         private readonly PurchasingDbContext dbContext;
         private readonly DbSet<GarmentDeliveryOrder> dbSet;
+        public readonly IServiceProvider serviceProvider;
 
-        public MonitoringCentralBillReceptionFacade(PurchasingDbContext dbContext)
+        public MonitoringCentralBillReceptionFacade(PurchasingDbContext dbContext, IServiceProvider serviceProvider)
         {
+            this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
             this.dbSet = dbContext.Set<GarmentDeliveryOrder>();
         }
 
         #region MonitoringCentralBillReceptionAll
-        public Tuple<List<MonitoringCentralBillReceptionViewModel>, int> GetMonitoringTerimaBonPusatReport(DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order, int offset)
+        public Tuple<List<MonitoringCentralBillReceptionViewModel>, int> GetMonitoringTerimaBonPusatReport(DateTime? dateFrom, DateTime? dateTo,bool? isImport, string ctg, int page, int size, string Order, int offset)
         {
-            var Query = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, jnsBC, offset, page, size);
+            var Query = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, isImport,ctg, offset, page, size);
 
             return Tuple.Create(Query, TotalCountReport);
         }
-        public MemoryStream GenerateExcelMonitoringTerimaBonPusat(DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order, int offset)
+        public MemoryStream GenerateExcelMonitoringTerimaBonPusat(DateTime? dateFrom, DateTime? dateTo,bool? isImport, string ctg, int page, int size, string Order, int offset)
         {
-            var Query = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, jnsBC, offset, 1, int.MaxValue);
+            var Query = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, isImport, ctg, offset, 1, int.MaxValue);
             DataTable result = new DataTable();
 
             result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "No. Bon Pusat", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "No. Bon Pusat", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tgl Bon Pusat", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "No. Bon Kecil", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tipe Bea Cukai", DataType = typeof(String) });
@@ -72,7 +75,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | QTY Sbl Konv", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Satuan Sbl Konv", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Harga", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Jumlah Harga", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | PPN", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | DPP", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | DPP Valas", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Rate", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Mata Uang", DataType = typeof(String) });
 
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Konversi", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Qty Stl Konv", DataType = typeof(String) });
@@ -92,7 +99,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
             result.Columns.Add(new DataColumn() { ColumnName = "KONF | Sat Stl Konv", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -118,10 +125,15 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
                     string URNConversion = string.Format("{0:N2}", item.URNConversion);
                     string URNSmallQuantity = string.Format("{0:N2}", item.URNSmallQuantity);
 
+                    string PPN = string.Format("{0:N2}", item.PPN);
+                    string DPPValas = string.Format("{0:N2}", item.DPPValas);
+                    string Rate = string.Format("{0:N2}", item.Rate);
+
+
                     result.Rows.Add(
-                           index, item.BillNo, BillDate, item.PaymentBill, item.CustomsType, item.BeaCukaiNo, BCDate, item.CodeRequirement, item.PaymentType, item.BuyerName, item.ProductType, item.ProductFrom,
+                           index, BillDate, item.PaymentBill, item.CustomsType, item.BeaCukaiNo, BCDate, item.CodeRequirement, item.PaymentType, item.BuyerName, item.ProductType, item.ProductFrom,
                            item.SupplierCode, item.SupplierName, item.Article, item.RONo, item.DONo, ArrivalDate, item.InvoiceNo, item.IncomeTaxNo, IncomeTaxDate, item.EPONo, item.ProductCode,
-                           item.ProductName, item.ProductRemark, DOQuantity, item.UOMUnit, PricePerDealUnit, PriceTotal, Conversion, SmallQuantity, item.SmallUOMUnit,
+                           item.ProductName, item.ProductRemark, DOQuantity, item.UOMUnit, PricePerDealUnit, PPN, PriceTotal, DPPValas, Rate, item.CurencyCode, Conversion, SmallQuantity, item.SmallUOMUnit,
                            item.InternNo, INDate, item.URNNo, ReceiptDate, item.UnitName, ReceiptQuantity, item.URNUOMUnit, URNPricePerDealUnit, URNPriceTotal, URNConversion, URNSmallQuantity, item.URNSmallUOMUnit);
                 }
             }
@@ -132,13 +144,20 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
         #endregion
         #region MonitoringCentralBillReceptionByUser
         public int TotalCountReport { get; set; } = 0;
-        private List<MonitoringCentralBillReceptionViewModel> GetMonitoringTerimaBonPusatByUserReportQuery(DateTime? dateFrom, DateTime? dateTo, string jnsBC, int offset, int page, int size)
+        private List<MonitoringCentralBillReceptionViewModel> GetMonitoringTerimaBonPusatByUserReportQuery(DateTime? dateFrom, DateTime? dateTo, bool? isImport, string ctg, int offset, int page, int size)
         {
 
 
             DateTime d1 = dateFrom == null ? new DateTime(1970, 1, 1) : dateFrom.GetValueOrDefault();
             DateTime d2 = dateTo == null ? DateTime.Now : dateTo.GetValueOrDefault();
             offset = 7;
+            string filter = (string.IsNullOrWhiteSpace(ctg) ? "{}" : "{" + "'" + "CodeRequirement" + "'" + ":" + "'" + ctg + "'" + "}");
+
+            var categories = GetProductCategories(1, int.MaxValue, "{}", filter);
+
+            //var categories1 = ctg == "BB" ? categories.Where(x => x.CodeRequirement == "BB").Select(x => x.Name).ToArray() : ctg == "BP" ? categories.Where(x => x.CodeRequirement == "BP").Select(x => x.Name).ToArray() : ctg == "BE" ? categories.Where(x => x.CodeRequirement == "BE").Select(x => x.Name).ToArray() : categories.Select(x=>x.Name).ToArray();
+
+            var categories1 = categories.Select(x => x.Name).ToArray();
 
             List<MonitoringCentralBillReceptionViewModel> listDO = new List<MonitoringCentralBillReceptionViewModel>();
 
@@ -176,9 +195,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
                          //&& Inv.IsDeleted == false && HInv.IsDeleted == false 
                          //&& NI.IsDeleted == false && URN.IsDeleted == false && IURN.IsDeleted == false
                          //&& URN.URNType == (URN.URNType == null ? URN.URNType : "PEMBELIAN")
-                         && (string.IsNullOrWhiteSpace(jnsBC) ? true : (jnsBC == "BCDL" ? d.BeacukaiNo.Substring(0, 4) == "BCDL" : d.BeacukaiNo.Substring(0, 4) != "BCDL"))
+                         //&& (string.IsNullOrWhiteSpace(jnsBC) ? true : (jnsBC == "BCDL" ? d.BeacukaiNo.Substring(0, 4) == "BCDL" : d.BeacukaiNo.Substring(0, 4) != "BCDL"))
                          //&& d.BeacukaiDate.AddHours(offset).Date >= d1.Date && d.BeacukaiDate.AddHours(offset).Date <= d2.Date
-                          && ((d1 != new DateTime(1970, 1, 1)) ? (d.ArrivalDate >= d1.Date && d.ArrivalDate <= d2.Date) : true)
+                          && a.SupplierIsImport == (isImport != null ? isImport : a.SupplierIsImport)
+                          && categories1.Contains(c.ProductName)
+                          && ((d1 != new DateTime(1970, 1, 1)) ? (URN.CreatedUtc >= d1.Date && URN.CreatedUtc <= d2.Date) : true)
                           && a.SupplierCode != "GDG"
                          //
                          select new SelectedId
@@ -203,9 +224,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
             TotalCountReport = Query.Distinct().OrderByDescending(o => o.BillDate).Count();
             var queryResult = Query.Distinct().OrderByDescending(o => o.BillDate).Skip((page - 1) * size).Take(size).ToList();
             var deliveryOrderIds = queryResult.Select(s => s.DOId).Distinct().ToList();
-            var deliveryOrders = dbContext.GarmentDeliveryOrders.Where(w => deliveryOrderIds.Contains(w.Id)).Select(s => new { s.Id, s.BillNo, s.DOCurrencyRate, s.PaymentBill, s.PaymentMethod, s.SupplierCode, s.SupplierName, s.DONo, s.ArrivalDate, s.InternNo }).ToList();
+            var deliveryOrders = dbContext.GarmentDeliveryOrders.Where(w => deliveryOrderIds.Contains(w.Id)).Select(s => new { s.Id, s.BillNo, s.DOCurrencyRate, s.PaymentBill, s.PaymentMethod, s.SupplierCode, s.SupplierName, s.DONo, s.ArrivalDate, s.InternNo,s.VatRate }).ToList();
             var deliveryOrderItemIds = queryResult.Select(s => s.DOItemId).Distinct().ToList();
-            var deliveryOrderItems = dbContext.GarmentDeliveryOrderItems.Where(w => deliveryOrderItemIds.Contains(w.Id)).Select(s => new { s.Id, s.EPONo }).ToList();
+            var deliveryOrderItems = dbContext.GarmentDeliveryOrderItems.Where(w => deliveryOrderItemIds.Contains(w.Id)).Select(s => new { s.Id, s.EPONo,s.CurrencyCode }).ToList();
             var deliveryOrderDetailIds = queryResult.Select(s => s.DODetailId).Distinct().ToList();
             var deliveryOrderDetails = dbContext.GarmentDeliveryOrderDetails.Where(w => deliveryOrderDetailIds.Contains(w.Id)).Select(s => new { s.Id, s.CodeRequirment, s.POSerialNumber, s.ProductCode, s.ProductName, s.DOQuantity, s.UomUnit, s.PricePerDealUnit, s.PriceTotal, s.Conversion, s.SmallQuantity, s.SmallUomUnit }).ToList();
             var beaCukaiIds = queryResult.Select(s => s.BCId).Distinct().ToList();
@@ -270,7 +291,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
                 monitoringcentralbillreceptionViewModel.DOQuantity = deliveryOrderDetail.DOQuantity;
                 monitoringcentralbillreceptionViewModel.UOMUnit = deliveryOrderDetail.UomUnit;
                 monitoringcentralbillreceptionViewModel.PricePerDealUnit = Math.Round((double)deliveryOrder.DOCurrencyRate * deliveryOrderDetail.PricePerDealUnit, 2);
+                monitoringcentralbillreceptionViewModel.PPN = Math.Round((double)(deliveryOrder.DOCurrencyRate* deliveryOrderDetail.PricePerDealUnit* deliveryOrderDetail.DOQuantity) * (double)(deliveryOrder.VatRate/100), 2);
                 monitoringcentralbillreceptionViewModel.PriceTotal = Math.Round((double)deliveryOrder.DOCurrencyRate * deliveryOrderDetail.PricePerDealUnit * deliveryOrderDetail.DOQuantity, 2);
+                monitoringcentralbillreceptionViewModel.DPPValas = deliveryOrderItem.CurrencyCode != "IDR" ? Math.Round((double)deliveryOrder.DOCurrencyRate * deliveryOrderDetail.PricePerDealUnit * deliveryOrderDetail.DOQuantity, 2) : 0;
+                monitoringcentralbillreceptionViewModel.Rate = Math.Round((double)deliveryOrder.DOCurrencyRate, 2); ;
+                monitoringcentralbillreceptionViewModel.CurencyCode = deliveryOrderItem.CurrencyCode;
                 monitoringcentralbillreceptionViewModel.Conversion = deliveryOrderDetail.Conversion;
                 monitoringcentralbillreceptionViewModel.SmallQuantity = deliveryOrderDetail.DOQuantity * deliveryOrderDetail.Conversion;
                 monitoringcentralbillreceptionViewModel.SmallUOMUnit = deliveryOrderDetail.SmallUomUnit;
@@ -288,6 +313,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
                 monitoringcentralbillreceptionViewModel.URNSmallUOMUnit = unitReceiptNoteItem == null ? "-" : unitReceiptNoteItem.SmallUomUnit;
                 monitoringcentralbillreceptionViewModel.URNType = unitReceiptNote == null ? "-" : unitReceiptNote.URNType;
 
+
+
                 listDO.Add(monitoringcentralbillreceptionViewModel);
                 i++;
             }
@@ -295,22 +322,22 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
         }
 
 
-        public Tuple<List<MonitoringCentralBillReceptionViewModel>, int> GetMonitoringTerimaBonPusatByUserReport(DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order, int offset)
+        public Tuple<List<MonitoringCentralBillReceptionViewModel>, int> GetMonitoringTerimaBonPusatByUserReport(DateTime? dateFrom, DateTime? dateTo,bool? isImport, string ctg, int page, int size, string Order, int offset)
         {
-            var Data = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, jnsBC, offset, page, size);
+            var Data = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, isImport,ctg, offset, page, size);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
             return Tuple.Create(Data, TotalCountReport);
         }
 
-        public MemoryStream GenerateExcelMonitoringTerimaBonPusatByUser(DateTime? dateFrom, DateTime? dateTo, string jnsBC, int page, int size, string Order, int offset)
+        public MemoryStream GenerateExcelMonitoringTerimaBonPusatByUser(DateTime? dateFrom, DateTime? dateTo, bool? isImport, string ctg, int page, int size, string Order, int offset)
         {
-            var Query = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, jnsBC, offset, 1, int.MaxValue);
+            var Query = GetMonitoringTerimaBonPusatByUserReportQuery(dateFrom, dateTo, isImport, ctg, offset, 1, int.MaxValue);
             DataTable result = new DataTable();
 
             result.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "No. Bon Pusat", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "No. Bon Pusat", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tgl Bon Pusat", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "No. Bon Kecil", DataType = typeof(String) });
 
@@ -341,7 +368,11 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | QTY Sbl Konv", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Satuan Sbl Konv", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Harga", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Jumlah Harga", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | PPN", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | DPP", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | DPP Valas", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Rate", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Mata Uang", DataType = typeof(String) });
 
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Konversi", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "PUSAT | Qty Stl Konv", DataType = typeof(String) });
@@ -361,7 +392,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
             result.Columns.Add(new DataColumn() { ColumnName = "KONF | Sat Stl Konv", DataType = typeof(String) });
 
             if (Query.ToArray().Count() == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add( "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","","","",""); // to allow column name to be generated properly for empty data as template
             else
             {
                 int index = 0;
@@ -388,10 +419,14 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
                     string URNConversion = string.Format("{0:N2}", item.URNConversion);
                     string URNSmallQuantity = string.Format("{0:N2}", item.URNSmallQuantity);
 
+                    string PPN = string.Format("{0:N2}", item.PPN);
+                    string DPPValas = string.Format("{0:N2}", item.DPPValas);
+                    string Rate = string.Format("{0:N2}", item.Rate);
+
                     result.Rows.Add(
-                           index, item.BillNo, BillDate, item.PaymentBill, item.CustomsType, item.BeaCukaiNo, BCDate, item.CodeRequirement, item.PaymentType, item.BuyerName, item.ProductType, item.ProductFrom,
+                           index, BillDate, item.PaymentBill, item.CustomsType, item.BeaCukaiNo, BCDate, item.CodeRequirement, item.PaymentType, item.BuyerName, item.ProductType, item.ProductFrom,
                            item.SupplierCode, item.SupplierName, item.Article, item.RONo, item.DONo, ArrivalDate, item.InvoiceNo, item.IncomeTaxNo, IncomeTaxDate, item.EPONo, item.ProductCode,
-                           item.ProductName, item.ProductRemark, DOQuantity, item.UOMUnit, PricePerDealUnit, PriceTotal, Conversion, SmallQuantity, item.SmallUOMUnit,
+                           item.ProductName, item.ProductRemark, DOQuantity, item.UOMUnit, PricePerDealUnit,PPN, PriceTotal,DPPValas,Rate,item.CurencyCode, Conversion, SmallQuantity, item.SmallUOMUnit,
                            item.InternNo, INDate, item.URNNo, ReceiptDate, item.UnitName, ReceiptQuantity, item.URNUOMUnit, URNPricePerDealUnit, URNPriceTotal, URNConversion, URNSmallQuantity, item.URNSmallUOMUnit);
                 }
             }
@@ -399,6 +434,56 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.MonitoringCentralBillRec
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
         }
         #endregion
+
+        private List<GarmentCategoryViewModel> GetProductCategories(int page, int size, string order, string filter)
+        {
+            IHttpClientService httpClient = (IHttpClientService)this.serviceProvider.GetService(typeof(IHttpClientService));
+
+
+            var garmentSupplierUri = APIEndpoint.Core + $"master/garment-categories";
+            string queryUri = "?page=" + page + "&size=" + size + "&order=" + order + "&filter=" + filter;
+            string uri = garmentSupplierUri + queryUri;
+            var httpResponse = httpClient.GetAsync($"{uri}").Result;
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                var content = httpResponse.Content.ReadAsStringAsync().Result;
+                Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);
+
+                List<GarmentCategoryViewModel> viewModel;
+                if (result.GetValueOrDefault("data") == null)
+                {
+                    viewModel = new List<GarmentCategoryViewModel>();
+                }
+                else
+                {
+                    viewModel = JsonConvert.DeserializeObject<List<GarmentCategoryViewModel>>(result.GetValueOrDefault("data").ToString());
+
+                }
+                return viewModel;
+            }
+            else
+            {
+                List<GarmentCategoryViewModel> viewModel = new List<GarmentCategoryViewModel>();
+                return viewModel;
+            }
+
+            //if (httpClient != null)
+            //{
+            //    var garmentSupplierUri = APIEndpoint.Core + $"master/garment-categories";
+            //    string queryUri = "?page=" + page + "&size=" + size + "&order=" + order + "&filter=" + filter;
+            //    string uri = garmentSupplierUri + queryUri;
+            //    var response = httpClient.GetAsync($"{uri}").Result.Content.ReadAsStringAsync();
+            //    Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
+            //    List<GarmentCategoryViewModel> viewModel = JsonConvert.DeserializeObject<List<GarmentCategoryViewModel>>(result.GetValueOrDefault("data").ToString());
+            //    return viewModel;
+            //}
+            //else
+            //{
+            //    List<GarmentCategoryViewModel> viewModel = null;
+            //    return viewModel;
+            //}
+        }
 
     }
 
