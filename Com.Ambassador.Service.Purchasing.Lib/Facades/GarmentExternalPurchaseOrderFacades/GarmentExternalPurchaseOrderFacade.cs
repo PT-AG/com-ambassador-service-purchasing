@@ -1372,5 +1372,20 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentExternalPurchaseO
 
             return response;
         }
+
+        public List<GarmentExternalPurchaseOrder> ReadEPONoMany(string EPONo)
+        {
+            var listEPONo = EPONo.Split(",");
+
+            var data = dbContext.GarmentExternalPurchaseOrders.Where(w => listEPONo.Contains(w.EPONo)).Select(s => new GarmentExternalPurchaseOrder
+            {
+                EPONo = s.EPONo,
+                SupplierCode = s.SupplierCode,
+                SupplierId = s.SupplierId,
+                SupplierName = s.SupplierName
+            }).ToList();
+
+            return data;
+        }
     }
 }
