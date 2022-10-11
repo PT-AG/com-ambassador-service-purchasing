@@ -41,7 +41,6 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReports
 
             try
             {
-
                 var data = facade.GetMonitoring(prId, Order);
 
                 return Ok(new
