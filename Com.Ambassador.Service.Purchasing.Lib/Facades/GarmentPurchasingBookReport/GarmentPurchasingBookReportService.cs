@@ -119,6 +119,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
                             IsUseIncomeTax = deliveryOrderInvoices != null ? deliveryOrderInvoices.UseIncomeTax : false,
                             IsIncomeTaxPaidBySupplier = deliveryOrderInvoices != null ? deliveryOrderInvoices.IsPayTax : false,
                             IncomeTaxRate = deliveryOrderInvoices != null ? deliveryOrderInvoices.IncomeTaxRate : 0.0,
+                            PriceTotalCorrection = deliveryOrderDetails != null ? deliveryOrderDetails.PriceTotalCorrection : 0,
                         };
 
             //select new ReportIndexDto(deliveryOrderCustoms.ArrivalDate, deliveryOrderExternalPurchaseOrders.SupplierId, deliveryOrderExternalPurchaseOrders.SupplierName, deliveryOrderExternalPurchaseOrders.SupplierImport, deliveryOrderInternalNoteDetails.ProductName, (int) garmentDeliveryOrders.Id, garmentDeliveryOrders.DONo, garmentDeliveryOrders.BillNo, garmentDeliveryOrders.PaymentBill, (int) deliveryOrderInvoices.Id, deliveryOrderInvoices.InvoiceNo, deliveryOrderInvoices.VatNo, (int) deliveryOrderInternalNotes.Id, deliveryOrderInternalNotes.INNo, 0, deliveryOrderExternalPurchaseOrders.Category, 0, deliveryOrderExternalPurchaseOrders.Category, deliveryOrderInternalNoteDetails.Quantity, (int) deliveryOrderInternalNotes.CurrencyId.GetValueOrDefault(), deliveryOrderInternalNotes.CurrencyCode, deliveryOrderInternalNotes.CurrencyRate, deliveryOrderInternalNoteDetails.PriceTotal, deliveryOrderInvoices.UseVat, deliveryOrderInvoices.IsPayVat, deliveryOrderInvoices.UseIncomeTax, deliveryOrderInvoices.IsPayTax, deliveryOrderInvoices.IncomeTaxRate);
@@ -165,7 +166,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
                 entity.SupplierName, 
                 entity.IsImportSupplier, 
                 entity.ProductName, 
-                (int)entity.DeliveryOrderId, entity.DeliveryOrderNo, entity.BillNo, entity.PaymentBill, (int)entity.InvoiceId, entity.InvoiceNo, entity.VATNo, (int)entity.InternalNoteId, entity.InternalNoteNo, 0, entity.PurchasingCategoryName, 0, entity.AccountingCategoryName, entity.InternalNoteQuantity, entity.CurrencyId, entity.CurrencyCode, entity.CurrencyRate, entity.DPPAmount, entity.IsUseVAT, entity.IsPayVAT, entity.IsUseIncomeTax, entity.IsIncomeTaxPaidBySupplier, entity.IncomeTaxRate, entity.CustomsDate, entity.CustomsNo, entity.CustomsType, entity.ImportValueRemark)).ToList();
+                (int)entity.DeliveryOrderId, entity.DeliveryOrderNo, entity.BillNo, entity.PaymentBill, (int)entity.InvoiceId, entity.InvoiceNo, entity.VATNo, (int)entity.InternalNoteId, entity.InternalNoteNo, 0, entity.PurchasingCategoryName, 0, entity.AccountingCategoryName, entity.InternalNoteQuantity, entity.CurrencyId, entity.CurrencyCode, entity.CurrencyRate, entity.DPPAmount, entity.IsUseVAT, entity.IsPayVAT, entity.IsUseIncomeTax, entity.IsIncomeTaxPaidBySupplier, entity.IncomeTaxRate, entity.CustomsDate, entity.CustomsNo, entity.CustomsType, entity.ImportValueRemark,(double)entity.PriceTotalCorrection)).ToList();
 
             var reportCategories = data
                 .GroupBy(element => new { element.CurrencyCode, element.AccountingCategoryName })
@@ -208,6 +209,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "DPP", DataType = typeof(decimal) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "PPN", DataType = typeof(decimal) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "PPh", DataType = typeof(decimal) });
+            reportDataTable.Columns.Add(new DataColumn() { ColumnName = "Koreksi", DataType = typeof(decimal) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "Total(IDR)", DataType = typeof(decimal) });
             //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "Mata Uang", DataType = typeof(string) });
             //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "DPP Valas", DataType = typeof(decimal) });
@@ -227,7 +229,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
             {
                 foreach (var report in result.Data)
                 {
-                    reportDataTable.Rows.Add(report.CustomsArrivalDate.ToString("dd/MM/yyyy"), report.SupplierName, report.ProductName, report.GarmentDeliveryOrderNo, report.BillNo, report.PaymentBill, report.InvoiceNo, report.VATNo, report.InternalNoteNo, report.PurchasingCategoryName, report.AccountingCategoryName, report.InternalNoteQuantity, report.CurrencyCode, report.DPPAmount, report.VATAmount, report.IncomeTaxAmount, report.Total);
+                    reportDataTable.Rows.Add(report.CustomsArrivalDate.ToString("dd/MM/yyyy"), report.SupplierName, report.ProductName, report.GarmentDeliveryOrderNo, report.BillNo, report.PaymentBill, report.InvoiceNo, report.VATNo, report.InternalNoteNo, report.PurchasingCategoryName, report.AccountingCategoryName, report.InternalNoteQuantity, report.CurrencyCode, report.DPPAmount, report.VATAmount, report.IncomeTaxAmount,report.PriceCorrection, report.Total);
                 }
                 foreach (var categorySummary in result.Categories)
                     categoryDataTable.Rows.Add(categorySummary.CategoryName, categorySummary.Amount);

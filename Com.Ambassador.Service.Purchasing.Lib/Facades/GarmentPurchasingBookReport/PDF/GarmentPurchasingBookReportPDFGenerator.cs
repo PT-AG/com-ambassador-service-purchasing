@@ -644,8 +644,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
             table.AddCell(cellCenterWithBackground);
             cellCenterWithBackground.Phrase = new Phrase("No. Surat Jalan", _subHeaderFont);
             table.AddCell(cellCenterWithBackground);
-            cellCenterWithBackground.Phrase = new Phrase("No. BP Besar", _subHeaderFont);
-            table.AddCell(cellCenterWithBackground);
+            //cellCenterWithBackground.Phrase = new Phrase("No. BP Besar", _subHeaderFont);
+            //table.AddCell(cellCenterWithBackground);
             cellCenterWithBackground.Phrase = new Phrase("No. BP Kecil", _subHeaderFont);
             table.AddCell(cellCenterWithBackground);
             cellCenterWithBackground.Phrase = new Phrase("No. Invoice", _subHeaderFont);
@@ -661,7 +661,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
             cellCenterWithBackground.Phrase = new Phrase("Mata Uang", _subHeaderFont);
             table.AddCell(cellCenterWithBackground);
             cellCenterWithBackground.Rowspan = 1;
-            cellCenterWithBackground.Colspan = 3;
+            cellCenterWithBackground.Colspan = 4;
             cellCenterWithBackground.Phrase = new Phrase("Pembelian", _subHeaderFont);
             table.AddCell(cellCenterWithBackground);
             cellCenterWithBackground.Rowspan = 2;
@@ -675,6 +675,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
             cellCenterWithBackground.Phrase = new Phrase("PPN", _subHeaderFont);
             table.AddCell(cellCenterWithBackground);
             cellCenterWithBackground.Phrase = new Phrase("PPh", _subHeaderFont);
+            table.AddCell(cellCenterWithBackground);
+            cellCenterWithBackground.Phrase = new Phrase("Koreksi", _subHeaderFont);
             table.AddCell(cellCenterWithBackground);
 
             foreach (var accountingCategory in _accountingCategories)
@@ -701,8 +703,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
                     table.AddCell(cellLeft);
                     cellCenter.Phrase = new Phrase(item.GarmentDeliveryOrderNo, _normalFont);
                     table.AddCell(cellCenter);
-                    cellCenter.Phrase = new Phrase(item.BillNo, _normalFont);
-                    table.AddCell(cellCenter);
+                    //cellCenter.Phrase = new Phrase(item.BillNo, _normalFont);
+                    //table.AddCell(cellCenter);
                     cellCenter.Phrase = new Phrase(item.PaymentBill, _normalFont);
                     table.AddCell(cellCenter);
                     cellCenter.Phrase = new Phrase(item.InvoiceNo, _normalFont);
@@ -723,6 +725,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
                     table.AddCell(cellRight);
                     cellRight.Phrase = new Phrase(item.IncomeTaxAmount.ToString("0,0.00", CultureInfo.InvariantCulture), _normalFont);
                     table.AddCell(cellRight);
+                    cellRight.Phrase = new Phrase(item.PriceCorrection.ToString("0,0.00", CultureInfo.InvariantCulture), _normalFont);
+                    table.AddCell(cellRight);
                     cellRight.Phrase = new Phrase(item.Total.ToString("0,0.00", CultureInfo.InvariantCulture), _normalFont);
                     table.AddCell(cellRight);
                 }
@@ -735,7 +739,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
                     var incomeTaxAmount = items.Sum(item => item.IncomeTaxAmount);
                     var grandTotal = items.Sum(item => item.Total);
 
-                    cellRight.Colspan = 12;
+                    var corectionTotal = items.Sum(item => item.PriceCorrection);
+
+                    cellRight.Colspan = 11;
                     cellRight.Phrase = new Phrase(totalRemark, _normalBoldFont);
                     table.AddCell(cellRight);
                     cellRight.Colspan = 1;
@@ -747,6 +753,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
                     table.AddCell(cellRight);
 
                     cellRight.Phrase = new Phrase(incomeTaxAmount.ToString("0,0.00", CultureInfo.InvariantCulture), _normalBoldFont);
+                    table.AddCell(cellRight);
+
+                    cellRight.Phrase = new Phrase(corectionTotal.ToString("0,0.00", CultureInfo.InvariantCulture), _normalBoldFont);
                     table.AddCell(cellRight);
 
                     cellRight.Phrase = new Phrase(grandTotal.ToString("0,0.00", CultureInfo.InvariantCulture), _normalBoldFont);
