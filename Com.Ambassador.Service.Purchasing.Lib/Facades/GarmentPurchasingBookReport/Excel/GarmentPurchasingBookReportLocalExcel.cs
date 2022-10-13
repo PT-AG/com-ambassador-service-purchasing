@@ -21,7 +21,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "Supplier", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "Nama Barang", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "No Surat Jalan", DataType = typeof(string) });
-            reportDataTable.Columns.Add(new DataColumn() { ColumnName = "No BP Besar", DataType = typeof(string) });
+            //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "No BP Besar", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "No BP Kecil", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "No Invoice", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "No Faktur Pajak", DataType = typeof(string) });
@@ -33,6 +33,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "DPP", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "PPN", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "PPh", DataType = typeof(string) });
+            reportDataTable.Columns.Add(new DataColumn() { ColumnName = "Koreksi", DataType = typeof(string) });
             reportDataTable.Columns.Add(new DataColumn() { ColumnName = "Total(IDR)", DataType = typeof(string) });
 
             var categoryDataTable = new DataTable();
@@ -56,7 +57,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
 
                         report.ProductName, 
                         report.GarmentDeliveryOrderNo, 
-                        report.BillNo, 
+                        //report.BillNo, 
                         report.PaymentBill, 
                         report.InvoiceNo, 
                         report.VATNo, 
@@ -67,7 +68,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchasingBookRep
                         report.CurrencyCode, 
                         report.DPPAmount.ToString("N2", ci), 
                         report.VATAmount.ToString("N2", ci), 
-                        report.IncomeTaxAmount.ToString("N2", ci), 
+                        report.IncomeTaxAmount.ToString("N2", ci),
+                        report.PriceCorrection.ToString("N2",ci),
                         report.Total.ToString("N2", ci));
                 }
                 foreach (var categorySummary in result.Categories)
