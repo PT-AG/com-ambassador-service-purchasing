@@ -250,7 +250,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
                 throw new Exception("UnitCode format is invalid when Generate RONo");
             }
 
-            var prefix = string.Concat(y, unitCode);
+            var prefix = string.Concat("AG", y, unitCode);
             var padding = 5;
             var suffix = string.Empty;
 

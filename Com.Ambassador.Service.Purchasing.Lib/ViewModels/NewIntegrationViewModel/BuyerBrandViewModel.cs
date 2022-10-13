@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewModel
 {
-    public class BuyerViewModel
+    public class BuyerBrandViewModel
     {
         public string Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public BuyerViewModel Buyers { get; set; }
     }
 }

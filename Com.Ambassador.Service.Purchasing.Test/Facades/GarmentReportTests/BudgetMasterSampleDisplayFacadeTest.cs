@@ -10,6 +10,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Text;
 using Xunit;
 
@@ -29,10 +30,28 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentReportTests
 
         private Mock<IServiceProvider> GetMockServiceProvider()
         {
+
+            HttpResponseMessage message = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            message.Content = new StringContent("{\"apiVersion\":\"1.0\",\"statusCode\":200,\"message\":\"Ok\",\"data\":[{\"Id\":7,\"code\":\"USD\",\"rate\":13700.0,\"date\":\"2018/10/20\"}],\"info\":{\"count\":1,\"page\":1,\"size\":1,\"total\":2,\"order\":{\"date\":\"desc\"},\"select\":[\"Id\",\"code\",\"rate\",\"date\"]}}");
+
             var mockServiceProvider = new Mock<IServiceProvider>();
+            var httpClientServiceMock = new Mock<IHttpClientService>();
+
+            httpClientServiceMock
+                .Setup(x => x.GetAsync(It.IsRegex($"^master/garment-buyer-brands/all")))
+                .ReturnsAsync(message);
+
+            httpClientServiceMock
+                .Setup(x => x.GetAsync(It.IsRegex($"^master/garment-buyers/all")))
+                .ReturnsAsync(message);
+
             mockServiceProvider
                 .Setup(x => x.GetService(typeof(IdentityService)))
                 .Returns(new IdentityService { Username = "Username" });
+
+            mockServiceProvider
+                .Setup(x => x.GetService(typeof(IHttpClientService)))
+                .Returns(httpClientServiceMock.Object);
 
             return mockServiceProvider;
         }
