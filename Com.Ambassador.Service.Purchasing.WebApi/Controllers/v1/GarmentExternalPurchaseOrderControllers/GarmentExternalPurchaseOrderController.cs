@@ -730,5 +730,37 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentExterna
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+
+        [HttpGet("by-epo-no-many")]
+        public IActionResult ByEPONoMany([FromBody] string EPONo)
+        {
+            try
+            {
+                identityService.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+
+                var Data = facade.ReadEPONoMany(EPONo);
+                var viewModel = mapper.Map<List<GarmentExternalPurchaseOrderViewModel>>(Data);
+
+                List<object> listData = new List<object>();
+                listData.AddRange(
+                    viewModel.AsQueryable().Select(s => new
+                    {
+                        s.EPONo,
+                        s.Supplier,
+                    }).ToList()
+                );
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(listData);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
     }
 }

@@ -36,6 +36,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Interfaces
         Tuple<List<GarmentExternalPurchaseOrder>, int, Dictionary<string, string>> ReadItemByEPONoSimply(string EPONo = null, int supplierId = 0, string currencyCode = null, string paymentType = null, string category = null, int Page = 1, int Size = 10);
         List<GarmentExternalPurchaseOrderItem> ReadItemForUnitDOByRO(string Keyword = null, string Filter = "{}");
         List<GarmentExternalPurchaseOrder> ReadEPOForSubconDeliveryLoader(string Keyword = null, string Filter = "{}", int Size = 10);
+        List<GarmentExternalPurchaseOrder> ReadEPONoMany(string EPONo);
         bool GetIsUnpost(int Id);
     }
 }

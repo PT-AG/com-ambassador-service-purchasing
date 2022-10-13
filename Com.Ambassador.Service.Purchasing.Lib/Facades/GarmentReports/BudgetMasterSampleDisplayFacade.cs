@@ -1,4 +1,5 @@
 ﻿using Com.Ambassador.Service.Purchasing.Lib.Helpers;
+using Com.Ambassador.Service.Purchasing.Lib.Interfaces;
 using Com.Ambassador.Service.Purchasing.Lib.Services;
 using Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentReports;
 using Newtonsoft.Json;
@@ -27,8 +28,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
         }
 
         public IQueryable<BudgetMasterSampleDisplayViewModel> GetDisplayQuery(long prId)
-
         {
+            IQueryable<ViewModels.NewIntegrationViewModel.BuyerViewModel> buyerQ = GetGarmentBuyer().AsQueryable();
+            IQueryable<ViewModels.NewIntegrationViewModel.BuyerBrandViewModel> buyerbrandQ = GetGarmentBuyerBrand().AsQueryable();
+
             var Query = (from a in dbContext.GarmentPurchaseRequests
                          join b in dbContext.GarmentPurchaseRequestItems on a.Id equals b.GarmentPRId
                          where a.Id == prId
@@ -45,13 +48,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                              Quantity = b.Quantity * b.PriceConversion,
                              Uom = b.PriceUomUnit,
                              Price = b.BudgetPrice,
-                             POSerialNumber = b.PO_SerialNumber
+                             POSerialNumber = b.PO_SerialNumber,
+                             Type = buyerQ.Where(x=> x.Id == buyerbrandQ.Where(y=> y.Code == a.BuyerCode).Select(y => y.Buyers.Id).FirstOrDefault()).Select(x=> x.Type).FirstOrDefault()
                          });
             return Query;
         }
 
         public Tuple<List<BudgetMasterSampleDisplayViewModel>, int> GetMonitoring(long prId, string Order)
-
         {
             var Query = GetDisplayQuery(prId);
 
@@ -90,6 +93,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             result.Columns.Add(new DataColumn() { ColumnName = "Nomor RO", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Buyer", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nama Buyer", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Tipe Buyer", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Artikel", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tgl Shipment", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "Kode Barang", DataType = typeof(string) });
@@ -114,10 +118,52 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     string BgtPrc = string.Format("{0:N2}", item.Price);
                     string BgtAmt = string.Format("{0:N2}", item.Quantity * item.Price);
 
-                    result.Rows.Add(index, item.RO_Number, item.BuyerCode, item.BuyerName, item.Article, ShipDate, item.ProductCode, item.Remark, QtyBgt, item.Uom, BgtPrc, BgtAmt, item.POSerialNumber);
+                    result.Rows.Add(index, item.RO_Number, item.BuyerCode, item.BuyerName, item.Type, item.Article, ShipDate, item.ProductCode, item.Remark, QtyBgt, item.Uom, BgtPrc, BgtAmt, item.POSerialNumber);
                 }
             //}
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Display RO Master") }, true);
+        }
+
+        public List<ViewModels.NewIntegrationViewModel.BuyerViewModel> GetGarmentBuyer()
+        {
+            IHttpClientService httpClientService = (IHttpClientService)serviceProvider.GetService(typeof(IHttpClientService));
+
+            string buyerUri = "master/garment-buyers/all";
+            var response = httpClientService.GetAsync($@"{APIEndpoint.Core}{buyerUri}").Result.Content.ReadAsStringAsync();
+
+            if (response != null)
+            {
+                Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
+                var json = result.Single(p => p.Key.Equals("data")).Value;
+                List<ViewModels.NewIntegrationViewModel.BuyerViewModel> buyerList = JsonConvert.DeserializeObject<List<ViewModels.NewIntegrationViewModel.BuyerViewModel>>(json.ToString());
+
+                return buyerList;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<ViewModels.NewIntegrationViewModel.BuyerBrandViewModel> GetGarmentBuyerBrand()
+        {
+            IHttpClientService httpClientService = (IHttpClientService)serviceProvider.GetService(typeof(IHttpClientService));
+
+            string buyerbrandUri = "master/garment-buyer-brands/all";
+            var response = httpClientService.GetAsync($@"{APIEndpoint.Core}{buyerbrandUri}").Result.Content.ReadAsStringAsync();
+
+            if (response != null)
+            {
+                Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Result);
+                var json = result.Single(p => p.Key.Equals("data")).Value;
+                List<ViewModels.NewIntegrationViewModel.BuyerBrandViewModel> buyerList = JsonConvert.DeserializeObject<List<ViewModels.NewIntegrationViewModel.BuyerBrandViewModel>>(json.ToString());
+
+                return buyerList;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 

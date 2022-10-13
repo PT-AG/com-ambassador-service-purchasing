@@ -8,6 +8,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentReports
         public DateTimeOffset DeliveryDate { get; set; }
         public string BuyerCode { get; set; }
         public string BuyerName { get; set; }
+        public string Type { get; set; }
         public string Article { get; set; }
         public string ProductCode { get; set; }
         public string Remark { get; set; }
