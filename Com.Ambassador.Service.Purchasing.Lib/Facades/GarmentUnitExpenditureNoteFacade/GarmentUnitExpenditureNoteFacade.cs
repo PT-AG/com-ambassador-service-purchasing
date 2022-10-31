@@ -975,8 +975,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNo
             return Created;
         }
 
-        
-
         public async Task<int> Delete(int id)
         {
             int Deleted = 0;
@@ -1960,6 +1958,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNo
             return Query.AsQueryable();
 
         }
+
         public MemoryStream GenerateExcelMonOut(DateTime? dateFrom, DateTime? dateTo, string category, int offset)
         {
             var Query = GetReportQueryOut(dateFrom, dateTo, category, offset);
@@ -2147,6 +2146,40 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNo
             }
 
             return Updated;
+        }
+
+        public List<object> ReadLoaderProductByROJob(string Keyword = null, string Filter = "{}", int size = 50)
+        {
+            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
+            bool hasRONoFilter = FilterDictionary.ContainsKey("RONo");
+            string RONo = hasRONoFilter ? (FilterDictionary["RONo"] ?? "").Trim() : "";
+
+            Keyword = (Keyword ?? "").Trim();
+
+            IQueryable<GarmentUnitExpenditureNoteItem> Query = (from uenItem in dbContext.GarmentUnitExpenditureNoteItems
+                                                                join uen in dbSet on uenItem.UENId equals uen.Id
+                                                                join b in dbContext.GarmentUnitDeliveryOrders
+                                                                on uen.UnitDOId equals b.Id
+                                                                where b.RONo == RONo
+                                                                && uenItem.IsDeleted == false
+                                                                && uenItem.ProductCode.Contains(Keyword)
+                                                                && uen.ExpenditureType == "SUBCON"
+                                                                && uenItem.ProductName == "FABRIC"
+                                                                select uenItem).AsQueryable();
+
+            var Data = from a in Query
+                       join b in dbContext.GarmentUnitReceiptNoteItems on a.URNItemId equals b.Id
+                       select new
+                       {
+                           a.ProductCode,
+                           a.ProductName,
+                           a.ProductId,
+                           b.DesignColor
+                       };
+
+            List<object> ListData = new List<object>();
+            ListData.AddRange(Data.Distinct());
+            return ListData;
         }
     }
 }
