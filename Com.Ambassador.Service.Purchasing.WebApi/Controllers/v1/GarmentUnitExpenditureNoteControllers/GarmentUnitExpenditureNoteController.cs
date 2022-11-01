@@ -592,6 +592,12 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentUnitExp
             try
             {
                 var result = facade.ReadLoaderProductByROJob(keyword, filter);
+
+                if (result == null)
+                {
+                    throw new Exception("Invalid RO");
+                }
+
                 Dictionary<string, object> Result =
                        new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
                        .Ok(result);

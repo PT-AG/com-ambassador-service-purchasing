@@ -159,6 +159,13 @@ namespace Com.Ambassador.Service.Purchasing.Test.Controllers.GarmentUnitExpendit
                     .Returns(facadeUnitDO.Object);
             }
 
+            if (facadeM != null)
+            {
+                servicePMock
+                   .Setup(x => x.GetService(typeof(IGarmentUnitExpenditureNoteFacade)))
+                   .Returns(facadeM.Object);
+            }
+
             var controller = new GarmentUnitExpenditureNoteController(servicePMock.Object, mapper.Object, facadeM.Object, facadeUnitDO.Object)
             {
                 ControllerContext = new ControllerContext()
@@ -994,14 +1001,36 @@ namespace Com.Ambassador.Service.Purchasing.Test.Controllers.GarmentUnitExpendit
                 .Verifiable();
 
             var mockFacade = new Mock<IGarmentUnitExpenditureNoteFacade>();
-            mockFacade.Setup(x => x.UenDateRevise(It.IsAny<List<long>>(), It.IsAny<string>(), It.IsAny<DateTime>()))
-                .Returns(1);
+            mockFacade.Setup(x => x.ReadLoaderProductByROJob(It.IsAny<string>(), "{}", 50))
+                .Returns(new List<object>());
+
+            var mockunitdo = new Mock<IGarmentUnitDeliveryOrderFacade>();
+
+            var controller = GetController(mockFacade, mockunitdo, validateMock, mockMapper);
+            var response = controller.GetLoaderByRO(It.IsAny<string>(), "{}");
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(response));
+        }
+
+        [Fact]
+        public void GetLoaderByRO_Error()
+        {
+            var mockMapper = new Mock<IMapper>();
+            //mockMapper.Setup(x => x.Map<List<GarmentUnitExpenditureNoteViewModel>>(It.IsAny<List<GarmentUnitExpenditureNote>>()))
+            //    .Returns(new List<GarmentUnitExpenditureNoteViewModel> { ViewModel });
+
+            var validateMock = new Mock<IValidateService>();
+            //validateMock.Setup(s => s.Validate(It.IsAny<GarmentUnitExpenditureNoteViewModel>()))
+            //    .Verifiable();
+
+            var mockFacade = new Mock<IGarmentUnitExpenditureNoteFacade>();
+            //mockFacade.Setup(x => x.ReadLoaderProductByROJob(It.IsAny<string>(), "{}", 1))
+            //    .Returns(new List<object>());
 
             var mockunitdo = new Mock<IGarmentUnitDeliveryOrderFacade>();
 
             var controller = GetController(mockFacade, mockunitdo, validateMock, mockMapper);
             var response = controller.GetLoaderByRO();
-            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(response));
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(response));
         }
     }
 }
