@@ -45,7 +45,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
 
         public Tuple<List<GarmentPurchaseRequest>, int, Dictionary<string, string>> Read(int Page = 1, int Size = 25, string Order = "{}", string Keyword = null, string Filter = "{}")
         {
-            IQueryable<GarmentPurchaseRequest> Query = this.dbSet;
+            IQueryable<GarmentPurchaseRequest> Query = this.dbSet.Where(x => !x.CreatedBy.Equals("Manager"));
 
             List<string> searchAttributes = new List<string>()
             {
@@ -129,7 +129,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
                 ValidatedPurchasingDate = s.ValidatedPurchasingDate,
                 SectionName=s.SectionName,
                 ApprovalPR = s.ApprovalPR
-
             });
 
             Pageable<GarmentPurchaseRequest> pageable = new Pageable<GarmentPurchaseRequest>(Query, Page - 1, Size);
@@ -2159,7 +2158,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
 
         public List<GarmentInternalPurchaseOrder> ReadByTagsOptimized(string tags, DateTimeOffset shipmentDateFrom, DateTimeOffset shipmentDateTo)
         {
-            IQueryable<GarmentPurchaseRequest> Models = this.dbSet.AsNoTracking().AsQueryable();
+            IQueryable<GarmentPurchaseRequest> Models = this.dbSet.AsNoTracking().AsQueryable().Where(x => !x.CreatedBy.Equals("Manager"));
 
             if (shipmentDateFrom != DateTimeOffset.MinValue && shipmentDateTo != DateTimeOffset.MinValue)
             {
