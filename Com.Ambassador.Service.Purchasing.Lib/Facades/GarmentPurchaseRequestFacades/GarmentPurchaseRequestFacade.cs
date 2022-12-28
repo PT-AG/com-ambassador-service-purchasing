@@ -45,7 +45,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
 
         public Tuple<List<GarmentPurchaseRequest>, int, Dictionary<string, string>> Read(int Page = 1, int Size = 25, string Order = "{}", string Keyword = null, string Filter = "{}")
         {
-            IQueryable<GarmentPurchaseRequest> Query = this.dbSet.Where(x => !x.CreatedBy.Equals("Manager"));
+            IQueryable<GarmentPurchaseRequest> Query = this.dbSet.Where(x => !x.CreatedBy.Equals("Manager123"));
 
             List<string> searchAttributes = new List<string>()
             {
@@ -2158,7 +2158,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
 
         public List<GarmentInternalPurchaseOrder> ReadByTagsOptimized(string tags, DateTimeOffset shipmentDateFrom, DateTimeOffset shipmentDateTo)
         {
-            IQueryable<GarmentPurchaseRequest> Models = this.dbSet.AsNoTracking().AsQueryable().Where(x => !x.CreatedBy.Equals("Manager"));
+            IQueryable<GarmentPurchaseRequest> Models = this.dbSet.AsNoTracking().AsQueryable().Where(x => !x.CreatedBy.Equals("Manager123"));
 
             if (shipmentDateFrom != DateTimeOffset.MinValue && shipmentDateTo != DateTimeOffset.MinValue)
             {
