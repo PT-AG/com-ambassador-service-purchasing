@@ -543,7 +543,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
 
             #region signature
             PdfPTable tableSignature = new PdfPTable(5);
-            tableSignature.SetWidths(new float[] { 4f, 4f, 4f, 4f, 4.5f });
+            tableSignature.SetWidths(new float[] { 4f, 4f, 4f, 6f, 4.5f });
 
             PdfPCell cellSignatureContent = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
 
@@ -572,9 +572,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             tableSignature.AddCell(cellSignatureContent);
             cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(      Verifikasi      )", bold_font3);
             tableSignature.AddCell(cellSignatureContent);
-            cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(   Kabag Pembelian    )", bold_font3);
+            cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(   Anggaran    )", bold_font3);
             tableSignature.AddCell(cellSignatureContent);
-            cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(   Kasie Pembelian    )", bold_font3);
+            cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(   Kabag/Kasie Pembelian    )", bold_font3);
             tableSignature.AddCell(cellSignatureContent);
             cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(     " + viewModel.CreatedBy + "     )", bold_font3);
             tableSignature.AddCell(cellSignatureContent);
