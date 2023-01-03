@@ -543,7 +543,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
 
             #region signature
             PdfPTable tableSignature = new PdfPTable(5);
-            tableSignature.SetWidths(new float[] { 4f, 4f, 4f, 6f, 4.5f });
+            tableSignature.SetWidths(new float[] { 4.5f, 4f, 4f, 6f, 4.5f });
 
             PdfPCell cellSignatureContent = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
 
@@ -568,7 +568,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             cellSignatureContent.Phrase = new Phrase("Hormat Kami,", bold_font3);
             tableSignature.AddCell(cellSignatureContent);
 
-            cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(    Johanes Tjahjadi    )\n  Direktur Keuangan", bold_font3);
+            cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(   Johanes Tjahjadi   )\n  Direktur Keuangan", bold_font3);
             tableSignature.AddCell(cellSignatureContent);
             cellSignatureContent.Phrase = new Phrase("\n\n\n\n\n\n\n(      Verifikasi      )", bold_font3);
             tableSignature.AddCell(cellSignatureContent);
