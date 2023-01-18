@@ -9,6 +9,7 @@ using Com.Moonlay.NetCore.Lib.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -175,8 +176,16 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
         {
             try
             {
+                int clientTimeZoneOffset = int.Parse(Request.Headers["x-timezone-offset"].First());
+                identityService.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
+                identityService.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
                 var result = facade.ReadById(id);
                 GarmentPurchaseRequestViewModel viewModel = mapper.Map<GarmentPurchaseRequestViewModel>(result);
+
+                var Coscal = facade.GetGarmentCostCalculation(viewModel.RONo);
+
+
+                viewModel.QuantityOrder = Coscal.Quantity;
                 if (viewModel == null)
                 {
                     throw new Exception("Invalid Id");
