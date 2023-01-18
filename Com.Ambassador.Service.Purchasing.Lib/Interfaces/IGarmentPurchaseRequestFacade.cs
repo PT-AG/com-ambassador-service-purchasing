@@ -3,6 +3,7 @@ using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentInternalPurchaseOrderM
 using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentPurchaseRequestModel;
 using Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentPurchaseRequestViewModel;
 using Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewModel;
+using Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewModel.CostCalculationGarment;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
@@ -36,5 +37,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Interfaces
         Task<int> PRUnApprove(long id, string username);
         Task<int> Patch(long id, JsonPatchDocument<GarmentPurchaseRequest> jsonPatch, string user);
         List<GarmentInternalPurchaseOrder> ReadByTagsOptimized(string tags, DateTimeOffset shipmentDateFrom, DateTimeOffset shipmentDateTo);
+        CostCalculationGarmentViewModel GetGarmentCostCalculation(string RONo);
     }
 }
