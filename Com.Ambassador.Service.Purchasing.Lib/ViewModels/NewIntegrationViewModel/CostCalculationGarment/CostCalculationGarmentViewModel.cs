@@ -6,6 +6,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewMod
     public class CostCalculationGarmentViewModel : BaseViewModel
     {
         public string RO_Number { get; set; }
+        public int Quantity { get; set; }
         public List<CostCalculationGarment_MaterialViewModel> CostCalculationGarment_Materials { get; set; }
     }
 }

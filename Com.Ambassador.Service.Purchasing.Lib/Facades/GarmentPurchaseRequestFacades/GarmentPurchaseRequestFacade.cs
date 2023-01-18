@@ -23,6 +23,7 @@ using System.Data;
 using Com.Ambassador.Service.Purchasing.Lib.Services;
 using System.Globalization;
 using Com.Ambassador.Service.Purchasing.Lib.Helpers.ReadResponse;
+using Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewModel.CostCalculationGarment;
 
 namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFacades
 {
@@ -35,6 +36,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
         private readonly IServiceProvider serviceProvider;
 
         private readonly string GarmentPreSalesContractUri = "merchandiser/garment-pre-sales-contracts/";
+        private readonly string GarmentCostCalculationUri = "cost-calculation-garments/by-ro/";
 
         public GarmentPurchaseRequestFacade(IServiceProvider serviceProvider, PurchasingDbContext dbContext)
         {
@@ -2149,6 +2151,24 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
             if (response.IsSuccessStatusCode)
             {
                 GarmentPreSalesContractViewModel data = JsonConvert.DeserializeObject<GarmentPreSalesContractViewModel>(result.GetValueOrDefault("data").ToString());
+                return data;
+            }
+            else
+            {
+                throw new Exception(string.Concat("Error from '", GarmentPreSalesContractUri, "' : ", (string)result.GetValueOrDefault("error") ?? "- ", ". Message : ", (string)result.GetValueOrDefault("message") ?? "- ", ". Status : ", response.StatusCode, "."));
+            }
+        }
+
+        public CostCalculationGarmentViewModel GetGarmentCostCalculation(string RONo)
+        {
+            var httpClient = (IHttpClientService)serviceProvider.GetService(typeof(IHttpClientService));
+
+            var response = httpClient.GetAsync(string.Concat(APIEndpoint.Sales, GarmentCostCalculationUri, RONo)).Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+            Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(content) ?? new Dictionary<string, object>();
+            if (response.IsSuccessStatusCode)
+            {
+                CostCalculationGarmentViewModel data = JsonConvert.DeserializeObject<CostCalculationGarmentViewModel>(result.GetValueOrDefault("data").ToString());
                 return data;
             }
             else

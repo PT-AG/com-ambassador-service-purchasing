@@ -52,6 +52,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentPurchaseReques
         public string ValidatedPurchasingBy { get; set; }
         public DateTimeOffset ValidatedPurchasingDate { get; set; }
 
+        public int QuantityOrder { get; set; }
+
         public List<GarmentPurchaseRequestItemViewModel> Items { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
