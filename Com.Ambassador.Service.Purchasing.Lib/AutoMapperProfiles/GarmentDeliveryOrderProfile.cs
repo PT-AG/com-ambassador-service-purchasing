@@ -121,6 +121,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.AutoMapperProfiles
                 .ForPath(d => d.priceTotalCorrection, opt => opt.MapFrom(s => s.PriceTotalCorrection))
 
                 .ForPath(d => d.codeRequirment, opt => opt.MapFrom(s => s.CodeRequirment))
+                .ForPath(d => d.remark, opt => opt.MapFrom(s => s.ProductRemark))
                 .ReverseMap();
         }
     }
