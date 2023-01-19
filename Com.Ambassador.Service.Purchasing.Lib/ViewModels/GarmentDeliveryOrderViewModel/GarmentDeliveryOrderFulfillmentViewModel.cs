@@ -41,5 +41,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentDeliveryOrderV
 
         public string codeRequirment { get; set; }
         public string customsCategory { get; set; }
+        public string remark { get; set; }
     }
 }
