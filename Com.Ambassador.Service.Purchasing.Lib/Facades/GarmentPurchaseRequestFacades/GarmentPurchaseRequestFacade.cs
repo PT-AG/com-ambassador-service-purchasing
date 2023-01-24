@@ -2172,7 +2172,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
             }
             else
             {
-                throw new Exception(string.Concat("Error from '", GarmentPreSalesContractUri, "' : ", (string)result.GetValueOrDefault("error") ?? "- ", ". Message : ", (string)result.GetValueOrDefault("message") ?? "- ", ". Status : ", response.StatusCode, "."));
+                //throw new Exception(string.Concat("Error from '", GarmentPreSalesContractUri, "' : ", (string)result.GetValueOrDefault("error") ?? "- ", ". Message : ", (string)result.GetValueOrDefault("message") ?? "- ", ". Status : ", response.StatusCode, "."));
+                return null;
             }
         }
 

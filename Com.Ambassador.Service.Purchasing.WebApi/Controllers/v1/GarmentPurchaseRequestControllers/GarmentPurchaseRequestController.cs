@@ -182,13 +182,15 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
                 var result = facade.ReadById(id);
                 GarmentPurchaseRequestViewModel viewModel = mapper.Map<GarmentPurchaseRequestViewModel>(result);
 
-                var Coscal = facade.GetGarmentCostCalculation(viewModel.RONo);
-
-
-                viewModel.QuantityOrder = Coscal.Quantity;
                 if (viewModel == null)
                 {
                     throw new Exception("Invalid Id");
+                }
+
+                var Coscal = facade.GetGarmentCostCalculation(viewModel.RONo);
+                if (Coscal != null)
+                {
+                    viewModel.QuantityOrder = Coscal.Quantity;
                 }
 
                 var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
