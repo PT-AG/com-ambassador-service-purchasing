@@ -1,6 +1,7 @@
 using AutoMapper;
 using Com.Ambassador.Service.Purchasing.Lib.Interfaces;
 using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentUnitDeliveryOrderModel;
+using Com.Ambassador.Service.Purchasing.Lib.PDFTemplates.GarmentUnitDeliveryOrderPDFTemplates;
 using Com.Ambassador.Service.Purchasing.Lib.Services;
 using Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOrderViewModel;
 using Com.Ambassador.Service.Purchasing.WebApi.Helpers;
@@ -103,6 +104,8 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentUnitDel
         {
             try
             {
+                var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
+
                 var model = facade.ReadById(id);
 
                 var viewModel = mapper.Map<GarmentUnitDeliveryOrderViewModel>(model);
@@ -111,10 +114,24 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentUnitDel
                 {
                     throw new Exception("Invalid Id");
                 }
-                Dictionary<string, object> Result =
-                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
-                    .Ok(viewModel);
-                return Ok(Result);
+                if (indexAcceptPdf < 0)
+                {
+                    Dictionary<string, object> Result =
+                        new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                        .Ok(viewModel);
+                    return Ok(Result);
+                }
+                else
+                {
+                    int clientTimeZoneOffset = int.Parse(Request.Headers["x-timezone-offset"].First());
+
+                    var stream = GarmentUnitDeliveryOrderPDFTemplate.GeneratePdfTemplate(serviceProvider, viewModel);
+
+                    return new FileStreamResult(stream, "application/pdf")
+                    {
+                        FileDownloadName = $"{viewModel.UnitDONo}.pdf"
+                    };
+                }
             }
             catch (Exception e)
             {
