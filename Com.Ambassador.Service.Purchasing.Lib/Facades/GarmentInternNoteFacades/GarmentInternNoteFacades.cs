@@ -367,7 +367,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentInternNoteFacades
                          //&& npn != null ? e.NPN == npn : false 
                          //&& e.NPN == (string.IsNullOrWhiteSpace(npn) ? e.NPN : npn)
                          && c.DONo == (string.IsNullOrWhiteSpace(doNo) ? c.DONo : doNo)
-                         && d.BillNo == (string.IsNullOrWhiteSpace(billNo) ? d.BillNo : billNo)
+                         //&& d.BillNo == (string.IsNullOrWhiteSpace(billNo) ? d.BillNo : billNo)
                          && d.PaymentBill == (string.IsNullOrWhiteSpace(paymentBill) ? d.PaymentBill : paymentBill)
                          && a.SupplierCode == (string.IsNullOrWhiteSpace(supplierCode) ? a.SupplierCode : supplierCode)
                          && a.INDate.AddHours(offset).Date >= DateFrom.Date
@@ -511,7 +511,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentInternNoteFacades
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Invoice", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nomor Surat Jalan", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal Surat Jalan", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "No Bon", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "No Bon", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "No Bon Kecil", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nominal", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "No Nota Pajak", DataType = typeof(String) });
@@ -528,7 +528,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentInternNoteFacades
             //result.Columns.Add(new DataColumn() { ColumnName = "poserialnumber", DataType = typeof(String) });
 
             if (Query.Count() == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", 0, "", "", "", "", 0, "", "", 0, "","","");
+                result.Rows.Add("", "", "", "", "", "", "", "",  "", "", 0, "", "", "", "", 0, "", "", 0, "","","");
             else
             {
                 int index = 0;
@@ -546,7 +546,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentInternNoteFacades
                     string corrDate = item.cnDate == new DateTime(1970, 1, 1) ? "-" : item.cnDate.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
                     string corrAmt = string.Format("{0:N2}", item.cnAmount);
                     //result.Rows.Add(index, item.inNo, date, item.currencyCode, item.supplierName, item.paymentMethod, item.paymentType, DueDate, item.invoiceNo, invoDate, item.doNo, Dodate, item.pOSerialNumber, item.rONo, item.productCode, item.productName, item.quantity, item.uOMUnit, item.pricePerDealUnit, totalHarga);
-                    result.Rows.Add(index, item.inNo, date, item.supplierCode, item.supplierName, item.invoiceNo, invoDate, item.doNo, Dodate, item.billNo, item.paymentBill, priceTotal, item.NPN, item.VatNo, item.ProductName, item.currencyCode, item.doCurrencyRate, item.cnNo, corrDate, corrAmt, item.paymentType, item.paymentDoc, paymentdate);
+                    result.Rows.Add(index, item.inNo, date, item.supplierCode, item.supplierName, item.invoiceNo, invoDate, item.doNo, Dodate, item.paymentBill, priceTotal, item.NPN, item.VatNo, item.ProductName, item.currencyCode, item.doCurrencyRate, item.cnNo, corrDate, corrAmt, item.paymentType, item.paymentDoc, paymentdate);
                 }
             }
 
