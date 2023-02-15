@@ -221,7 +221,9 @@ namespace Com.Ambassador.Service.Purchasing.WebApi
                 .AddTransient<IGarmentClosingDateFacade, GarmentClosingDateFacade>()
                 .AddTransient<IMonitoringFlowProductFacade, MonitoringFlowProductFacade>()
                 .AddTransient<IBeacukaiNoFeature, BeacukaiNoFeature>()
-                .AddTransient<IRealizationBOMFacade, RealizationBOMFacade>();
+                .AddTransient<IRealizationBOMFacade, RealizationBOMFacade>()
+                .AddTransient<IGarmentLocalPurchasingJournalReportFacade, GarmentLocalPurchasingJournalReportFacade>()
+                .AddTransient<IGarmentImportPurchasingJournalReportFacade, GarmentImportPurchasingJournalReportFacade>();
 
         }
 
