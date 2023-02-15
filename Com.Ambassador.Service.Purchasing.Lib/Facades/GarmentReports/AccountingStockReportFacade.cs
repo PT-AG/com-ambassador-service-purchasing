@@ -80,8 +80,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                 join b in dbContext.GarmentStockOpnameItems on a.Id equals b.GarmentStockOpnameId
                                 join c in dbContext.GarmentDOItems on b.DOItemId equals c.Id
                                 join d in dbContext.GarmentUnitReceiptNoteItems on b.URNItemId equals d.Id
-                                join f in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on b.EPOItemId equals f.Id
-                                join h in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on f.GarmentEPOId equals h.Id
+                                //join f in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on b.EPOItemId equals f.Id
+                                //join h in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on f.GarmentEPOId equals h.Id
                                 join g in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select new { gg.BuyerCode, gg.Article, gg.RONo }).Distinct() on b.RO equals g.RONo into PR
                                 from prs in PR.DefaultIfEmpty()
                                 where a.IsDeleted == false && b.IsDeleted == false
@@ -258,8 +258,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             //                    }).Distinct();
             var SATerima = (from a in (from aa in dbContext.GarmentUnitReceiptNoteItems  select aa)
                             join b in dbContext.GarmentUnitReceiptNotes on a.URNId equals b.Id
-                            join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
-                            join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                            //join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
+                            //join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
                             join e in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select new { gg.BuyerCode, gg.Article, gg.RONo }).Distinct() on a.RONo equals e.RONo into PR
                             from prs in PR.DefaultIfEmpty()
                                 //join h in Codes on a.ProductCode equals h.Code
@@ -380,8 +380,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var SAKeluar = (from a in (from aa in dbContext.GarmentUnitExpenditureNoteItems select aa)
                             join b in dbContext.GarmentUnitExpenditureNotes on a.UENId equals b.Id
-                            join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
-                            join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                            //join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
+                            //join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
                             //join h in Codes on a.ProductCode equals h.Code
                             join e in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select new { gg.BuyerCode, gg.Article, gg.RONo }).Distinct() on a.RONo equals e.RONo into PR
                             from prs in PR.DefaultIfEmpty()
@@ -506,8 +506,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var SAKoreksi = (from a in dbContext.GarmentUnitReceiptNotes
                              join b in (from aa in dbContext.GarmentUnitReceiptNoteItems select aa) on a.Id equals b.URNId
-                             join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on b.EPOItemId equals c.Id
-                             join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                             //join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on b.EPOItemId equals c.Id
+                             //join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
                              join e in dbContext.GarmentReceiptCorrectionItems on b.Id equals e.URNItemId
                              join g in dbContext.GarmentReceiptCorrections on e.CorrectionId equals g.Id
                              join f in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select new { gg.BuyerCode, gg.Article, gg.RONo }).Distinct() on b.RONo equals f.RONo into PR
@@ -687,8 +687,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var Terima = (from a in (from aa in dbContext.GarmentUnitReceiptNoteItems  select aa)
                           join b in dbContext.GarmentUnitReceiptNotes on a.URNId equals b.Id
-                          join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
-                          join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                          //join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
+                          //join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
                           join e in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select new { gg.BuyerCode, gg.Article, gg.RONo }).Distinct() on a.RONo equals e.RONo into PR
                           from prs in PR.DefaultIfEmpty()
                           join g in dbContext.GarmentUnitExpenditureNotes on b.UENId equals g.Id into UEN
@@ -810,8 +810,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             
             var Keluar = (from a in (from aa in dbContext.GarmentUnitExpenditureNoteItems select aa)
                           join b in dbContext.GarmentUnitExpenditureNotes on a.UENId equals b.Id
-                          join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
-                          join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                          //join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on a.EPOItemId equals c.Id
+                          //join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
                           //join h in Codes on a.ProductCode equals h.Code
                           join e in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select new { gg.BuyerCode, gg.Article, gg.RONo }).Distinct() on a.RONo equals e.RONo into PR
                           from prs in PR.DefaultIfEmpty()
@@ -942,8 +942,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var Koreksi = (from a in dbContext.GarmentUnitReceiptNotes
                            join b in (from aa in dbContext.GarmentUnitReceiptNoteItems select aa) on a.Id equals b.URNId
-                           join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on b.EPOItemId equals c.Id
-                           join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
+                           //join c in dbContext.GarmentExternalPurchaseOrderItems.IgnoreQueryFilters() on b.EPOItemId equals c.Id
+                           //join d in dbContext.GarmentExternalPurchaseOrders.IgnoreQueryFilters() on c.GarmentEPOId equals d.Id
                            join e in dbContext.GarmentReceiptCorrectionItems on b.Id equals e.URNItemId
                            join g in dbContext.GarmentReceiptCorrections on e.CorrectionId equals g.Id
                            join f in (from gg in dbContext.GarmentPurchaseRequests where gg.IsDeleted == false select new { gg.BuyerCode, gg.Article, gg.RONo }).Distinct() on b.RONo equals f.RONo into PR
