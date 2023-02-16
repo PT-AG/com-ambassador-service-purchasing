@@ -35,7 +35,14 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentInternNoteView
             {
                 yield return new ValidationResult("Supplier is required", new List<string> { "supplier" });
             }
-
+            if (this.inDate.Equals(DateTimeOffset.MinValue) || this.inDate == null)
+            {
+                yield return new ValidationResult("Intern Note date is required", new List<string> { "inDate" });
+            }
+            else if (inDate.Date > DateTimeOffset.Now.Date)
+            {
+                yield return new ValidationResult("Intern Note date should not be more than today", new List<string> { "inDate" });
+            }
             int itemErrorCount = 0;
             int detailErrorCount = 0;
 

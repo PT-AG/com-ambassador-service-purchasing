@@ -54,7 +54,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentInternNoteFacades
                     EntityExtension.FlagForCreate(m, user, USER_AGENT);
 
                     m.INNo = await GenerateNo(m, isImport, clientTimeZoneOffset);
-                    m.INDate = DateTimeOffset.Now;
+                    //m.INDate = DateTimeOffset.Now;
 
                     foreach (var item in m.Items)
                     {
