@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 {
-    public class GarmentImportPurchasingJournalReportFacade  : IGarmentImportPurchasingJournalReportFacade
+    public class GarmentImportPurchasingJournalReportFacade : IGarmentImportPurchasingJournalReportFacade
     {
         private readonly PurchasingDbContext dbContext;
         public readonly IServiceProvider serviceProvider;
@@ -29,7 +29,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
         private readonly ICurrencyProvider _currencyProvider;
         private readonly IdentityService _identityService;
         private readonly string IDRCurrencyCode = "IDR";
-     
+
         public static readonly string[] MONTH_NAMES = { "JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER" };
 
         public GarmentImportPurchasingJournalReportFacade(IServiceProvider serviceProvider, PurchasingDbContext dbContext)
@@ -64,13 +64,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                          where a.URNType == "PEMBELIAN" && c.SupplierIsImport == true
                                && (c.PaymentType == "T/T AFTER" || c.PaymentType == "T/T BEFORE" || c.PaymentType == "CASH")
                                && c.DOCurrencyCode != "IDR"
-                               && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date 
+                               && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                          group new { Price = b.PricePerDealUnit, Qty = b.ReceiptQuantity, Rate = c.DOCurrencyRate } by new { e.CodeRequirment, c.PaymentType, c.UseVat, c.VatRate, c.UseIncomeTax, c.IncomeTaxRate } into G
 
                          select new GarmentImportPurchasingJournalReportTempViewModel
                          {
                              Code = G.Key.CodeRequirment,
-                             PaymentType = G.Key.PaymentType,                             
+                             PaymentType = G.Key.PaymentType,
                              IsVat = G.Key.UseVat == true ? "Y" : "N",
                              VatRate = (double)G.Key.VatRate,
                              IsTax = G.Key.UseIncomeTax == true ? "Y" : "N",
@@ -79,13 +79,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                          });
 
             var Query1 = (from x in Query
-                         group new { Amt = x.Amount } by new { x.Code } into G
+                          group new { Amt = x.Amount } by new { x.Code } into G
 
-                         select new GarmentImportPurchasingJournalReportTemp1ViewModel
-                         {
-                             Code = G.Key.Code,
-                             Amount = Math.Round(G.Sum(c => c.Amt), 2)
-                         });
+                          select new GarmentImportPurchasingJournalReportTemp1ViewModel
+                          {
+                              Code = G.Key.Code,
+                              Amount = Math.Round(G.Sum(c => c.Amt), 2)
+                          });
 
             var NewQuery = from a in Query1
                            select new GarmentImportPurchasingJournalReportViewModel
@@ -118,16 +118,16 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var PPNMsk = new GarmentImportPurchasingJournalReportViewModel
             {
-                remark = "PPN MASUKAN (AG2)",              
-                debit = Query.Where(a => a.IsVat == "Y").Sum(a => a.Amount * (decimal)(a.VatRate/100)),
+                remark = "PPN MASUKAN (AG2)",
+                debit = Query.Where(a => a.IsVat == "Y").Sum(a => a.Amount * (decimal)(a.VatRate / 100)),
                 credit = 0,
                 account = "117.01.2.000"
             };
 
-            if (PPNMsk.debit > 0)
-            {
-                data.Add(PPNMsk);
-            }
+            //if (PPNMsk.debit > 0)
+            //{
+            data.Add(PPNMsk);
+            //}
 
             var PPH = new GarmentImportPurchasingJournalReportViewModel
             {
@@ -137,41 +137,41 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 account = "217.03.2.000"
             };
 
-            if (PPH.credit > 0)
-            {
-                data.Add(PPH);
-            }
+            //if (PPH.credit > 0)
+            //{
+            data.Add(PPH);
+            //}
 
             var Credit1 = new GarmentImportPurchasingJournalReportViewModel
             {
                 remark = "       KAS  DITANGAN VALAS (AG2)",
                 credit = Query.Where(a => a.PaymentType == "CASH").Sum(a => a.Amount),
                 debit = 0,
-                account = "111.01.2.002	"
+                account = "111.01.2.002"
             };
 
-            if (Credit1.credit > 0)
-            {
-                data.Add(Credit1);
-            }
+            //if (Credit1.credit > 0)
+            //{
+            data.Add(Credit1);
+            //}
 
             var Credit = new GarmentImportPurchasingJournalReportViewModel
             {
-                remark = "       HUTANG USAHA LOKAL(AG2)",
+                remark = "       HUTANG USAHA IMPOR(AG2)",
                 debit = 0,
                 credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (PPH.credit + Credit1.credit),
                 //credit = Query.Where(a => a.PaymentType == "T/T AFTER" || a.PaymentType == "T/T BEFORE").Sum(a => a.Amount),
-                account = "211.00.2.000"
+                account = "211.00.3.000"
             };
 
-            if (Credit.credit > 0)
-            {
-                data.Add(Credit);
-            }
+            //if (Credit.credit > 0)
+            //{
+            data.Add(Credit);
+            //}
 
             var total = new GarmentImportPurchasingJournalReportViewModel
             {
-                remark = "",                
+                remark = "",
                 debit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
                 credit = Credit.credit + Credit1.credit + PPH.credit,
                 account = "J U M L A H"
@@ -265,7 +265,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
                     result.Rows.Add(d.remark, d.account, d.debit, d.credit);
                 }
-                
+
                 bool styling = true;
 
                 foreach (KeyValuePair<DataTable, String> item in new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") })
@@ -309,10 +309,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 }
             }
 
-                var stream = new MemoryStream();
-                package.SaveAs(stream);
+            var stream = new MemoryStream();
+            package.SaveAs(stream);
 
-                return stream;
-            }   
+            return stream;
+        }
     }
 }

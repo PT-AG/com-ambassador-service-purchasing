@@ -18,11 +18,11 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReport
     public class GarmentImportPurchasingJournalReportController : Controller
     {
         private string ApiVersion = "1.0.0";
-        private readonly IGarmentLocalPurchasingJournalReportFacade garmentLocalPurchasingJournalReportFacade;
+        private readonly IGarmentImportPurchasingJournalReportFacade garmentImportPurchasingJournalReportFacade;
 
-        public GarmentImportPurchasingJournalReportController(IGarmentLocalPurchasingJournalReportFacade garmentLocalPurchasingJournalReportFacade)
+        public GarmentImportPurchasingJournalReportController(IGarmentImportPurchasingJournalReportFacade garmentImportPurchasingJournalReportFacade)
         {
-            this.garmentLocalPurchasingJournalReportFacade = garmentLocalPurchasingJournalReportFacade;
+            this.garmentImportPurchasingJournalReportFacade = garmentImportPurchasingJournalReportFacade;
         }
 
         [HttpGet]
@@ -31,8 +31,8 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReport
             try
             {
                 int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                var data = garmentLocalPurchasingJournalReportFacade.GetReportData(dateFrom, dateTo, offset);
-           
+                var data = garmentImportPurchasingJournalReportFacade.GetReportData(dateFrom, dateTo, offset);
+
                 return Ok(new
                 {
                     apiVersion = ApiVersion,
@@ -58,8 +58,8 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentReport
             {
                 byte[] xlsInBytes;
                 int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                var xls = garmentLocalPurchasingJournalReportFacade.GenerateExcel(dateFrom, dateTo, offset);
-                
+                var xls = garmentImportPurchasingJournalReportFacade.GenerateExcel(dateFrom, dateTo, offset);
+
                 //string filename = "Laporan Jurnal Pembelian Lokal";
                 //if (month != null) filename += " " + month.ToString();
                 //if (year != null) filename += "-" + year.ToString();
