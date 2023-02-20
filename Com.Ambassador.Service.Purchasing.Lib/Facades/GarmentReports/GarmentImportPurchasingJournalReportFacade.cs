@@ -129,17 +129,17 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             data.Add(PPNMsk);
             //}
 
-            var PPH = new GarmentImportPurchasingJournalReportViewModel
-            {
-                remark = "       PPH  23   YMH DIBAYAR(AG2)",
-                debit = 0,
-                credit = Query.Where(a => a.IsTax == "Y").Sum(a => a.Amount * (decimal)(a.TaxRate / 100)),
-                account = "217.03.2.000"
-            };
+            //var PPH = new GarmentImportPurchasingJournalReportViewModel
+            //{
+            //    remark = "       PPH  23   YMH DIBAYAR(AG2)",
+            //    debit = 0,
+            //    credit = Query.Where(a => a.IsTax == "Y").Sum(a => a.Amount * (decimal)(a.TaxRate / 100)),
+            //    account = "217.03.2.000"
+            //};
 
             //if (PPH.credit > 0)
             //{
-            data.Add(PPH);
+            //data.Add(PPH);
             //}
 
             var Credit1 = new GarmentImportPurchasingJournalReportViewModel
@@ -159,7 +159,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             {
                 remark = "       HUTANG USAHA IMPOR(AG2)",
                 debit = 0,
-                credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (PPH.credit + Credit1.credit),
+                //credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (PPH.credit + Credit1.credit),
+                credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - Credit1.credit,
                 //credit = Query.Where(a => a.PaymentType == "T/T AFTER" || a.PaymentType == "T/T BEFORE").Sum(a => a.Amount),
                 account = "211.00.3.000"
             };
@@ -173,7 +174,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             {
                 remark = "",
                 debit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
-                credit = Credit.credit + Credit1.credit + PPH.credit,
+                //credit = Credit.credit + Credit1.credit + PPH.credit,
+                credit = Credit.credit + Credit1.credit,
                 account = "J U M L A H"
             };
             data.Add(total);
