@@ -62,7 +62,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                          join d in dbContext.GarmentDeliveryOrderItems on e.GarmentDOItemId equals d.Id
                          join c in dbContext.GarmentDeliveryOrders on d.GarmentDOId equals c.Id
                          where a.URNType == "PEMBELIAN" && c.SupplierIsImport == true
-                               && (c.PaymentType == "T/T AFTER" || c.PaymentType == "T/T BEFORE" || c.PaymentType == "CASH")
+                               && (c.PaymentType == "T/T AFTER" || c.PaymentType == "T/T BEFORE")
                                && c.DOCurrencyCode != "IDR"
                                && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                          group new { Price = b.PricePerDealUnit, Qty = b.ReceiptQuantity, Rate = c.DOCurrencyRate } by new { e.CodeRequirment, c.PaymentType, c.UseVat, c.VatRate, c.UseIncomeTax, c.IncomeTaxRate } into G
@@ -116,17 +116,47 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 data.Add(result);
             }
 
-            var PPNMsk = new GarmentImportPurchasingJournalReportViewModel
+            if (NewQuery.ToList().Count == 0)
             {
-                remark = "PPN MASUKAN (AG2)",
-                debit = Query.Where(a => a.IsVat == "Y").Sum(a => a.Amount * (decimal)(a.VatRate / 100)),
-                credit = 0,
-                account = "117.01.2.000"
-            };
+                var stock1 = new GarmentImportPurchasingJournalReportViewModel
+                {
+                    remark = "PERSEDIAAN BAHAN BAKU(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "114.03.2.000"
+                };
+                data.Add(stock1);
 
-            //if (PPNMsk.debit > 0)
+                var stock2 = new GarmentImportPurchasingJournalReportViewModel
+                {
+                    remark = "PERSEDIAAN PEMBANTU(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "114.04.2.000"
+                };
+                data.Add(stock2);
+
+                var stock3 = new GarmentImportPurchasingJournalReportViewModel
+                {
+                    remark = "PERSEDIAAN EMBALANCE(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "114.05.2.000"
+                };
+                data.Add(stock3);
+            }
+
+            //var PPNMsk = new GarmentImportPurchasingJournalReportViewModel
             //{
-            data.Add(PPNMsk);
+            //    remark = "PPN MASUKAN (AG2)",
+            //    debit = Query.Where(a => a.IsVat == "Y").Sum(a => a.Amount * (decimal)(a.VatRate / 100)),
+            //    credit = 0,
+            //    account = "117.01.2.000"
+            //};
+
+            ////if (PPNMsk.debit > 0)
+            ////{
+            //data.Add(PPNMsk);
             //}
 
             //var PPH = new GarmentImportPurchasingJournalReportViewModel
@@ -142,43 +172,70 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             //data.Add(PPH);
             //}
 
-            var Credit1 = new GarmentImportPurchasingJournalReportViewModel
-            {
-                remark = "       KAS  DITANGAN VALAS (AG2)",
-                credit = Query.Where(a => a.PaymentType == "CASH").Sum(a => a.Amount),
-                debit = 0,
-                account = "111.01.2.002"
-            };
-
-            //if (Credit1.credit > 0)
+            //var Credit1 = new GarmentImportPurchasingJournalReportViewModel
             //{
-            data.Add(Credit1);
-            //}
+            //    remark = "       KAS  DITANGAN VALAS (AG2)",
+            //    credit = Query.Where(a => a.PaymentType == "CASH").Sum(a => a.Amount),
+            //    debit = 0,
+            //    account = "111.01.2.002"
+            //};
+
+            ////if (Credit1.credit > 0)
+            ////{
+            //data.Add(Credit1);
+            ////}
 
             var Credit = new GarmentImportPurchasingJournalReportViewModel
             {
                 remark = "       HUTANG USAHA IMPOR(AG2)",
                 debit = 0,
                 //credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (PPH.credit + Credit1.credit),
-                credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - Credit1.credit,
+                credit = Query1.Sum(a => a.Amount),
                 //credit = Query.Where(a => a.PaymentType == "T/T AFTER" || a.PaymentType == "T/T BEFORE").Sum(a => a.Amount),
                 account = "211.00.3.000"
             };
 
-            //if (Credit.credit > 0)
-            //{
-            data.Add(Credit);
-            //}
+            if (Credit.credit > 0)
+            {
+                data.Add(Credit);
+            }
+            else
+            {
+                var hutang = new GarmentImportPurchasingJournalReportViewModel
+                {
+                    remark = "       HUTANG USAHA IMPOR(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "211.00.3.000"
+                };
+                data.Add(hutang);
+            }
 
             var total = new GarmentImportPurchasingJournalReportViewModel
             {
                 remark = "",
-                debit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
+                //debit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
+                debit = Query1.Sum(a => a.Amount),
                 //credit = Credit.credit + Credit1.credit + PPH.credit,
-                credit = Credit.credit + Credit1.credit,
+                credit = Query1.Sum(a => a.Amount),
                 account = "J U M L A H"
             };
-            data.Add(total);
+            if (total.credit > 0)
+            {
+                data.Add(total);
+            }
+            else
+            {
+                var jumlah = new GarmentImportPurchasingJournalReportViewModel
+                {
+                    remark = "",
+                    debit = 0,
+                    credit = 0,
+                    account = "J U M L A H"
+                };
+                data.Add(jumlah);
+            }
+
             return data;
         }
 

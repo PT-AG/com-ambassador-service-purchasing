@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 {
-    public class GarmentLocalPurchasingJournalReportFacade  : IGarmentLocalPurchasingJournalReportFacade
+    public class GarmentLocalPurchasingJournalReportFacade : IGarmentLocalPurchasingJournalReportFacade
     {
         private readonly PurchasingDbContext dbContext;
         public readonly IServiceProvider serviceProvider;
@@ -29,7 +29,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
         private readonly ICurrencyProvider _currencyProvider;
         private readonly IdentityService _identityService;
         private readonly string IDRCurrencyCode = "IDR";
-     
+
         public static readonly string[] MONTH_NAMES = { "JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER" };
 
         public GarmentLocalPurchasingJournalReportFacade(IServiceProvider serviceProvider, PurchasingDbContext dbContext)
@@ -60,10 +60,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                          join b in dbContext.GarmentUnitReceiptNoteItems on a.Id equals b.URNId
                          join e in dbContext.GarmentDeliveryOrderDetails on b.DODetailId equals e.Id
                          join d in dbContext.GarmentDeliveryOrderItems on e.GarmentDOItemId equals d.Id
-                         join c in dbContext.GarmentDeliveryOrders on d.GarmentDOId equals c.Id                         
+                         join c in dbContext.GarmentDeliveryOrders on d.GarmentDOId equals c.Id
                          where a.URNType == "PEMBELIAN" && c.SupplierIsImport == false
-                               && (c.PaymentType == "T/T AFTER" || c.PaymentType == "T/T BEFORE" || c.PaymentType == "CASH")
-                               && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date 
+                               && (c.PaymentType == "T/T AFTER" || c.PaymentType == "T/T BEFORE")
+                               && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                          group new { Price = b.PricePerDealUnit, Qty = b.ReceiptQuantity, Rate = c.DOCurrencyRate } by new { e.CodeRequirment, c.PaymentType, c.DOCurrencyCode, c.UseVat, c.VatRate, c.UseIncomeTax, c.IncomeTaxRate } into G
 
                          select new GarmentLocalPurchasingJournalReportTempViewModel
@@ -79,13 +79,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                          });
 
             var Query1 = (from x in Query
-                         group new { Amt = x.Amount } by new { x.Code } into G
+                          group new { Amt = x.Amount } by new { x.Code } into G
 
-                         select new GarmentLocalPurchasingJournalReportTemp1ViewModel
-                         {
-                             Code = G.Key.Code,
-                             Amount = Math.Round(G.Sum(c => c.Amt), 2)
-                         });
+                          select new GarmentLocalPurchasingJournalReportTemp1ViewModel
+                          {
+                              Code = G.Key.Code,
+                              Amount = Math.Round(G.Sum(c => c.Amt), 2)
+                          });
 
             var NewQuery = from a in Query1
                            select new GarmentLocalPurchasingJournalReportViewModel
@@ -96,13 +96,14 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                account = a.Code == "BB" ? "114.03.2.000" : (a.Code == "BP" ? "114.04.2.000" : "114.05.2.000")
                            };
 
+
             var sumquery = NewQuery.ToList()
-                   .GroupBy(x => new { x.remark, x.account }, (key, group) => new
-                   {
-                       Remark = key.remark,
-                       Account = key.account,
-                       Debit = group.Sum(s => s.debit)
-                   }).OrderBy(a => a.Remark);
+                       .GroupBy(x => new { x.remark, x.account }, (key, group) => new
+                       {
+                           Remark = key.remark,
+                           Account = key.account,
+                           Debit = group.Sum(s => s.debit)
+                       }).OrderBy(a => a.Remark);
             foreach (var item in sumquery)
             {
                 var result = new GarmentLocalPurchasingJournalReportViewModel
@@ -115,11 +116,41 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
                 data.Add(result);
             }
+            //
+            if (NewQuery.ToList().Count == 0)
+            {
+                var stock1 = new GarmentLocalPurchasingJournalReportViewModel
+                {
+                    remark = "PERSEDIAAN BAHAN BAKU(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "114.03.2.000"
+                };
+                data.Add(stock1);
+
+                var stock2 = new GarmentLocalPurchasingJournalReportViewModel
+                {
+                    remark = "PERSEDIAAN PEMBANTU(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "114.04.2.000"
+                };
+                data.Add(stock2);
+
+                var stock3 = new GarmentLocalPurchasingJournalReportViewModel
+                {
+                    remark = "PERSEDIAAN EMBALANCE(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "114.05.2.000"
+                };
+                data.Add(stock3);
+            }
 
             var PPNMsk = new GarmentLocalPurchasingJournalReportViewModel
             {
-                remark = "PPN MASUKAN (AG2)",              
-                debit = Query.Where(a => a.IsVat == "Y").Sum(a => a.Amount * (decimal)(a.VatRate/100)),
+                remark = "PPN MASUKAN (AG2)",
+                debit = Query.Where(a => a.IsVat == "Y").Sum(a => a.Amount * (decimal)(a.VatRate / 100)),
                 credit = 0,
                 account = "117.01.2.000"
             };
@@ -128,7 +159,17 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             {
                 data.Add(PPNMsk);
             }
-
+            else
+            {
+                var ppn = new GarmentLocalPurchasingJournalReportViewModel
+                {
+                    remark = "PPN MASUKAN (AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "117.01.2.000"
+                };
+                data.Add(ppn);
+            }
             //var PPH = new GarmentLocalPurchasingJournalReportViewModel
             //{
             //    remark = "       PPH  23   YMH DIBAYAR(AG2)",
@@ -142,38 +183,39 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             //    data.Add(PPH);
             //}
 
-            var Credit1 = new GarmentLocalPurchasingJournalReportViewModel
-            {
-                remark = "       KAS  DITANGAN IDR (AG2)",
-                credit = Query.Where(a => a.PaymentType == "CASH" && a.CurrencyCode == "IDR").Sum(a => a.Amount),
-                debit = 0,
-                account = "111.01.2.001"
-            };
+            //var Credit1 = new GarmentLocalPurchasingJournalReportViewModel
+            //{
+            //    remark = "       KAS  DITANGAN IDR (AG2)",
+            //    credit = Query.Where(a => a.PaymentType == "CASH" && a.CurrencyCode == "IDR").Sum(a => a.Amount),
+            //    debit = 0,
+            //    account = "111.01.2.001"
+            //};
 
-            if (Credit1.credit > 0)
-            {
-                data.Add(Credit1);
-            }
+            //if (Credit1.credit > 0)
+            //{
+            //    data.Add(Credit1);
+            //}
 
-            var Credit2 = new GarmentLocalPurchasingJournalReportViewModel
-            {
-                remark = "       KAS  DITANGAN VALAS (AG2)",
-                credit = Query.Where(a => a.PaymentType == "CASH" && a.CurrencyCode != "IDR").Sum(a => a.Amount),
-                debit = 0,
-                account = "111.01.2.002	"
-            };
+            //var Credit2 = new GarmentLocalPurchasingJournalReportViewModel
+            //{
+            //    remark = "       KAS  DITANGAN VALAS (AG2)",
+            //    credit = Query.Where(a => a.PaymentType == "CASH" && a.CurrencyCode != "IDR").Sum(a => a.Amount),
+            //    debit = 0,
+            //    account = "111.01.2.002	"
+            //};
 
-            if (Credit2.credit > 0)
-            {
-                data.Add(Credit2);
-            }
+            //if (Credit2.credit > 0)
+            //{
+            //    data.Add(Credit2);
+            //}
 
             var Credit = new GarmentLocalPurchasingJournalReportViewModel
             {
                 remark = "       HUTANG USAHA LOKAL(AG2)",
                 debit = 0,
                 //credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (PPH.credit + Credit1.credit + Credit2.credit),
-                credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (Credit1.credit + Credit2.credit),
+                //credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (Credit1.credit + Credit2.credit),
+                credit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
                 //credit = Query.Where(a => a.PaymentType == "T/T AFTER" || a.PaymentType == "T/T BEFORE").Sum(a => a.Amount),
                 account = "211.00.2.000"
             };
@@ -182,16 +224,42 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             {
                 data.Add(Credit);
             }
+            else
+            {
+                var hutang = new GarmentLocalPurchasingJournalReportViewModel
+                {
+                    remark = "       HUTANG USAHA LOKAL(AG2)",
+                    debit = 0,
+                    credit = 0,
+                    account = "211.00.2.000"
+                };
+                data.Add(hutang);
+            }
 
             var total = new GarmentLocalPurchasingJournalReportViewModel
             {
-                remark = "",                
+                remark = "",
                 debit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
                 //credit = Credit.credit + Credit1.credit + Credit2.credit + PPH.credit,
-                credit = Credit.credit + Credit1.credit + Credit2.credit,
+                credit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
                 account = "J U M L A H"
             };
-            data.Add(total);
+
+            if (total.credit > 0)
+            {
+                data.Add(total);
+            }
+            else
+            {
+                var jumlah = new GarmentLocalPurchasingJournalReportViewModel
+                {
+                    remark = "",
+                    debit = 0,
+                    credit = 0,
+                    account = "J U M L A H"
+                };
+                data.Add(jumlah);
+            }
             return data;
         }
 
@@ -280,7 +348,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
                     result.Rows.Add(d.remark, d.account, d.debit, d.credit);
                 }
-                
+
                 bool styling = true;
 
                 foreach (KeyValuePair<DataTable, String> item in new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") })
@@ -324,10 +392,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 }
             }
 
-                var stream = new MemoryStream();
-                package.SaveAs(stream);
+            var stream = new MemoryStream();
+            package.SaveAs(stream);
 
-                return stream;
-            }   
+            return stream;
+        }
     }
 }
