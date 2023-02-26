@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 {
-    public class GarmentImportPurchasingJournalReportFacade : IGarmentImportPurchasingJournalReportFacade
+    public class GarmentDetailImportPurchasingJournalReportFacade  : IGarmentDetailImportPurchasingJournalReportFacade
     {
         private readonly PurchasingDbContext dbContext;
         public readonly IServiceProvider serviceProvider;
@@ -29,10 +29,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
         private readonly ICurrencyProvider _currencyProvider;
         private readonly IdentityService _identityService;
         private readonly string IDRCurrencyCode = "IDR";
-
+     
         public static readonly string[] MONTH_NAMES = { "JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER" };
 
-        public GarmentImportPurchasingJournalReportFacade(IServiceProvider serviceProvider, PurchasingDbContext dbContext)
+        public GarmentDetailImportPurchasingJournalReportFacade(IServiceProvider serviceProvider, PurchasingDbContext dbContext)
         {
             this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
@@ -41,9 +41,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             _identityService = serviceProvider.GetService<IdentityService>();
         }
 
-
         //public List<GarmentLocalPurchasingJournalReportViewModel> GetReportQuery(int month, int year, int offset)
-        public List<GarmentImportPurchasingJournalReportViewModel> GetReportQuery(DateTime? dateFrom, DateTime? dateTo, int offset)
+        public List<GarmentDetailImportPurchasingJournalReportViewModel> GetReportQuery(DateTime? dateFrom, DateTime? dateTo, int offset)
         {
 
             //DateTime dateFrom = new DateTime(year, month, 1);
@@ -54,196 +53,124 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : (DateTime)dateFrom;
             DateTime DateTo = dateTo == null ? DateTime.Now : (DateTime)dateTo;
 
-            List<GarmentImportPurchasingJournalReportViewModel> data = new List<GarmentImportPurchasingJournalReportViewModel>();
+            List<GarmentDetailImportPurchasingJournalReportViewModel> data = new List<GarmentDetailImportPurchasingJournalReportViewModel>();
 
             var Query = (from a in dbContext.GarmentUnitReceiptNotes
                          join b in dbContext.GarmentUnitReceiptNoteItems on a.Id equals b.URNId
                          join e in dbContext.GarmentDeliveryOrderDetails on b.DODetailId equals e.Id
                          join d in dbContext.GarmentDeliveryOrderItems on e.GarmentDOItemId equals d.Id
-                         join c in dbContext.GarmentDeliveryOrders on d.GarmentDOId equals c.Id
+                         join c in dbContext.GarmentDeliveryOrders on d.GarmentDOId equals c.Id                         
                          where a.URNType == "PEMBELIAN" && c.SupplierIsImport == true
                                && (c.PaymentType == "T/T AFTER" || c.PaymentType == "T/T BEFORE")
-                               && c.DOCurrencyCode != "IDR"
-                               && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date
-                         group new { Price = b.PricePerDealUnit, Qty = b.ReceiptQuantity, Rate = c.DOCurrencyRate } by new { e.CodeRequirment, c.PaymentType, c.UseVat, c.VatRate, c.UseIncomeTax, c.IncomeTaxRate } into G
+                               && a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date && a.CreatedUtc.AddHours(offset).Date <= DateTo.Date 
+                         group new { Price = b.PricePerDealUnit, Qty = b.ReceiptQuantity, Rate = c.DOCurrencyRate } by new 
+                         { a.URNNo, a.ReceiptDate, a.SupplierCode, a.SupplierName, a.Remark, c.InternNo, c.BillNo, e.CodeRequirment, c.PaymentType, c.DOCurrencyCode, c.DOCurrencyRate, c.UseVat, c.VatRate, c.UseIncomeTax, c.IncomeTaxRate } into G
 
-                         select new GarmentImportPurchasingJournalReportTempViewModel
+                         select new GarmentDetailImportPurchasingJournalReportViewModel
                          {
-                             Code = G.Key.CodeRequirment,
-                             PaymentType = G.Key.PaymentType,
-                             IsVat = G.Key.UseVat == true ? "Y" : "N",
-                             VatRate = (double)G.Key.VatRate,
-                             IsTax = G.Key.UseIncomeTax == true ? "Y" : "N",
-                             TaxRate = (double)G.Key.IncomeTaxRate,
-                             Amount = Math.Round(G.Sum(c => c.Price * c.Qty * (decimal)c.Rate), 2)
+                             urnno = G.Key.URNNo,
+                             urndate = G.Key.ReceiptDate,
+                             supplier = G.Key.SupplierCode + "-" + G.Key.SupplierName,
+                             remark = G.Key.Remark,
+                             inno = G.Key.InternNo == null ? "-" : G.Key.InternNo,
+                             billno = G.Key.BillNo == null ? "-" : G.Key.BillNo,
+                             code = G.Key.CodeRequirment,
+                             paymentyype = G.Key.PaymentType,
+                             currencycode = G.Key.DOCurrencyCode,
+                             rate = G.Key.DOCurrencyRate,
+                             isvat = G.Key.UseVat == true ? "Y" : "N",
+                             vatrate = (double)G.Key.VatRate,
+                             istax = G.Key.UseIncomeTax == true ? "Y" : "N",
+                             taxrate = (double)G.Key.IncomeTaxRate,
+                             amount = Math.Round(G.Sum(c => c.Price * c.Qty * (decimal)c.Rate), 2),
+                             coaname = "-",
+                             account = "-",
+                             debit = 0,
+                             credit = 0,
                          });
-
-            var Query1 = (from x in Query
-                          group new { Amt = x.Amount } by new { x.Code } into G
-
-                          select new GarmentImportPurchasingJournalReportTemp1ViewModel
-                          {
-                              Code = G.Key.Code,
-                              Amount = Math.Round(G.Sum(c => c.Amt), 2)
-                          });
-
-            var NewQuery = from a in Query1
-                           select new GarmentImportPurchasingJournalReportViewModel
-                           {
-                               remark = a.Code == "BB" ? "PERSEDIAAN BAHAN BAKU(AG2)" : (a.Code == "BP" ? "PERSEDIAAN PEMBANTU(AG2)" : "PERSEDIAAN EMBALANCE(AG2)"),
-                               credit = 0,
-                               debit = a.Amount,
-                               account = a.Code == "BB" ? "114.03.2.000" : (a.Code == "BP" ? "114.04.2.000" : "114.05.2.000")
-                           };
-
-            var sumquery = NewQuery.ToList()
-                   .GroupBy(x => new { x.remark, x.account }, (key, group) => new
-                   {
-                       Remark = key.remark,
-                       Account = key.account,
-                       Debit = group.Sum(s => s.debit)
-                   }).OrderBy(a => a.Remark);
-            foreach (var item in sumquery)
+            //
+            foreach (GarmentDetailImportPurchasingJournalReportViewModel x in Query.OrderBy(x => x.urnno))
             {
-                var result = new GarmentImportPurchasingJournalReportViewModel
+                var debit1 = new GarmentDetailImportPurchasingJournalReportViewModel
                 {
-                    remark = item.Remark,
-                    debit = item.Debit,
+                    urnno = x.urnno,
+                    urndate = x.urndate,
+                    supplier = x.supplier,
+                    remark = x.remark,
+                    inno = x.inno,
+                    billno = x.billno,
+                    code = x.code,
+                    paymentyype = x.paymentyype,
+                    currencycode = x.currencycode,
+                    rate = x.rate,
+                    isvat = x.isvat,
+                    vatrate = x.vatrate,
+                    istax = x.istax,
+                    taxrate = x.taxrate,
+                    amount = x.amount,
+                    coaname = x.code == "BB" ? "PERSEDIAAN BAHAN BAKU(AG2)" : (x.code == "BP" ? "PERSEDIAAN PEMBANTU(AG2)" : "PERSEDIAAN EMBALANCE(AG2)"),
                     credit = 0,
-                    account = item.Account
+                    debit = x.amount,
+                    account = x.code == "BB" ? "114.03.2.000" : (x.code == "BP" ? "114.04.2.000" : "114.05.2.000")                
                 };
+                data.Add(debit1);
 
-                data.Add(result);
-            }
-
-            if (NewQuery.ToList().Count == 0)
-            {
-                var stock1 = new GarmentImportPurchasingJournalReportViewModel
+                var kredit = new GarmentDetailImportPurchasingJournalReportViewModel
                 {
-                    remark = "PERSEDIAAN BAHAN BAKU(AG2)",
+                    urnno = x.urnno,
+                    urndate = x.urndate,
+                    supplier = x.supplier,
+                    remark = x.remark,
+                    inno = x.inno,
+                    billno = x.billno,
+                    code = x.code,
+                    paymentyype = x.paymentyype,
+                    currencycode = x.currencycode,
+                    rate = x.rate,
+                    isvat = x.isvat,
+                    vatrate = x.vatrate,
+                    istax = x.istax,
+                    taxrate = x.taxrate,
+                    amount = x.amount,
+                    coaname = "       HUTANG USAHA IMPORT(AG2)",
                     debit = 0,
-                    credit = 0,
-                    account = "114.03.2.000"
-                };
-                data.Add(stock1);
-
-                var stock2 = new GarmentImportPurchasingJournalReportViewModel
-                {
-                    remark = "PERSEDIAAN PEMBANTU(AG2)",
-                    debit = 0,
-                    credit = 0,
-                    account = "114.04.2.000"
-                };
-                data.Add(stock2);
-
-                var stock3 = new GarmentImportPurchasingJournalReportViewModel
-                {
-                    remark = "PERSEDIAAN EMBALANCE(AG2)",
-                    debit = 0,
-                    credit = 0,
-                    account = "114.05.2.000"
-                };
-                data.Add(stock3);
-            }
-
-            //var PPNMsk = new GarmentImportPurchasingJournalReportViewModel
-            //{
-            //    remark = "PPN MASUKAN (AG2)",
-            //    debit = Query.Where(a => a.IsVat == "Y").Sum(a => a.Amount * (decimal)(a.VatRate / 100)),
-            //    credit = 0,
-            //    account = "117.01.2.000"
-            //};
-
-            ////if (PPNMsk.debit > 0)
-            ////{
-            //data.Add(PPNMsk);
-            //}
-
-            //var PPH = new GarmentImportPurchasingJournalReportViewModel
-            //{
-            //    remark = "       PPH  23   YMH DIBAYAR(AG2)",
-            //    debit = 0,
-            //    credit = Query.Where(a => a.IsTax == "Y").Sum(a => a.Amount * (decimal)(a.TaxRate / 100)),
-            //    account = "217.03.2.000"
-            //};
-
-            //if (PPH.credit > 0)
-            //{
-            //data.Add(PPH);
-            //}
-
-            //var Credit1 = new GarmentImportPurchasingJournalReportViewModel
-            //{
-            //    remark = "       KAS  DITANGAN VALAS (AG2)",
-            //    credit = Query.Where(a => a.PaymentType == "CASH").Sum(a => a.Amount),
-            //    debit = 0,
-            //    account = "111.01.2.002"
-            //};
-
-            ////if (Credit1.credit > 0)
-            ////{
-            //data.Add(Credit1);
-            ////}
-
-            var Credit = new GarmentImportPurchasingJournalReportViewModel
-            {
-                remark = "       HUTANG USAHA IMPOR(AG2)",
-                debit = 0,
-                //credit = Query1.Sum(a => a.Amount) + PPNMsk.debit - (PPH.credit + Credit1.credit),
-                credit = Query1.Sum(a => a.Amount),
-                //credit = Query.Where(a => a.PaymentType == "T/T AFTER" || a.PaymentType == "T/T BEFORE").Sum(a => a.Amount),
-                account = "211.00.3.000"
-            };
-
-            if (Credit.credit > 0)
-            {
-                data.Add(Credit);
-            }
-            else
-            {
-                var hutang = new GarmentImportPurchasingJournalReportViewModel
-                {
-                    remark = "       HUTANG USAHA IMPOR(AG2)",
-                    debit = 0,
-                    credit = 0,
+                    credit = x.amount,                   
                     account = "211.00.3.000"
                 };
-                data.Add(hutang);
+
+                data.Add(kredit);                
             }
 
-            var total = new GarmentImportPurchasingJournalReportViewModel
+            var total = new GarmentDetailImportPurchasingJournalReportViewModel
             {
-                remark = "",
-                //debit = Query1.Sum(a => a.Amount) + PPNMsk.debit,
-                debit = Query1.Sum(a => a.Amount),
-                //credit = Credit.credit + Credit1.credit + PPH.credit,
-                credit = Query1.Sum(a => a.Amount),
+                remark = "",                
+                debit = Query.Sum(a => a.amount),
+                credit = Query.Sum(a => a.amount),
                 account = "J U M L A H"
             };
-            if (total.credit > 0)
+            if (total.debit > 0)
             {
                 data.Add(total);
             }
             else
             {
-                var jumlah = new GarmentImportPurchasingJournalReportViewModel
+                var totalx = new GarmentDetailImportPurchasingJournalReportViewModel
                 {
                     remark = "",
                     debit = 0,
                     credit = 0,
                     account = "J U M L A H"
                 };
-                data.Add(jumlah);
+                data.Add(totalx);
             }
-
             return data;
         }
 
-        public List<GarmentImportPurchasingJournalReportViewModel> GetReportData(DateTime? dateFrom, DateTime? dateTo, int offset)
-        {
-            var Query = GetReportQuery(dateFrom, dateTo, offset);
-            return Query.ToList();
-        }
+        //public List<GarmentDetailLocalPurchasingJournalReportViewModel> GetReportData(DateTime? dateFrom, DateTime? dateTo, int offset)
+        //{
+        //    var Query = GetReportQuery(dateFrom, dateTo, offset);
+        //    return Query.ToList();
+        //}
 
         public MemoryStream GenerateExcel(DateTime? dateFrom, DateTime? dateTo, int offset)
         {
@@ -253,8 +180,18 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             var Query = GetReportQuery(dateFrom, dateTo, offset);
             DataTable result = new DataTable();
 
-            result.Columns.Add(new DataColumn() { ColumnName = "AKUN DAN KETERANGAN", DataType = typeof(string) });
-            result.Columns.Add(new DataColumn() { ColumnName = "AKUN", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NO BON", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "TGL BON", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NO AKUN ", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NAMA AKUN", DataType = typeof(string) });
+
+            result.Columns.Add(new DataColumn() { ColumnName = "SUPPLIER", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "KETERANGAN", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NO NOTA INTERN", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "NO BILL", DataType = typeof(string) });
+
+            result.Columns.Add(new DataColumn() { ColumnName = "MATA UANG", DataType = typeof(string) });
+            result.Columns.Add(new DataColumn() { ColumnName = "KURS", DataType = typeof(string) });            
             result.Columns.Add(new DataColumn() { ColumnName = "DEBET", DataType = typeof(string) });
             result.Columns.Add(new DataColumn() { ColumnName = "KREDIT", DataType = typeof(string) });
 
@@ -274,11 +211,21 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     var sheet = package.Workbook.Worksheets.Add(item.Value);
 
                     //string Bln = MONTH_NAMES[month - 1];
-
-                    sheet.Column(1).Width = 50;
+                    sheet.Column(1).Width = 15;
                     sheet.Column(2).Width = 15;
-                    sheet.Column(3).Width = 20;
-                    sheet.Column(4).Width = 20;
+                    sheet.Column(3).Width = 15;
+                    sheet.Column(4).Width = 50;
+
+                    sheet.Column(5).Width = 30;
+                    sheet.Column(6).Width = 50;
+                    sheet.Column(7).Width = 20;
+                    sheet.Column(8).Width = 20;
+
+                    sheet.Column(9).Width = 15;
+                    sheet.Column(10).Width = 15;
+                    sheet.Column(11).Width = 20;
+                    sheet.Column(12).Width = 20;
+
 
                     #region KopTable
                     sheet.Cells[$"A1:D1"].Value = "PT AMBASSADOR GARMINDO";
@@ -293,7 +240,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     sheet.Cells[$"A2:D2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                     sheet.Cells[$"A2:D2"].Style.Font.Bold = true;
 
-                    sheet.Cells[$"A4:D4"].Value = "IKHTISAR JURNAL";
+                    sheet.Cells[$"A4:D4"].Value = "RINCIAN JURNAL";
                     sheet.Cells[$"A4:D4"].Merge = true;
                     sheet.Cells[$"A4:D4"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     sheet.Cells[$"A4:D4"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
@@ -306,7 +253,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
                     sheet.Cells[$"C6"].Value = "PERIODE";
                     sheet.Cells[$"C6"].Style.Font.Bold = true;
-                    sheet.Cells[$"D6"].Value = ": " + DateFrom.ToString("ddMMyyyy") + " S/D " + DateTo.ToString("ddMMyyyy");
+                    sheet.Cells[$"D6"].Value = ": " + DateFrom.ToString("dd-MM-yyyy") + " S/D " + DateTo.ToString("dd-MM-yyyy");
                     sheet.Cells[$"D6"].Style.Font.Bold = true;
 
                     #endregion
@@ -322,20 +269,29 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 {
                     index++;
 
-                    result.Rows.Add(d.remark, d.account, d.debit, d.credit);
+                    result.Rows.Add(d.urnno, d.urndate, d.account, d.coaname, d.supplier, d.remark, d.inno, d.billno, d.currencycode, d.rate, d.debit, d.credit);
                 }
-
+                
                 bool styling = true;
 
                 foreach (KeyValuePair<DataTable, String> item in new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") })
                 {
                     var sheet = package.Workbook.Worksheets.Add(item.Value);
                     //string Bln = MONTH_NAMES[month - 1];
-
-                    sheet.Column(1).Width = 50;
+                    sheet.Column(1).Width = 15;
                     sheet.Column(2).Width = 15;
-                    sheet.Column(3).Width = 20;
-                    sheet.Column(4).Width = 20;
+                    sheet.Column(3).Width = 15;
+                    sheet.Column(4).Width = 50;
+
+                    sheet.Column(5).Width = 30;
+                    sheet.Column(6).Width = 50;
+                    sheet.Column(7).Width = 20;
+                    sheet.Column(8).Width = 20;
+
+                    sheet.Column(9).Width = 15;
+                    sheet.Column(10).Width = 15;
+                    sheet.Column(11).Width = 20;
+                    sheet.Column(12).Width = 20;
 
                     #region KopTable
                     sheet.Cells[$"A1:D1"].Value = "PT AMBASSADOR GARMINDO";
@@ -350,7 +306,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     sheet.Cells[$"A2:D2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                     sheet.Cells[$"A2:D2"].Style.Font.Bold = true;
 
-                    sheet.Cells[$"A4:D4"].Value = "IKHTISAR JURNAL";
+                    sheet.Cells[$"A4:D4"].Value = "RINCIAN JURNAL";
                     sheet.Cells[$"A4:D4"].Merge = true;
                     sheet.Cells[$"A4:D4"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     sheet.Cells[$"A4:D4"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
@@ -363,7 +319,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
                     sheet.Cells[$"C6"].Value = "PERIODE";
                     sheet.Cells[$"C6"].Style.Font.Bold = true;
-                    sheet.Cells[$"D6"].Value = ": " + DateFrom.ToString("ddMMyyyy") + " S/D " + DateTo.ToString("ddMMyyyy");
+                    sheet.Cells[$"D6"].Value = ": " + DateFrom.ToString("dd-MM-yyyy") + " S/D " + DateTo.ToString("dd-MM-yyyy");
                     sheet.Cells[$"D6"].Style.Font.Bold = true;
 
                     #endregion
@@ -373,10 +329,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 }
             }
 
-            var stream = new MemoryStream();
-            package.SaveAs(stream);
+                var stream = new MemoryStream();
+                package.SaveAs(stream);
 
-            return stream;
-        }
+                return stream;
+            }   
     }
 }
