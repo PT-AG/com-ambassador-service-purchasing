@@ -195,7 +195,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             tableIdentity.AddCell(cellLeftNoBorder);
 
             var pphDanliris = pphRate;
-            if (viewModel.IncomeTaxBy == "Dan Liris")
+            if (viewModel.IncomeTaxBy == "Ambassador Garmindo")
             {
                 pphDanliris = 0;
             }
