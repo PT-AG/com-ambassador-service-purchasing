@@ -771,7 +771,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Controllers.PurchasingDispositi
                 .Returns(new PurchasingDisposition());
 
             var ViewModel = this.ViewModel;
-            ViewModel.IncomeTaxBy = "Dan Liris";
+            ViewModel.IncomeTaxBy = "Ambassador Garmindo";
             ViewModel.Currency.description = "rupiah";
            // ViewModel.Unit._id = "50";
 
@@ -816,7 +816,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Controllers.PurchasingDispositi
                 .Returns(new PurchasingDisposition());
 
             var ViewModel = this.ViewModel2;
-            ViewModel.IncomeTaxBy = "Dan Liris";
+            ViewModel.IncomeTaxBy = "Ambassador Garmindo";
             ViewModel.Currency.description = "rupiah";
             
 
