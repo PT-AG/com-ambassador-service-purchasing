@@ -30,7 +30,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.VBRequestPOExternal
                 UseVat = elementInvoice.UseVat;
                 UseIncomeTax = elementInvoice.UseIncomeTax;
                 IncomeTax = new IncomeTaxDto(elementInvoice.IncomeTaxId, elementInvoice.IncomeTaxName, elementInvoice.IncomeTaxRate);
-                IncomeTaxBy = elementInvoice.IsPayTax ? "Dan Liris" : "Supplier";
+                IncomeTaxBy = elementInvoice.IsPayTax ? "PT Ambassador Garmindo" : "Supplier";
                 VatTax = new VatTaxDto(Convert.ToString(elementInvoice.VatId), elementInvoice.VatRate);
                 IsPayVat = elementInvoice.IsPayVat;
                 IsPayTax = elementInvoice.IsPayTax;
