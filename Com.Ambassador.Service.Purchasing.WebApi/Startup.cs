@@ -277,7 +277,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi
             services.AddTransient<ILocalDbCashFlowDbContext>(s => new LocalDbCashFlowDbContext(connectionStringLocalCashFlow));
             RegisterEndpoints();
             RegisterFacades(services);
-            RegisterServices(services, env.Equals("ASPNETCORE_ENVIRONMENT"));
+            RegisterServices(services, env.Equals("Test"));
             services.AddAutoMapper(typeof(BaseAutoMapperProfile));
             services.AddMemoryCache();
 
