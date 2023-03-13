@@ -231,6 +231,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                && a.IsDeleted == false && b.IsDeleted == false
                                && categories1.Contains(b.ProductName)
                                //&& pemasukan.Contains(g.URNType)
+                               && c.CustomsCategory == "Fasilitas"
                                 select new MutationBBCentralViewModelTemp
                                {
                                    AdjustmentQty = 0,
@@ -272,6 +273,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                      && b.CreatedUtc.AddHours(offset).Date < DateFrom.Date
                                      && categories1.Contains(a.ProductName)
                                   //&& pemasukan.Contains(b.URNType)
+                                  && a.CustomsCategory == "Fasilitas"
                                   select new MutationBBCentralViewModelTemp
                                   {
                                       AdjustmentQty = 0,
@@ -316,6 +318,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                        && b.CreatedUtc.AddHours(offset).Date < DateFrom.Date
                                        && categories1.Contains(a.ProductName)
                                       //&& pengeluaran.Contains(b.ExpenditureType)
+                                      && a.CustomsCategory == "Fasilitas"
                                       select new MutationBBCentralViewModelTemp
                                       {
                                           AdjustmentQty = 0,
@@ -361,6 +364,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                                && g.CreatedUtc.AddHours(offset).Date < DateFrom.Date
                                                && categories1.Contains(b.ProductName)
                                             //&& pemasukan.Contains(a.URNType)
+                                            && b.CustomsCategory == "Fasilitas"
                                             select new MutationBBCentralViewModelTemp
                                             {
                                                 AdjustmentQty = 0,
@@ -479,7 +483,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                && b.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                                && categories1.Contains(a.ProductName)
                                && pemasukan.Contains(b.URNType)
-
+                               && a.CustomsCategory == "Fasilitas"
                            //group new { a, b, c, d } by new { b.ProductCode, b.ProductName, b.SmallUomUnit, d.SupplierImport } into data
                            select new MutationBBCentralViewModelTemp
                            {
@@ -523,6 +527,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                     && b.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                                     && categories1.Contains(a.ProductName)
                                     && pengeluaran.Contains(b.ExpenditureType)
+                                    && a.CustomsCategory == "Fasilitas"
                                select new MutationBBCentralViewModelTemp
                                {
                                    AdjustmentQty = 0,
@@ -566,6 +571,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                           && g.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                                           && categories1.Contains(b.ProductName)
                                           && pemasukan.Contains(a.URNType)
+                                          && b.CustomsCategory == "Fasilitas"
                                      select new MutationBBCentralViewModelTemp
                                      {
                                          AdjustmentQty = Math.Round(e.SmallQuantity,2),
