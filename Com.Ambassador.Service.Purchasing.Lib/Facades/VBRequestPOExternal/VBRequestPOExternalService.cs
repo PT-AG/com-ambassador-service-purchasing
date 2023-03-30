@@ -174,7 +174,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.VBRequestPOExternal
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(typePurchasing) && typePurchasing.ToUpper() == "UMUM")
+                    //if (!string.IsNullOrEmpty(typePurchasing) && typePurchasing.ToUpper() == "UMUM")
+                    if (!string.IsNullOrEmpty(division) && division.ToUpper() == "AMBASSADOR GARMINDO 2")
                     {
                         var epoItemIds = _dbContext.ExternalPurchaseOrderItems.AsNoTracking().Where(entity => epoIds.Contains(entity.EPOId)).Select(entity => entity.Id).ToList();
                         var epoDetailIds = _dbContext.ExternalPurchaseOrderDetails.AsNoTracking().Where(entity => epoItemIds.Contains(entity.EPOItemId)).Select(entity => entity.Id).ToList();
