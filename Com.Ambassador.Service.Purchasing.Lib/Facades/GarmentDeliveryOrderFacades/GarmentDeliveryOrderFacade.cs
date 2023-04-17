@@ -566,7 +566,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                 Query = QueryHelper<GarmentDeliveryOrder>.ConfigureOrder(Query, OrderDictionary).Include(m => m.Items)
                     .ThenInclude(i => i.Details).Where(s => s.IsInvoice == false 
                     //&& s.CustomsId != 0
-                    && (filterSupplierIsImport == true ? s.CustomsId != 0 : true)
+                    //&& (filterSupplierIsImport == true ? s.TotalAmount < 1500 ? true :  s.CustomsId != 0 : true)
                     );
             }
 
@@ -678,7 +678,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
 
             IQueryable<GarmentDeliveryOrder> Query = dbSet
                 .Where(m => m.DONo.Contains(Keyword ?? "") && (filterSupplierId == 0 ? true : m.SupplierId == filterSupplierId) 
-                && (filterSupplierIsImport == true ? m.CustomsId != 0 : true ) 
+                //&& (filterSupplierIsImport == true ? m.TotalAmount < 1500 ? true : m.CustomsId != 0 : true ) 
                 && m.Items.Any(i => i.Details.Any(d => d.ReceiptQuantity == 0 && (string.IsNullOrWhiteSpace(filterUnitId) ? true : d.UnitId == filterUnitId))))
                 .Select(m => new GarmentDeliveryOrder
                 {
