@@ -811,10 +811,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
         {
             IHttpClientService httpClient = (IHttpClientService)this.serviceProvider.GetService(typeof(IHttpClientService));
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(codes), Encoding.UTF8, "application/json");
+            var garmentProductionUri = APIEndpoint.Core + $"master/garmentProducts/byCode?code="+codes;
 
-            var garmentProductionUri = APIEndpoint.Core + $"master/garmentProducts/byCode";
-            var httpResponse = httpClient.SendAsync(HttpMethod.Get, garmentProductionUri, httpContent).Result;
+            var httpResponse = httpClient.GetAsync($"{garmentProductionUri}").Result;
+
 
             if (httpResponse.IsSuccessStatusCode)
             {
