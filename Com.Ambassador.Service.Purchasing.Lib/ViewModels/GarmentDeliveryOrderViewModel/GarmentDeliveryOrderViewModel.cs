@@ -131,7 +131,15 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentDeliveryOrderV
                                 detailErrorCount++;
                                 detailError += "doQuantity: 'DoQuantity must be greater than 0', ";
                             }
-
+                            else
+                            {
+                                double maxQty = (103 * detail.dealQuantity)/100;
+                                if (detail.doQuantity > maxQty)
+                                {
+                                    detailErrorCount++;
+                                    detailError += $"doQuantity: 'DoQuantity must not be greater than {maxQty}', ";
+                                }
+                            }
                             
 
                             detailError += "}, ";
