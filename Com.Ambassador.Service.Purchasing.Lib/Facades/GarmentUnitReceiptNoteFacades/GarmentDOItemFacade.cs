@@ -344,6 +344,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
                                 EPOItemId = dataToCreate.EPOItemId,
                                 PRItemId = dataToCreate.PRItemId,
                                 RO = dataToCreate.RO,
+                                CustomsCategory = dataToCreate.CustomsCategory,
 
                                 RemainingQuantity = viewModels.Items[a].Quantity,
                                 Colour = viewModels.Items[a].Colour.ToUpper(),

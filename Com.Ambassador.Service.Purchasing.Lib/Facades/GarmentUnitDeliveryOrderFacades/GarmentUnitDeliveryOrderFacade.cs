@@ -482,11 +482,17 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
                         i.DesignColor,
                         i.DOCurrency,
                         i.CustomsCategory,
+
                         Buyer = new
                         {
                             Id = dbContext.GarmentPurchaseRequests.Where(m => m.RONo == i.RONo).Select(m => m.BuyerId).FirstOrDefault(),
                             Code = dbContext.GarmentPurchaseRequests.Where(m => m.RONo == i.RONo).Select(m => m.BuyerCode).FirstOrDefault()
                         },
+                        i.Colour,
+                        i.Box,
+                        i.Level,
+                        i.Rack,
+                        i.Area,
                     }).ToList()
                 }).ToList()
             );
