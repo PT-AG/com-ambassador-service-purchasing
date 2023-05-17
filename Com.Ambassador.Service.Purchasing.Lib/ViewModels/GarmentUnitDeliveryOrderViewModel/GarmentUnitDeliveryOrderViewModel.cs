@@ -40,7 +40,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
         public string UnitDOFromNo { get; set; }
         public string OtherDescription { get; set; }
 
-
         public List<GarmentUnitDeliveryOrderItemViewModel> Items { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -141,6 +140,12 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
                                         itemError += $"Quantity: 'Jumlah tidak boleh lebih dari {quantity}', ";
                                     }
                                 }
+                            }
+
+                            if (Storage.name == "GUDANG BAHAN BAKU" && UnitDOType != "SAMPLE" && UnitDOType != "RETUR" && (string.IsNullOrWhiteSpace(item.Colour) || string.IsNullOrWhiteSpace(item.Rack) || string.IsNullOrWhiteSpace(item.Box) || string.IsNullOrWhiteSpace(item.Level)))
+                            {
+                                itemErrorCount++;
+                                itemError += $"Colour: 'Data Racking Belum Lengkap', ";
                             }
                         }
 
