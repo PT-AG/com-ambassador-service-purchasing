@@ -2816,7 +2816,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentUnitReceiptNoteF
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentCategoryDataUtil().GetMultipleResultFormatterOkString()) });
 
             httpClientService
-                .Setup(x => x.SendAsync(It.IsAny<HttpMethod>(), It.Is<string>(s => s.Contains("master/garmentProducts")), It.IsAny<HttpContent>()))
+                .Setup(x => x.GetAsync( It.Is<string>(s => s.Contains("master/garmentProducts/byCode"))))
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentProductDataUtil().GetMultipleResultFormatterOk2String()) });
 
             var serviceProviderMock = new Mock<IServiceProvider>();
@@ -2972,7 +2972,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentUnitReceiptNoteF
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentCategoryDataUtil().GetResultFormatterOkNullString()) });
 
             httpClientService
-                .Setup(x => x.SendAsync(It.IsAny<HttpMethod>(), It.Is<string>(s => s.Contains("master/garmentProducts")), It.IsAny<HttpContent>()))
+                .Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("master/garmentProducts/byCode"))))
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new GarmentProductDataUtil().GetMultipleResultFormatterNullOkString()) });
 
             var serviceProviderMock = new Mock<IServiceProvider>();
@@ -3059,7 +3059,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentUnitReceiptNoteF
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError));
 
             httpClientService
-                .Setup(x => x.SendAsync(It.IsAny<HttpMethod>(), It.Is<string>(s => s.Contains("master/garmentProducts")), It.IsAny<HttpContent>()))
+                .Setup(x => x.GetAsync(It.Is<string>(s => s.Contains("master/garmentProducts/byCode"))))
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError));
 
             var serviceProviderMock = new Mock<IServiceProvider>();
