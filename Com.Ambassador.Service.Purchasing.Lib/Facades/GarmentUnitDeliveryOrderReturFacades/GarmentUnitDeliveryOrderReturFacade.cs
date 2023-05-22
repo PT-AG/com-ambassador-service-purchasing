@@ -122,7 +122,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
                         EntityExtension.FlagForUpdate(garmentUnitReceiptNoteItem, identityService.Username, USER_AGENT);
                         garmentUnitReceiptNoteItem.OrderQuantity = garmentUnitReceiptNoteItem.OrderQuantity + (decimal)garmentUnitDeliveryOrderItem.Quantity;
 
-                        GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
+                        //GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
+                        GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.Id == garmentUnitDeliveryOrderItem.DOItemsId);
                         if (garmentDOItems != null)
                             garmentDOItems.RemainingQuantity -= (decimal)garmentUnitDeliveryOrderItem.Quantity;
                     }
@@ -190,7 +191,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
                         EntityExtension.FlagForUpdate(garmentUnitReceiptNoteItem, identityService.Username, USER_AGENT);
                         garmentUnitReceiptNoteItem.OrderQuantity = garmentUnitReceiptNoteItem.OrderQuantity - (decimal)garmentUnitDeliveryOrderItem.Quantity;
 
-                        GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
+                        //GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
+                        GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.Id == garmentUnitDeliveryOrderItem.DOItemsId);
                         if (garmentDOItems != null)
                             garmentDOItems.RemainingQuantity += (decimal)garmentUnitDeliveryOrderItem.Quantity;
                     }
@@ -250,7 +252,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
                             EntityExtension.FlagForUpdate(garmentUnitReceiptNoteItem, identityService.Username, USER_AGENT);
                             garmentUnitReceiptNoteItem.OrderQuantity = garmentUnitReceiptNoteItem.OrderQuantity - (decimal)oldGarmentUnitDeliveryOrderItem.Quantity + (decimal)garmentUnitDeliveryOrderItem.Quantity;
 
-                            GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
+                            //GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
+                            GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.Id == garmentUnitDeliveryOrderItem.DOItemsId);
                             if (garmentDOItems != null)
                                 garmentDOItems.RemainingQuantity = garmentDOItems.RemainingQuantity + (decimal)oldGarmentUnitDeliveryOrderItem.Quantity - (decimal)garmentUnitDeliveryOrderItem.Quantity;
 

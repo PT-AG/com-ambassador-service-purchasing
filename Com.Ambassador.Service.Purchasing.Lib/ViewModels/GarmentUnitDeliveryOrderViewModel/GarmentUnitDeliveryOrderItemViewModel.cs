@@ -49,5 +49,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
 
         public int DOItemsId { get; set; }
         public string CustomsCategory { get; set; }
+        public string Colour { get; set; }
+        public string Rack { get; set; }
+        public string Level { get; set; }
+        public string Box { get; set; }
+        public string Area { get; set; }
     }
 }
