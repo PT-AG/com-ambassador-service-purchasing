@@ -265,6 +265,7 @@ namespace Com.Ambassador.Service.Purchasing.Test.Facades.GarmentUnitDeliveryOrde
             {
                 DONo = "DONo",
                 UnitDOType = "RETUR",
+                Storage = new Lib.ViewModels.IntegrationViewModel.StorageViewModel { name = "GUDANG BAHAN BAKU" },
                 Items = new List<GarmentUnitDeliveryOrderItemViewModel>
                 {
                     new GarmentUnitDeliveryOrderItemViewModel
