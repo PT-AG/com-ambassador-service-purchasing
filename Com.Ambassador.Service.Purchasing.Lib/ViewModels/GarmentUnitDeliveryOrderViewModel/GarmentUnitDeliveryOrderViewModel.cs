@@ -106,7 +106,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
                 else
                 {
                     string itemError = "[";
-
+                    
                     foreach (var item in Items)
                     {
                         itemError += "{";
@@ -142,7 +142,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitDeliveryOr
                                 }
                             }
 
-                            if (Storage.name == "GUDANG BAHAN BAKU" && UnitDOType != "SAMPLE" && UnitDOType != "RETUR" && (string.IsNullOrWhiteSpace(item.Colour) || string.IsNullOrWhiteSpace(item.Rack) || string.IsNullOrWhiteSpace(item.Box) || string.IsNullOrWhiteSpace(item.Level)))
+                            if (Storage.name == "GUDANG BAHAN BAKU" && UnitDOType != "RETUR" && UnitDOType != "MARKETING" && UnitDOType != "SISA" && (string.IsNullOrWhiteSpace(item.Colour) || string.IsNullOrWhiteSpace(item.Rack) || string.IsNullOrWhiteSpace(item.Box) || string.IsNullOrWhiteSpace(item.Level)))
                             {
                                 itemErrorCount++;
                                 itemError += $"Colour: 'Data Racking Belum Lengkap', ";
