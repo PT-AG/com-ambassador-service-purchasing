@@ -2196,13 +2196,14 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             //    invoice = PEB.Select(x=>x.BonNo.Trim()).FirstOrDefault()
             //};
 
-            string invoices = string.Join(",", PEB.Select(x => x.BonNo));
+            string invoices = string.Join(",", PEB.Select(x => x.BonNo).Distinct());
 
             var expend = GetRono(invoices);
 
             var Query = (from a in PEB
                          join b in expend on a.BonNo.Trim() equals b.Invoice.Trim()
-                         select new TraceableOutBeacukaiViewModel
+                         //where a.Quantity == b.TotalQuantity
+                         select new 
                          {
                              BCDate = a.BCDate,
                              BCNo = a.BCNo,
@@ -2216,7 +2217,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                              RO = b.RONo,
                              UnitQtyName = "PCS"
 
-                         }).GroupBy(x => new { x.ExpenditureDate, x.ExpenditureGoodId, x.ComodityName, x.ExpenditureNo, x.BuyerName, x.BCType, x.BCNo, x.BCDate, x.RO, x.UnitQtyName }, (key, group) => new TraceableOutBeacukaiViewModel
+                         }).Distinct().GroupBy(x => new { x.ExpenditureDate, x.ExpenditureGoodId, x.ComodityName, x.ExpenditureNo, x.BuyerName, x.BCType, x.BCNo, x.BCDate, x.RO, x.UnitQtyName }, (key, group) => new TraceableOutBeacukaiViewModel
                          {
                              BCDate = key.BCDate,
                              BCNo = key.BCNo,
@@ -2229,13 +2230,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                              Qty = group.Sum(x => x.Qty),
                              RO = key.RO,
                              UnitQtyName = key.UnitQtyName
-
                          }).ToList();
 
             var RO = string.Join(",", Query.Select(x => x.RO).Distinct().ToList());
             var listRo = Query.Select(x => x.RO).Distinct().ToList();
-
-            var expend2 = GetPreparingByRo(RO);
 
             var rinciandetil = (from a in dbContext.GarmentUnitDeliveryOrderItems
                                 join b in dbContext.GarmentUnitDeliveryOrders on a.UnitDOId equals b.Id
