@@ -805,7 +805,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     ExpenditureQty = i.ExpenditureQty,
                     ItemCode = i.ItemCode,
                     ItemName = i.ItemName,
-                    LastQty = LastQty,
+                    LastQty = i.LastQty,
                     ReceiptQty = i.ReceiptQty,
                     SupplierType = i.SupplierType,
                     UnitQtyName = i.UnitQtyName,
