@@ -358,6 +358,37 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
 
             #endregion
 
+            #region TableRemark
+            List<DateTimeOffset> tglIntern = new List<DateTimeOffset>();
+            foreach (GarmentInternNoteItemViewModel item in viewModel.items)
+            {
+                foreach (GarmentInternNoteDetailViewModel detail in item.details)
+                {
+                    tglIntern.Add(detail.paymentDueDate);
+                }
+            }
+            DateTimeOffset coba2 = tglIntern.Min(p => p);
+            if (coba2 < viewModel.inDate)
+            {
+                PdfPTable tableRemark = new PdfPTable(2);
+                float[] widths = new float[] { 1f, 0.5f };
+                tableRemark.SetWidths(widths);
+                PdfPCell CellRemarkContent = new PdfPCell() { Border = Rectangle.TOP_BORDER | Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.RIGHT_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
+
+                CellRemarkContent.Phrase = new Phrase("Alasan Keterlambatan\n\n\n\n\n\n\n", bold_font);
+                tableRemark.AddCell(CellRemarkContent);
+                CellRemarkContent.Phrase = new Phrase("TTD Kabag\n\n\n\n\n\n\n", bold_font);
+                tableRemark.AddCell(CellRemarkContent);
+
+                PdfPCell cellRemark = new PdfPCell(tableRemark); // don't remove
+                tableRemark.ExtendLastRow = false;
+                tableRemark.SpacingAfter = 10f;
+                document.Add(tableRemark);
+            }
+
+
+            #endregion
+
             #region TableSignature
 
             PdfPTable tableSignature = new PdfPTable(3);
