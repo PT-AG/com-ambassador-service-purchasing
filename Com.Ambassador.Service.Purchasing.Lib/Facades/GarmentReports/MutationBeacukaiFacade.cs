@@ -277,7 +277,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                   select new MutationBBCentralViewModelTemp
                                   {
                                       AdjustmentQty = 0,
-                                      BeginQty = Math.Round((double)(a.ReceiptQuantity * a.Conversion), 2),
+                                      BeginQty = Math.Round((double)(a.SmallQuantity), 2),
                                       ExpenditureQty = 0,
                                       ItemCode = a.ProductCode,
                                       ItemName = a.ProductName,
@@ -494,7 +494,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                ItemName = a.ProductName,
                                LastQty = 0,
                                OpnameQty = 0,
-                               ReceiptQty = (double)(a.ReceiptQuantity * a.Conversion),
+                               //ReceiptQty = (double)(a.ReceiptQuantity * a.Conversion),
+                               ReceiptQty = (double)a.SmallQuantity,
                                SupplierType = d.SupplierImport == false ? "LOKAL" : "IMPORT",
                                UnitQtyName = a.SmallUomUnit
                            }).GroupBy(x => new { x.ItemCode, x.ItemName, x.SupplierType, x.UnitQtyName }, (key, group) => new MutationBBCentralViewModelTemp
@@ -805,7 +806,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     ExpenditureQty = i.ExpenditureQty,
                     ItemCode = i.ItemCode,
                     ItemName = i.ItemName,
-                    LastQty = LastQty,
+                    LastQty = i.LastQty,
                     ReceiptQty = i.ReceiptQty,
                     SupplierType = i.SupplierType,
                     UnitQtyName = i.UnitQtyName,
