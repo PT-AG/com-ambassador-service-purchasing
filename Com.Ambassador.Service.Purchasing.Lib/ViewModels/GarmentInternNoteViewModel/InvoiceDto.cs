@@ -29,7 +29,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentInternNoteView
             Amount = amount;
 
             if (useVAT && isPayVAT)
-                Amount += amount * 0.1;
+                Amount += amount * 0.11;
 
             if (useIncomeTax && isPayTax)
                 Amount -= amount * (incomeTaxRate / 100);
@@ -61,8 +61,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentInternNoteView
 
             if (useVAT && isPayVAT)
             {
-                Amount += amount * 0.1;
-                correction += correctionAmount * 0.1;
+                Amount += amount * 0.11;
+                correction += correctionAmount * 0.11;
             }
 
             if (useIncomeTax && isPayTax)
