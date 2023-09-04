@@ -389,8 +389,8 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
                 identityService.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
                 int clientTimeZoneOffset = int.Parse(Request.Headers["x-timezone-offset"].First());
 
-                DateTimeOffset shipmentFrom;
-                DateTimeOffset shipmentTo;
+                DateTimeOffset shipmentFrom = DateTimeOffset.MinValue;
+                DateTimeOffset shipmentTo = DateTimeOffset.MinValue;
                 if (!string.IsNullOrWhiteSpace(shipmentDateFrom) && !string.IsNullOrWhiteSpace(shipmentDateTo))
                 {
                     if (!DateTimeOffset.TryParseExact(shipmentDateFrom, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out shipmentFrom) ||
