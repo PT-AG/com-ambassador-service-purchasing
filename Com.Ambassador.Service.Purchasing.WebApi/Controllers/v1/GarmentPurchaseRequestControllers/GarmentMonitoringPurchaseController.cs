@@ -30,15 +30,14 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
 			this.identityService = (IdentityService)serviceProvider.GetService(typeof(IdentityService));
 		}
 		[HttpGet]
-		public IActionResult GetReport(string epono, string unit,string roNo, string article,string poSerialNumber,string username,string doNo,string ipoStatus,string supplier, string status, DateTime? dateFrom, DateTime? dateTo, DateTime? dateFromEx, DateTime? dateToEx, int page, int size, string Order = "{}")
+		public async Task<IActionResult> GetReport(string epono, string unit,string roNo, string article,string poSerialNumber,string username,string doNo,string ipoStatus,string supplier, string status, DateTime? dateFrom, DateTime? dateTo, DateTime? dateFromEx, DateTime? dateToEx, int page, int size, string Order = "{}")
 		{
 			int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
 			string accept = Request.Headers["Accept"];
 
 			try
 			{
-
-				var data = facade.GetMonitoringPurchaseReport(epono, unit, roNo, article, poSerialNumber, username, doNo, ipoStatus, supplier, status, dateFrom, dateTo, dateFromEx, dateToEx, page, size, Order, offset);
+				var data = await facade.GetMonitoringPurchaseReport(epono, unit, roNo, article, poSerialNumber, username, doNo, ipoStatus, supplier, status, dateFrom, dateTo, dateFromEx, dateToEx, page, size, Order, offset);
 
 				return Ok(new
 				{
@@ -57,6 +56,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
 				return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
 			}
 		}
+
 		[HttpGet("by-user")]
 		public async Task<IActionResult> GetReportByUser(string epono, string unit, string roNo, string article, string poSerialNumber, string username, string doNo, string ipoStatus, string supplier, string status, DateTime? dateFrom, DateTime? dateTo, DateTime? dateFromEx, DateTime? dateToEx, int page, int size, string Order = "{}")
 		{
@@ -68,7 +68,6 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
 
 			try
 			{
-
 				var result = await facade.GetMonitoringPurchaseReport(epono, unit, roNo, article, poSerialNumber, username, doNo, ipoStatus, supplier, status, dateFrom, dateTo, dateFromEx, dateToEx, page, size, Order, offset);
 
 				return Ok(new
@@ -88,6 +87,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
 				return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
 			}
 		}
+
 		[HttpGet("download")]
 		public async Task<IActionResult> GetXls(string epono, string unit,string roNo, string article,string poSerialNumber,string username,string doNo,string ipoStatus,string supplier, string status, DateTime? dateFrom, DateTime? dateTo, DateTimeOffset? dateFromEx, DateTimeOffset? dateToEx, int page, int size, string Order = "{}")
 		{
@@ -116,6 +116,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
 			}
 
 		}
+
 		[HttpGet("by-user/download")]
 		public async Task<IActionResult> GetXlsByUser(string epono, string unit, string roNo, string article, string poSerialNumber, string username, string doNo, string ipoStatus, string supplier, string status, DateTime? dateFrom, DateTime? dateTo, DateTimeOffset? dateFromEx, DateTimeOffset? dateToEx, int page, int size, string Order = "{}")
 		{
