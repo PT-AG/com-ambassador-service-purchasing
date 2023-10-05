@@ -2240,7 +2240,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
                             ).ToList(),
                 });
 
-            var modelCount = Models.Count();
             var IPOModels = new List<GarmentInternalPurchaseOrder>();
 
             var data = Models.ToList();
