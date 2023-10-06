@@ -2209,10 +2209,12 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
                 }
             }
 
+            var filterBuyer = stringKeywords[1];
             Models = Models
                 .Where(m =>
                     (string.IsNullOrWhiteSpace(stringKeywords[0]) || m.UnitName.ToLower().Contains(stringKeywords[0])) &&
-                    (string.IsNullOrWhiteSpace(stringKeywords[1]) || m.BuyerName.ToLower().Contains(stringKeywords[1])) &&
+                    (string.IsNullOrWhiteSpace(filterBuyer) || m.BuyerName.ToLower().Contains(filterBuyer)) &&
+                    //(string.IsNullOrWhiteSpace(stringKeywords[1]) || m.BuyerName.ToLower().Contains(stringKeywords[1])) &&
                     m.IsUsed == false &&
                     m.IsValidated == true
                     )
@@ -2237,7 +2239,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
                             (string.IsNullOrWhiteSpace(stringKeywords[2]) || i.CategoryName.ToLower().Contains(stringKeywords[2]))
                             ).ToList(),
                 });
-
 
             var IPOModels = new List<GarmentInternalPurchaseOrder>();
 
