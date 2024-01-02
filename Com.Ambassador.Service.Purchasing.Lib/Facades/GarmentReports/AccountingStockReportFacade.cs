@@ -88,6 +88,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                 && a.Date.Date == lastdate.Date
                                 && c.CreatedUtc.Year <= DateTo.Date.Year
                                 && a.UnitCode == (string.IsNullOrWhiteSpace(unitcode) ? a.UnitCode : unitcode)
+                                && a.UnitCode != "SMP1"
                                 && categories1.Contains(b.ProductName)
                                 select new AccountingStockTempViewModel
                                 {
@@ -269,6 +270,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                               && b.CreatedUtc.AddHours(offset).Date < DateFrom.Date
                               && b.UnitCode == (string.IsNullOrWhiteSpace(unitcode) ? b.UnitCode : unitcode)
                               && categories1.Contains(a.ProductName)
+                              && b.UnitCode != "SMP1"
                             select new AccountingStockTempViewModel
                             {
                                 ProductCode = a.ProductCode.Trim(),
@@ -395,6 +397,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                && 
                                b.UnitSenderCode == (string.IsNullOrWhiteSpace(unitcode) ? b.UnitSenderCode : unitcode)
                                && categories1.Contains(a.ProductName)
+                               && b.UnitSenderCode != "SMP1"
                             select new AccountingStockTempViewModel
                             {
                                 ProductCode = a.ProductCode.Trim(),
@@ -520,6 +523,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                              && g.CreatedUtc.AddHours(offset).Date < DateFrom.Date
                              && a.UnitCode == (string.IsNullOrWhiteSpace(unitcode) ? a.UnitCode : unitcode)
                              && categories1.Contains(b.ProductName)
+                             && a.UnitCode != "SMP1"
                              select new AccountingStockTempViewModel
                              {
                                  ProductCode = b.ProductCode.Trim(),
@@ -700,6 +704,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                             && b.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                             && b.UnitCode == (string.IsNullOrWhiteSpace(unitcode) ? b.UnitCode : unitcode)
                             && categories1.Contains(a.ProductName)
+                            && b.UnitCode != "SMP1"
                           select new AccountingStockTempViewModel
                         {
                             ProductCode = a.ProductCode.Trim(),
@@ -823,6 +828,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                              && b.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                              && b.UnitSenderCode == (string.IsNullOrWhiteSpace(unitcode) ? b.UnitSenderCode : unitcode)
                              && categories1.Contains(a.ProductName)
+                             && b.UnitSenderCode != "SMP1"
                           select new AccountingStockTempViewModel
                          {
                              ProductCode = a.ProductCode.Trim(),
@@ -948,6 +954,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                            && g.CreatedUtc.AddHours(offset).Date <= DateTo.Date
                            && a.UnitCode == (string.IsNullOrWhiteSpace(unitcode) ? a.UnitCode : unitcode)
                            && categories1.Contains(b.ProductName)
+                           && a.UnitCode != "SMP1"
                            select new AccountingStockTempViewModel
                            {
                                ProductCode = b.ProductCode.Trim(),
@@ -1172,7 +1179,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 
             var productCodes = string.Join(",", SaldoAkhirs.Select(x => x.ProductCode).Distinct().ToList());
 
-            var Codes = GetProductCode(productCodes);
+            //var Codes = GetProductCode(productCodes);
 
 
             foreach (var i in SaldoAkhirs)
@@ -1181,18 +1188,20 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 //var BeginningBalancePrice = (i.BeginningBalanceQty > 0 && i.BeginningBalancePrice > 0) ? i.BeginningBalancePrice : 0;
                 //var EndingBalanceQty = i.EndingBalanceQty > 0 ? i.EndingBalanceQty : 0;
                 //var EndingBalancePrice = (i.EndingBalanceQty > 0 && i.EndingBalancePrice > 0) ? i.EndingBalancePrice : 0;
-                var remark = Codes.FirstOrDefault(x => x.Code == i.ProductCode);
+                //var remark = Codes.FirstOrDefault(x => x.Code == i.ProductCode);
 
-                var Composition = remark == null ? "-" : remark.Composition;
-                var Width = remark == null ? "-" : remark.Width;
-                var Const = remark == null ? "-" : remark.Const;
-                var Yarn = remark == null ? "-" : remark.Yarn;
-                var Name = remark == null ? "-" : remark.Name;
+                //var Composition = remark == null ? "-" : remark.Composition;
+                //var Width = remark == null ? "-" : remark.Width;
+                //var Const = remark == null ? "-" : remark.Const;
+                //var Yarn = remark == null ? "-" : remark.Yarn;
+                //var Name = remark == null ? "-" : remark.Name;
 
+                var productRemark = dbContext.GarmentUnitReceiptNoteItems.FirstOrDefault(x => x.POSerialNumber == i.PlanPo && x.RONo == i.RO);
                 stockReportViewModels.Add(new AccountingStockReportViewModel
                 {
                     ProductCode = i.ProductCode,
-                    ProductName = ctg == "BB" ? string.Concat(Composition, "", Width, "", Const, "", Yarn) : Name,
+                    //ProductName = ctg == "BB" ? string.Concat(Composition, "", Width, "", Const, "", Yarn) : Name,
+                    ProductName = productRemark != null? productRemark.ProductRemark : "-",
                     RO = i.RO,
                     Buyer = i.Buyer,
                     PlanPo = i.PlanPo,
