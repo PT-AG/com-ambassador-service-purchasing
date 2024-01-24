@@ -305,14 +305,16 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNo
                             if(listEpoNo.Count > 0)
                             {
                                 string lastEpo = listEpoNo.Last();
-                                var LastEPONo= lastEpo.Substring(lastEpo.IndexOf("R")+1);
+                                //var LastEPONo= lastEpo.Substring(lastEpo.IndexOf("R")+1);
+                                var LastEPONo = lastEpo.Substring(lastEpo.Length - 1);
                                 int lastNo= Int32.Parse(LastEPONo) + 1;
                                 EPONo = EPONo + lastNo.ToString();
                                 listEpoNo.Add(EPONo);
                             }
                             else if (existEPO != null )
                             {
-                                var LastEPONo = existEPO.EPONo.Substring(existEPO.EPONo.IndexOf("R") + 1);
+                                //var LastEPONo = existEPO.EPONo.Substring(existEPO.EPONo.IndexOf("R") + 1);
+                                var LastEPONo = existEPO.EPONo.Substring(existEPO.EPONo.Length - 1);
                                 int lastNo = Int32.Parse(LastEPONo) + 1;
                                 EPONo = EPONo + lastNo.ToString();
                                 //int lastNoNumber = Int32.Parse(existEPO.EPONo.Replace(EPONo, string.Empty)) + 1;
