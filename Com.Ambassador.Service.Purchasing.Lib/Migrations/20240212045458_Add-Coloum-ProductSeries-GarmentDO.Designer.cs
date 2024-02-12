@@ -13,9 +13,10 @@ using System;
 namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 {
     [DbContext(typeof(PurchasingDbContext))]
-    partial class PurchasingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240212045458_Add-Coloum-ProductSeries-GarmentDO")]
+    partial class AddColoumProductSeriesGarmentDO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4593,12 +4594,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("Area");
-
-                    b.Property<string>("Box");
-
-                    b.Property<string>("Colour");
-
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -4649,8 +4644,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("Level");
-
                     b.Property<long>("POItemId");
 
                     b.Property<string>("POSerialNumber")
@@ -4675,8 +4668,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<string>("RONo")
                         .HasMaxLength(255);
-
-                    b.Property<string>("Rack");
 
                     b.Property<double>("ReturQuantity");
 
@@ -4821,19 +4812,13 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("Area");
-
                     b.Property<decimal>("BasicPrice")
                         .HasColumnType("decimal(38, 4)");
-
-                    b.Property<string>("Box");
 
                     b.Property<string>("BuyerCode")
                         .HasMaxLength(255);
 
                     b.Property<long>("BuyerId");
-
-                    b.Property<string>("Colour");
 
                     b.Property<decimal>("Conversion")
                         .HasColumnType("decimal(38, 20)");
@@ -4884,8 +4869,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("Level");
-
                     b.Property<long>("POItemId");
 
                     b.Property<string>("POSerialNumber")
@@ -4909,8 +4892,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<string>("RONo")
                         .HasMaxLength(255);
-
-                    b.Property<string>("Rack");
 
                     b.Property<double>("ReturQuantity");
 
@@ -4941,12 +4922,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Active");
-
-                    b.Property<string>("Area");
-
-                    b.Property<string>("Box");
-
-                    b.Property<string>("Colour");
 
                     b.Property<string>("CreatedAgent")
                         .IsRequired()
@@ -4994,8 +4969,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("Level");
-
                     b.Property<long>("POId");
 
                     b.Property<long>("POItemId");
@@ -5016,8 +4989,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
                     b.Property<string>("RO")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Rack");
-
                     b.Property<decimal>("RemainingQuantity");
 
                     b.Property<decimal>("SmallQuantity");
@@ -5026,8 +4997,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<string>("SmallUomUnit")
                         .HasMaxLength(100);
-
-                    b.Property<decimal?>("SplitQuantity");
 
                     b.Property<string>("StorageCode")
                         .HasMaxLength(255);
@@ -5176,12 +5145,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("Area");
-
-                    b.Property<string>("Box");
-
-                    b.Property<string>("Colour");
-
                     b.Property<decimal>("Conversion")
                         .HasColumnType("decimal(38, 20)");
 
@@ -5237,8 +5200,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("Level");
-
                     b.Property<decimal>("OrderQuantity");
 
                     b.Property<long>("POId");
@@ -5270,8 +5231,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Migrations
 
                     b.Property<string>("RONo")
                         .HasMaxLength(255);
-
-                    b.Property<string>("Rack");
 
                     b.Property<decimal>("ReceiptCorrection");
 
