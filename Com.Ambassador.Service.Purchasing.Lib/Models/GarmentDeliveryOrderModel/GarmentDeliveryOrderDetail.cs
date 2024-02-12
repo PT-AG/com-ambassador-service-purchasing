@@ -62,6 +62,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Models.GarmentDeliveryOrderModel
         public double? PriceTotalCorrection { get; set; }
 		public string Uid { get; set; }
         public string CustomsCategory { get; set; }
+        public int? ProductSeries { get; set; }
         public string CodeRequirment { get; set; }
         [ForeignKey("GarmentDOItemId")]
         public virtual GarmentDeliveryOrderItem GarmentDeliveryOrderItem { get; set; }
