@@ -957,14 +957,14 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
 
                 if (item.category == "BB")
                 {
-                    if (datediff >= 27)
+                    if (datediff >= 30)
                     {
                         item.ok_notOk = "OK";
                     }
                 }
                 else if (item.category == "BP")
                 {
-                    if (datediff >= 20)
+                    if (datediff >= 25)
                     {
                         item.ok_notOk = "OK";
                     }
@@ -1286,7 +1286,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                                      }).ToList();
 
                 var total = resultToCount.Count;
-                var okTotal = resultToCount.Count(c => (c.ShipmentDate - c.DODate).Days >= 20);
+                var okTotal = resultToCount.Count(c => (c.ShipmentDate - c.DODate).Days >= 25);
                 var okPercentage = total > 0 ? okTotal / (double)total * 100 : 0;
 
                 var selectedSupplier = selectedGarmentDeliveryOrders.FirstOrDefault(f => f.SupplierId == selectedSupplierId);
@@ -1344,7 +1344,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                                      }).ToList();
 
                 var total = resultToCount.Count;
-                var okTotal = resultToCount.Count(c => (c.ShipmentDate - c.DODate).Days >= 27);
+                var okTotal = resultToCount.Count(c => (c.ShipmentDate - c.DODate).Days >= 30);
                 var okPercentage = total > 0 ? okTotal / (double)total * 100 : 0;
 
                 var selectedSupplier = selectedGarmentDeliveryOrders.FirstOrDefault(f => f.SupplierId == selectedSupplierId);
@@ -1627,7 +1627,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                     RONo = garmentDeliveryOrderDetail.RONo,
                     ShipmentDate = garmentPurchaseRequest.ShipmentDate,
                     DODate = garmentDeliveryOrder.DODate,
-                    OKStatus = (garmentPurchaseRequest.ShipmentDate - garmentDeliveryOrder.DODate).Days >= 20 ? "OK" : "NOT OK",
+                    OKStatus = (garmentPurchaseRequest.ShipmentDate - garmentDeliveryOrder.DODate).Days >= 25 ? "OK" : "NOT OK",
                     Staff = garmentDeliveryOrder.CreatedBy,
                     POSerialNumber = garmentDeliveryOrderDetail.POSerialNumber
                     //Category = cat
@@ -1688,7 +1688,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                     RONo = garmentDeliveryOrderDetail.RONo,
                     ShipmentDate = garmentPurchaseRequest.ShipmentDate,
                     DODate = garmentDeliveryOrder.DODate,
-                    OKStatus = (garmentPurchaseRequest.ShipmentDate - garmentDeliveryOrder.DODate).Days >= 27 ? "OK" : "NOT OK",
+                    OKStatus = (garmentPurchaseRequest.ShipmentDate - garmentDeliveryOrder.DODate).Days >= 30 ? "OK" : "NOT OK",
                     Staff = garmentDeliveryOrder.CreatedBy,
                     POSerialNumber = garmentDeliveryOrderDetail.POSerialNumber
                     //Category = cat
