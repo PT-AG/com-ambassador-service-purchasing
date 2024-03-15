@@ -529,5 +529,45 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentPurchas
                 return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
             }
         }
+
+        [HttpGet("dynamic-subcon")]
+        public IActionResult ReadDynamicForSubconDeliveryOrder(int page = 1, int size = 25, string order = "{}", string keyword = null, string filter = "{}", string select = "{}", string search = "[]")
+        {
+            try
+            {
+                var Data = facade.ReadDynamicForSubconDeliveryOrder(page, size, order, keyword, filter, select, search);
+
+                var newData = mapper.Map<List<GarmentPurchaseRequestViewModel>>(Data.Item1);
+
+                List<object> listData = new List<object>();
+
+
+                foreach (var header in newData)
+                {
+                    listData.AddRange(header.Items);
+                }
+
+                var info = new Dictionary<string, object>
+                    {
+                        { "count", listData.Count},
+                        { "total", Data.Item2 },
+                        { "page", page },
+                        { "size", size }
+                    };
+
+                Dictionary<string, object> Result =
+                     new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                     .Ok(listData, info);
+                return Ok(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
     }
 }
