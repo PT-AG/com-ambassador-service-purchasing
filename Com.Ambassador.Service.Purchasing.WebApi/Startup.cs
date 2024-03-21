@@ -84,6 +84,8 @@ using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubconDeliveryOrderFa
 using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.GarmentSubconUnitReceiptNoteFacades;
 using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.GarmentSubconUnitDeliveryOrderFacades;
 using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.GarmentSubconUnitExpenditureNoteFacade;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.Report.FinishedGoodsMinutes.FinishedGoodsMinutesFacades;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.Report.GarmentReceiptSubconStockReport;
 
 namespace Com.Ambassador.Service.Purchasing.WebApi
 {
@@ -230,7 +232,11 @@ namespace Com.Ambassador.Service.Purchasing.WebApi
                 .AddTransient<IGarmentSubconDeliveryOrderFacades, GarmentSubconDeliveryOrderFacade>()
                 .AddTransient<IGarmentSubconUnitReceiptNoteFacade, GarmentSubconUnitReceiptNoteFacade>()
                 .AddTransient<IGarmentSubconUnitDeliveryOrderFacade, GarmentSubconUnitDeliveryOrderFacades>()
-                .AddTransient<IGarmentSubconUnitExpenditureNoteFacade, GarmentSubconUnitExpenditureNoteFacade>();
+                .AddTransient<IGarmentSubconUnitExpenditureNoteFacade, GarmentSubconUnitExpenditureNoteFacade>()
+                .AddTransient<IFinishedGoodsMinutesFacade, FinishedGoodsMinutesFacade>()
+                .AddTransient<IGarmentReceiptSubconStockReportFacade, GarmentReceiptSubconStockReportFacade>();
+
+
 
         }
 

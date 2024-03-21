@@ -286,63 +286,63 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentSubconD
         }
 
         #region MONITORING DELIVERY ORDER
-        //[HttpGet("monitoring")]
-        //public IActionResult GetReportDO(DateTime? dateFrom, DateTime? dateTo, string no, int page, int size ,string Order = "{}")
-        //{
-        //    try
-        //    {
-        //        int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-        //        string accept = Request.Headers["Accept"];
+        [HttpGet("monitoring")]
+        public IActionResult GetReportDO(DateTime? dateFrom, DateTime? dateTo, string no, int page, int size, string Order = "{}")
+        {
+            try
+            {
+                int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                string accept = Request.Headers["Accept"];
 
-        //        var data = facade.GetReportDO(no, dateFrom, dateTo, page, size, Order, offset);
+                var data = facade.GetReportDO(no, dateFrom, dateTo, page, size, Order, offset);
 
 
-        //        return Ok(new
-        //        {
-        //            apiVersion = ApiVersion,
-        //            data = data.Item1,
-        //            info = new { total = data.Item2 },
-        //            message = General.OK_MESSAGE,
-        //            statusCode = General.OK_STATUS_CODE
-        //        });
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Dictionary<string, object> Result =
-        //            new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
-        //            .Fail();
-        //        return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
-        //    }
-        //}
+                return Ok(new
+                {
+                    apiVersion = ApiVersion,
+                    data = data.Item1,
+                    info = new { total = data.Item2 },
+                    message = General.OK_MESSAGE,
+                    statusCode = General.OK_STATUS_CODE
+                });
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
 
-        //[HttpGet("monitoring/download")]
-        //public IActionResult GetXlsDO(string no,  DateTime? dateFrom, DateTime? dateTo)
-        //{
+        [HttpGet("monitoring/download")]
+        public IActionResult GetXlsDO(string no, DateTime? dateFrom, DateTime? dateTo)
+        {
 
-        //    try
-        //    {
-        //        byte[] xlsInBytes;
-        //        int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-        //        DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
-        //        DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
+            try
+            {
+                byte[] xlsInBytes;
+                int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                DateTime DateFrom = dateFrom == null ? new DateTime(1970, 1, 1) : Convert.ToDateTime(dateFrom);
+                DateTime DateTo = dateTo == null ? DateTime.Now : Convert.ToDateTime(dateTo);
 
-        //        var xls = facade.GenerateExcelDO(no, dateFrom, dateTo, offset);
+                var xls = facade.GenerateExcelDO(no, dateFrom, dateTo, offset);
 
-        //        string filename = String.Format("Surat Jalan - {0}.xlsx", DateTime.UtcNow.ToString("ddMMyyyy"));
+                string filename = String.Format("Surat Jalan - {0}.xlsx", DateTime.UtcNow.ToString("ddMMyyyy"));
 
-        //        xlsInBytes = xls.ToArray();
-        //        var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
-        //        return file;
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                return file;
 
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Dictionary<string, object> Result =
-        //            new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
-        //           .Fail();
-        //        return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
-        //    }
-        //}
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                   .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
         #endregion
 
 

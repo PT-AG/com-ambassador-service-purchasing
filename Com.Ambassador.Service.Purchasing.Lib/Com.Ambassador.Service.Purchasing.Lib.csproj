@@ -28,6 +28,5 @@
   <ItemGroup>
     <Folder Include="Facades\GarmentSubcon\" />
     <Folder Include="Models\GarmentSubcon\" />
-    <Folder Include="ViewModels\GarmentSubcon\" />
   </ItemGroup>
 </Project>
