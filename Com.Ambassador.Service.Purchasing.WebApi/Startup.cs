@@ -79,6 +79,13 @@ using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDispositionPurchaseFa
 using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDispositionPaymentReport;
 using Microsoft.ApplicationInsights.AspNetCore;
 using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentClosingDateFacades;
+using Com.Ambassador.Service.Purchasing.Lib.Interfaces.GarmentSubcon;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubconDeliveryOrderFacades;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.GarmentSubconUnitReceiptNoteFacades;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.GarmentSubconUnitDeliveryOrderFacades;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.GarmentSubconUnitExpenditureNoteFacade;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.Report.FinishedGoodsMinutes.FinishedGoodsMinutesFacades;
+using Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentSubcon.Report.GarmentReceiptSubconStockReport;
 
 namespace Com.Ambassador.Service.Purchasing.WebApi
 {
@@ -221,7 +228,15 @@ namespace Com.Ambassador.Service.Purchasing.WebApi
                 .AddTransient<IGarmentClosingDateFacade, GarmentClosingDateFacade>()
                 .AddTransient<IMonitoringFlowProductFacade, MonitoringFlowProductFacade>()
                 .AddTransient<IBeacukaiNoFeature, BeacukaiNoFeature>()
-                .AddTransient<IRealizationBOMFacade, RealizationBOMFacade>();
+                .AddTransient<IRealizationBOMFacade, RealizationBOMFacade>()
+                .AddTransient<IGarmentSubconDeliveryOrderFacades, GarmentSubconDeliveryOrderFacade>()
+                .AddTransient<IGarmentSubconUnitReceiptNoteFacade, GarmentSubconUnitReceiptNoteFacade>()
+                .AddTransient<IGarmentSubconUnitDeliveryOrderFacade, GarmentSubconUnitDeliveryOrderFacades>()
+                .AddTransient<IGarmentSubconUnitExpenditureNoteFacade, GarmentSubconUnitExpenditureNoteFacade>()
+                .AddTransient<IFinishedGoodsMinutesFacade, FinishedGoodsMinutesFacade>()
+                .AddTransient<IGarmentReceiptSubconStockReportFacade, GarmentReceiptSubconStockReportFacade>();
+
+
 
         }
 

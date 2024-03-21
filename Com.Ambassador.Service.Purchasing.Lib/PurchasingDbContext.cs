@@ -34,6 +34,10 @@ using Com.Ambassador.Service.Purchasing.Lib.Models.BudgetCashflowWorstCaseModel;
 using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentDispositionPurchaseModel;
 using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentClosingDateModels;
 using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentUenUrnChangeDateHistory;
+using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentSubconDeliveryOrderModel;
+using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentSubcon.GarmentSubconUnitReceiptNoteModel;
+using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentSubcon.GarmentUnitDeliveryOrderModel;
+using Com.Ambassador.Service.Purchasing.Lib.Models.GarmentSubcon.GarmentUnitExpenditureNoteModel;
 //using Com.Ambassador.Service.Purchasing.Lib.Models.ImportValueModel;
 
 namespace Com.Ambassador.Service.Purchasing.Lib
@@ -152,6 +156,15 @@ namespace Com.Ambassador.Service.Purchasing.Lib
 
         public DbSet<GarmentClosingDate> ClosingDate { get; set; }
 
+        //SUBCON
+        public DbSet<GarmentSubconDeliveryOrder> GarmentSubconDeliveryOrders { get; set; }
+        public DbSet<GarmentSubconDeliveryOrderItem> GarmentSubconDeliveryOrderItems { get; set; }
+        public DbSet<GarmentSubconUnitReceiptNote> GarmentSubconUnitReceiptNotes { get; set; }
+        public DbSet<GarmentSubconUnitReceiptNoteItem> GarmentSubconUnitReceiptNoteItems { get; set; }
+        public DbSet<GarmentSubconUnitDeliveryOrder> GarmentSubconUnitDeliveryOrders { get; set; }
+        public DbSet<GarmentSubconUnitDeliveryOrderItem> GarmentSubconUnitDeliveryOrderItems { get; set; }
+        public DbSet<GarmentSubconUnitExpenditureNote> GarmentSubconUnitExpenditureNotes { get; set; }
+        public DbSet<GarmentSubconUnitExpenditureNoteItem> GarmentSubconUnitExpenditureNoteItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

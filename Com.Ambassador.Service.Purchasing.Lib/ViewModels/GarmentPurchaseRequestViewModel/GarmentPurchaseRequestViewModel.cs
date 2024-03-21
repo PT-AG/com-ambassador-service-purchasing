@@ -83,7 +83,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentPurchaseReques
                 yield return new ValidationResult("Sales Contract tidak boleh kosong", new List<string> { "SalesContract" });
             }
 
-            if (new string[] { "MASTER", "SAMPLE" }.Contains(PRType))
+            if (new string[] { "MASTER", "SAMPLE" ,"SUBCON" }.Contains(PRType))
             {
                 if (ShipmentDate.Equals(DateTimeOffset.MinValue) || ShipmentDate == null)
                 {
@@ -187,7 +187,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentPurchaseReques
                         itemError += "ProductRemark: 'Design/Color/Keterangan tidak boleh kosong', ";
                     }
 
-                    if (new string[] { "MASTER", "SAMPLE" }.Contains(PRType))
+                    if (new string[] { "MASTER", "SAMPLE", "SUBCON" }.Contains(PRType))
                     {
                         if (item.Category != null && item.Category.Name == "FABRIC")
                         {

@@ -24,4 +24,9 @@
     <PackageReference Include="MongoDB.Driver" Version="2.9.2" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.10" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Facades\GarmentSubcon\" />
+    <Folder Include="Models\GarmentSubcon\" />
+  </ItemGroup>
 </Project>
