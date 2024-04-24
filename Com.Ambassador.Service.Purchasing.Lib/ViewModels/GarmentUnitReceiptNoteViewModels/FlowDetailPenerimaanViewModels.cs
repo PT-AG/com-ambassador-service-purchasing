@@ -25,5 +25,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitReceiptNot
         public double jumlah { get; set; }
         public string tipepembayaran { get; set; }
         public string Jenis { get; set; }
+        public string supplier { get; set; }
     }
 }
