@@ -1755,7 +1755,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
 							 from cc in PO.DefaultIfEmpty()
 							 join g in dbContext.GarmentUnitExpenditureNotes on a.UENId equals g.Id into uen
 							 from gg in uen.DefaultIfEmpty()
-							 where a.IsDeleted == false
+                             where a.IsDeleted == false
 								&& b.IsDeleted == false
 								&& categories1.Contains(b.ProductName)
 								&& a.CreatedUtc.AddHours(offset).Date >= DateFrom.Date
@@ -1779,9 +1779,9 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
 								 jumlah = ((decimal.ToDouble(b.PricePerDealUnit) / (b.Conversion == 0 ? 1 : decimal.ToDouble(b.Conversion))) * b.DOCurrencyRate) * (decimal.ToDouble(b.ReceiptQuantity) * decimal.ToDouble(b.Conversion)),
 								 asal = a.URNType == "PROSES" ? a.URNType : a.URNType == "PEMBELIAN" ? "Pembelian Eksternal" : gg.UnitSenderName,
 								 Jenis = a.URNType,
-								 tipepembayaran = f.PaymentMethod == "FREE FROM BUYER" || f.PaymentMethod == "CMT" || f.PaymentMethod == "CMT / IMPORT" ? "BY" : "BL"
-
-							 });
+								 tipepembayaran = f.PaymentMethod == "FREE FROM BUYER" || f.PaymentMethod == "CMT" || f.PaymentMethod == "CMT / IMPORT" ? "BY" : "BL",
+                                 supplier = f.SupplierCode + " - " + f.SupplierName
+                             });
 
 				var index = 1;
 				foreach (var item in Query)
@@ -1807,8 +1807,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
 							   jumlahterima = (double)item.jumlahterima,
 							   satuanterima = item.satuanterima,
 							   jumlah = item.jumlah,
-							   tipepembayaran = item.tipepembayaran
-
+							   tipepembayaran = item.tipepembayaran,
+                               supplier = item.supplier
 						   });
 
 				}
@@ -1944,6 +1944,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
             //result.Columns.Add(new DataColumn() { ColumnName = "Jenis", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Asal", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Nomor Bukti", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Supplier", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Tanggal", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Jumlah Beli", DataType = typeof(Double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Satuan Beli", DataType = typeof(String) });
@@ -1962,7 +1963,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
             if (Query.ToArray().Count() == 0)
             {
                 //result.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", 0, "", 0, "", 0, ""); // to allow column name to be generated properly for empty data as template
-                result.Rows.Add(0, "", "", "", "", "", "", "", "", "", "", 0, "", 0, "", 0, ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add(0, "", "", "", "", "", "", "", "", "", "","", 0, "", 0, "", 0, ""); // to allow column name to be generated properly for empty data as template
             }
             else
             {
@@ -1971,7 +1972,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
                 {
                     index++;
                     string tgl = data.tanggal == null ? "-" : data.tanggal.ToOffset(new TimeSpan(offset, 0, 0)).ToString("dd MMM yyyy", new CultureInfo("id-ID"));
-                    result.Rows.Add(index, data.kdbarang, data.nmbarang, data.nopo, data.keterangan, data.noro, data.artikel, data.kdbuyer, data.asal, data.nobukti, tgl, data.jumlahbeli, data.satuanbeli, data.jumlahterima, data.satuanterima, data.jumlah, data.tipepembayaran);
+                    result.Rows.Add(index, data.kdbarang, data.nmbarang, data.nopo, data.keterangan, data.noro, data.artikel, data.kdbuyer, data.asal, data.nobukti,data.supplier, tgl, data.jumlahbeli, data.satuanbeli, data.jumlahterima, data.satuanterima, data.jumlah, data.tipepembayaran);
                     ReceiptQtyTotal += data.jumlahterima;
                     PurchaseQtyTotal += data.jumlahbeli;
                     PriceReceiptTotal += (double)data.jumlah;
@@ -2008,20 +2009,20 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
 
             var a = Query.Count();
             sheet.Cells[$"A{6 + a}"].Value = "T O T A L  . . . . . . . . . . . . . . .";
-            sheet.Cells[$"A{6 + a}:K{6 + a}"].Merge = true;
-            sheet.Cells[$"A{6 + a}:K{6 + a}"].Style.Font.Bold = true;
-            sheet.Cells[$"A{6 + a}:K{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
-            sheet.Cells[$"A{6 + a}:K{6 + a}"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            sheet.Cells[$"A{6 + a}:K{6 + a}"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            sheet.Cells[$"L{6 + a}"].Value = PurchaseQtyTotal;
-            sheet.Cells[$"L{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            sheet.Cells[$"A{6 + a}:L{6 + a}"].Merge = true;
+            sheet.Cells[$"A{6 + a}:L{6 + a}"].Style.Font.Bold = true;
+            sheet.Cells[$"A{6 + a}:L{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            sheet.Cells[$"A{6 + a}:L{6 + a}"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            sheet.Cells[$"A{6 + a}:L{6 + a}"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            sheet.Cells[$"M{6 + a}"].Value = PurchaseQtyTotal;
             sheet.Cells[$"M{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
-            sheet.Cells[$"N{6 + a}"].Value = ReceiptQtyTotal;
             sheet.Cells[$"N{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            sheet.Cells[$"O{6 + a}"].Value = ReceiptQtyTotal;
             sheet.Cells[$"O{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
-            sheet.Cells[$"P{6 + a}"].Value = PriceReceiptTotal;
             sheet.Cells[$"P{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            sheet.Cells[$"Q{6 + a}"].Value = PriceReceiptTotal;
             sheet.Cells[$"Q{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            sheet.Cells[$"R{6 + a}"].Style.Border.BorderAround(ExcelBorderStyle.Medium);
 
 
             MemoryStream stream = new MemoryStream();
