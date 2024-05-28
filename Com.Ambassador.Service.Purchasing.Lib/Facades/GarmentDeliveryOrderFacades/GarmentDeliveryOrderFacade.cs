@@ -577,7 +577,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                 {
                     foreach (var detail in item.Details)
                     {
-                        data.TotalAmount += detail.ReceiptQuantity * detail.PricePerDealUnit;
+                        data.TotalAmount += detail.DOQuantity * detail.PricePerDealUnit;
                     }
                 }
             }
