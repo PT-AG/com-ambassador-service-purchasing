@@ -570,6 +570,18 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDeliveryOrderFaca
                     );
             }
 
+            foreach (var data in Query)
+            {
+                data.TotalAmount = 0;
+                foreach (var item in data.Items)
+                {
+                    foreach (var detail in item.Details)
+                    {
+                        data.TotalAmount += detail.DOQuantity * detail.PricePerDealUnit;
+                    }
+                }
+            }
+
             return Query;
         }
 
