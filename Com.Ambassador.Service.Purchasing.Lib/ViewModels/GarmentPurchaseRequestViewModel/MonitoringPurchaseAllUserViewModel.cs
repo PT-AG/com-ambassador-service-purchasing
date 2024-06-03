@@ -93,7 +93,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentPurchaseReques
 		public string SupplierImport { get; set; }
 
 		public int Total { get; set; }
+        public string codeRequirement { get; set; }
 
 
-	}
+    }
 }
