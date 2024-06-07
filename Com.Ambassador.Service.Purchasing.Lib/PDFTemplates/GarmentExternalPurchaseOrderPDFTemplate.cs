@@ -83,7 +83,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
                 cellSupplierLeft.Phrase = new Phrase(viewModel.Supplier.Name, normal_font);
                 tableSupplier.AddCell(cellSupplierLeft);
 
-                cellSupplierRight.Phrase = new Phrase("Sukoharjo, " + viewModel.OrderDate.ToOffset(new TimeSpan(clientTimeZoneOffset, 0, 0)).ToString("dd MMMM yyyy", new CultureInfo("en-EN")), normal_font);
+                cellSupplierRight.Phrase = new Phrase("Sukoharjo, " + viewModel.CreatedUtc.AddHours(7).ToString("dd MMMM yyyy", new CultureInfo("en-EN")), normal_font);
                 tableSupplier.AddCell(cellSupplierRight);
 
                 cellSupplierLeft.Phrase = new Phrase("", normal_font);
@@ -103,7 +103,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
                 cellSupplierLeft.Phrase = new Phrase(viewModel.Supplier.Name, normal_font);
                 tableSupplier.AddCell(cellSupplierLeft);
 
-                cellSupplierRight.Phrase = new Phrase("Sukoharjo, " + viewModel.OrderDate.ToOffset(new TimeSpan(clientTimeZoneOffset, 0, 0)).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
+                cellSupplierRight.Phrase = new Phrase("Sukoharjo, " + viewModel.CreatedUtc.AddHours(7).ToString("dd MMMM yyyy", new CultureInfo("id-ID")), normal_font);
                 tableSupplier.AddCell(cellSupplierRight);
 
                 cellSupplierLeft.Phrase = new Phrase("", normal_font);
