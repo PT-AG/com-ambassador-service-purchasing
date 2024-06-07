@@ -65,7 +65,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentExternalPurchaseO
                     PRId = a.PRId
                 }).ToList(),
                 CreatedBy = s.CreatedBy,
-                LastModifiedUtc = s.LastModifiedUtc
+                LastModifiedUtc = s.LastModifiedUtc,
+                CreatedUtc = s.CreatedUtc.AddHours(7)
             });
 
 
