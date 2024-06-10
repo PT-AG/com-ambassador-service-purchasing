@@ -76,10 +76,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentExternalPurcha
                 yield return new ValidationResult("DeliveryDate is required", new List<string> { "DeliveryDate" });
             }
 
-            else if (this.OrderDate != null && this.OrderDate > this.DeliveryDate)
-            {
-                yield return new ValidationResult("OrderDate is greater than delivery date", new List<string> { "DeliveryDate" });
-            }
+            //else if (this.OrderDate != null && this.OrderDate > this.DeliveryDate)
+            //{
+            //    yield return new ValidationResult("OrderDate is greater than delivery date", new List<string> { "DeliveryDate" });
+            //}
 
             if (Category == "FABRIC")
             {
