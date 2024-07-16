@@ -100,7 +100,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentPurchaseRequestFa
                 Id = s.Id,
                 UId = s.UId,
                 RONo = s.RONo,
-                MDStaff = s.MDStaff,
+                MDStaff = s.PRType == "MASTER" || s.PRType == "SAMPLE" ? s.CreatedBy : s.MDStaff,
                 PRNo = s.PRNo,
                 Article = s.Article,
                 Date = s.Date,
