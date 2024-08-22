@@ -12,6 +12,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
 {
@@ -80,6 +81,37 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             else
             {
                 return null;
+            }
+        }
+
+        private async Task<List<GarmentProductViewModel>> GetCompotitionByCode(string codes)
+        {
+            IHttpClientService httpClient = (IHttpClientService)this.serviceProvider.GetService(typeof(IHttpClientService));
+
+            var garmentProductionUri = APIEndpoint.Core + $"master/garmentProducts/byCode?code=" + codes;
+
+            var httpResponse = httpClient.GetAsync(garmentProductionUri).Result;
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                var content = httpResponse.Content.ReadAsStringAsync().Result;
+                Dictionary<string, object> result = JsonConvert.DeserializeObject<Dictionary<string, object>>(content);
+
+                List<GarmentProductViewModel> viewModel;
+                if (result.GetValueOrDefault("data") == null)
+                {
+                    viewModel = new List<GarmentProductViewModel>();
+                }
+                else
+                {
+                    viewModel = JsonConvert.DeserializeObject<List<GarmentProductViewModel>>(result.GetValueOrDefault("data").ToString());
+
+                }
+                return viewModel;
+            }
+            else
+            {
+                List<GarmentProductViewModel> viewModel = new List<GarmentProductViewModel>();
+                return viewModel;
             }
         }
 
@@ -788,10 +820,22 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
             //mm.OpnameQty = 0;
             //mm.Diff = 0;
 
+
+
             var mutation2 = new List<MutationBBCentralViewModel>();
+
+            var Codes = GetCompotitionByCode(string.Join(",", mutation.Select(x => x.ItemCode).ToHashSet()));
 
             foreach (var i in mutation)
             {
+                var remark = Codes.Result.FirstOrDefault(x => x.Code == i.ItemCode);
+
+                var Composition = remark == null ? "-" : remark.Composition;
+                var Width = remark == null ? "-" : remark.Width;
+                var Const = remark == null ? "-" : remark.Const;
+                var Yarn = remark == null ? "-" : remark.Yarn;
+                var Name = remark == null ? "-" : remark.Name;
+
                 var AdjustmentQty = i.AdjustmentQty > 0 ? i.AdjustmentQty : 0;
                 var BeginQty = i.BeginQty > 0 ? i.BeginQty : 0;
                 var ExpenditureQty = i.ExpenditureQty > 0 ? i.ExpenditureQty : 0;
@@ -805,7 +849,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     BeginQty = BeginQty,
                     ExpenditureQty = i.ExpenditureQty,
                     ItemCode = i.ItemCode,
-                    ItemName = i.ItemName,
+                    ItemName = remark != null ? string.Concat(i.ItemName, " - ", Composition, "", Width, "", Const, "", Yarn) : i.ItemName,
                     LastQty = i.LastQty,
                     ReceiptQty = i.ReceiptQty,
                     SupplierType = i.SupplierType,
