@@ -824,10 +824,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                 var remark = Codes.Result.FirstOrDefault(x => x.Code == i.ItemCode);
 
                 var Composition = remark == null ? "-" : remark.Composition;
-                var Width = remark == null ? "-" : remark.Width;
-                var Const = remark == null ? "-" : remark.Const;
-                var Yarn = remark == null ? "-" : remark.Yarn;
-                var Name = remark == null ? "-" : remark.Name;
+                //var Width = remark == null ? "-" : remark.Width;
+                //var Const = remark == null ? "-" : remark.Const;
+                //var Yarn = remark == null ? "-" : remark.Yarn;
+                //var Name = remark == null ? "-" : remark.Name;
 
                 var AdjustmentQty = i.AdjustmentQty > 0 ? i.AdjustmentQty : 0;
                 var BeginQty = i.BeginQty > 0 ? i.BeginQty : 0;
@@ -842,7 +842,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                     BeginQty = BeginQty,
                     ExpenditureQty = i.ExpenditureQty,
                     ItemCode = i.ItemCode,
-                    ItemName = remark != null ? string.Concat(i.ItemName, " - ", Composition, "", Width, "", Const, "", Yarn) : i.ItemName,
+                    ItemName = remark != null ? string.Concat(i.ItemName, " - ", Composition /*"", Width, "", Const, "", Yarn*/) : i.ItemName,
                     LastQty = i.LastQty,
                     ReceiptQty = i.ReceiptQty,
                     SupplierType = i.SupplierType,
