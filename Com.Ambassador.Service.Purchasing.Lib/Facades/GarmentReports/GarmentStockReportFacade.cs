@@ -502,7 +502,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                           PaymentMethod = i.PaymentMethod,
                           PlanPo = i.PlanPo,
                           ProductCode = i.ProductCode,
-                          ProductRemark = ctg == "BB" ? string.Concat((bb == null ? "-" : bb.Composition), "", (bb == null ? "-" : bb.Width), "", (bb == null ? "-" : bb.Const), "", (bb == null ? "-" : bb.Yarn)) : bb.Name,
+                          ProductRemark = ctg == "BB" ? string.Concat((bb == null ? "-" : bb.Composition), "", (bb == null ? "-" : bb.Width), "", (bb == null ? "-" : bb.Const), "", (bb == null ? "-" : bb.Yarn)) : (bb == null ? "-":bb.Name),
                           ReceiptCorrectionQty = i.ReceiptCorrectionQty,
                           ReceiptQty = i.ReceiptQty,
                           ReceiptUom = i.ReceiptUom,
