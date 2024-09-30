@@ -174,7 +174,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                 //BeginningBalanceQty = Convert.ToDecimal(a.UomUnit == "YARD" && ctg == "BB" ? a.Quantity * -1 * 0.9144 : b.ExpenditureType == "EXTERNAL" ? Convert.ToDouble(urnitem == null ? 0 : urnitem.SmallQuantity) * -1 : -1 * a.Quantity),
                                 BeginningBalanceQty = a.UomUnit == "YARD" && ctg == "BB" ? Convert.ToDecimal(a.Quantity * -1 * 0.9144) : (b.ExpenditureType == "EXTERNAL" && a.UomUnit != "PCS" && ctg != "BB") ? Convert.ToDecimal(a.Quantity) /*/ urnitem.Conversion */* -1 : -1 * Convert.ToDecimal(a.Quantity),
                                 BeginningBalanceUom = a.UomUnit == "YARD" && ctg == "BB" ? "MT" : b.ExpenditureType == "EXTERNAL" ? urnitem.SmallUomUnit : a.UomUnit.Trim(),
-                                Buyer = a.BuyerCode == null ? "-" : a.BuyerCode,
+                                Buyer = prs != null ? prs.BuyerCode.Trim() : "-",
                                 EndingBalanceQty = 0,
                                 EndingUom = a.UomUnit == "YARD" && ctg == "BB" ? "MT" : b.ExpenditureType == "EXTERNAL" ? urnitem.SmallUomUnit : a.UomUnit.Trim(),
                                 ExpandUom = a.UomUnit == "YARD" && ctg == "BB" ? "MT" : b.ExpenditureType == "EXTERNAL" ? urnitem.SmallUomUnit : a.UomUnit.Trim(),
