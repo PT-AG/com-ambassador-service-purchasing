@@ -16,8 +16,10 @@ using Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentUnitReceiptNoteVie
 using Com.Ambassador.Service.Purchasing.Lib.ViewModels.NewIntegrationViewModel;
 using Com.Moonlay.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -598,6 +600,111 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitReceiptNoteFa
             MemoryStream stream = new MemoryStream();
             package.SaveAs(stream);
             return stream;
+        }
+
+        public async Task<List<PARackingViewModel>> GetPARackingQuery(string Keyword = null)
+        {
+            var doItemQuery = from aa in dbSetGarmentDOItems
+                              where aa.ProductName.Equals("FABRIC") && aa.IsDeleted == false
+                              && (aa.RO.Contains(Keyword) || aa.POSerialNumber.Contains(Keyword))
+                              select aa;
+
+            var QueryReceipt = (from a in doItemQuery
+                                join b in dbSetGarmentUnitReceiptNoteItem on a.URNItemId equals b.Id
+                                join c in dbSetGarmentUnitReceiptNote on b.URNId equals c.Id
+                                where a.IsDeleted == false && b.IsDeleted == false
+                                select new PARackingViewModel
+                                {
+                                    POSerialNumber = a.POSerialNumber,
+                                    QtyReceipt = a.SplitQuantity.HasValue ? decimal.Round(a.SplitQuantity.Value, 2) : decimal.Round(a.SmallQuantity, 2),
+                                    UomReceipt = a.SmallUomUnit,
+                                    Colour = a.Colour,
+                                    Rack = a.Rack,
+                                    ReceiptDate = a.CreatedUtc.ToString("dd MMM yyyy", new CultureInfo("id-ID")),
+                                    ExpenditureDate = "-",
+                                    QtyExpenditure = 0,
+                                    QtyRemaining = 0,
+                                    Description = b.ProductRemark,
+                                    Supplier = c.SupplierName ?? "-",
+                                    ProductId = a.ProductId,
+                                    RoNo = a.RO,
+                                    Type=c.URNType,
+                                    ProductName=a.ProductName,
+                                    id=a.Id
+                                }).GroupBy(x => new { x.POSerialNumber, x.id, x.ProductName, x.UomReceipt, x.Colour, x.Rack, x.ReceiptDate, x.ExpenditureDate, x.QtyExpenditure, x.QtyRemaining, x.Description, x.Supplier, x.ProductId,x.RoNo, x.Type }, (key, group) => new PARackingViewModel
+                                {
+                                    POSerialNumber = key.POSerialNumber,
+                                    QtyReceipt = group.Sum(x => x.QtyReceipt),
+                                    UomReceipt = key.UomReceipt,
+                                    Colour = key.Colour,
+                                    Rack = key.Rack,
+                                    ReceiptDate = key.ReceiptDate,
+                                    ExpenditureDate = key.ExpenditureDate,
+                                    QtyExpenditure = key.QtyExpenditure,
+                                    QtyRemaining = key.QtyRemaining,
+                                    Description = key.Description,
+                                    Supplier = key.Supplier,
+                                    ProductId = key.ProductId,
+                                    RoNo=key.RoNo,
+                                    Type=key.Type,
+                                    //Quantity= group.Sum(x => x.Quantity),
+                                    ProductName= key.ProductName,
+                                    id=key.id,
+                                });
+
+            var QueryExpend = (from a in doItemQuery
+                               join d in garmentUnitDeliveryOrderItems on a.Id equals d.DOItemsId
+                               join e in garmentUnitDeliveryOrders on d.UnitDOId equals e.Id
+                               join b in garmentUnitExpenditureNoteItems on d.Id equals b.UnitDOItemId
+                               join c in garmentUnitExpenditureNotes on b.UENId equals c.Id
+                               where a.ProductName.Equals("FABRIC")
+                               && c.UnitSenderCode == a.UnitCode
+                                && a.IsDeleted == false && b.IsDeleted == false
+                                && c.IsDeleted == false
+                                && d.IsDeleted == false
+                               && e.IsDeleted == false
+                               && b.Colour != (null)
+                               select new PARackingViewModel
+                               {
+                                   QtyReceipt = 0,
+                                   id =a.Id,
+                                   POSerialNumber = a.POSerialNumber,
+                                   UomExpenditure = b.UomUnit,
+                                   Colour = a.Colour,
+                                   Rack = a.Rack,
+                                   ReceiptDate = "-",
+                                   ExpenditureDate = b.CreatedUtc.ToString("dd MMM yyyy", new CultureInfo("id-ID")),
+                                   QtyExpenditure = Math.Round((decimal)b.Quantity, 2)*(-1),
+                                   QtyRemaining = 0,
+                                   ProductName = a.ProductName,
+                                   Description = b.ProductRemark,
+                                   RoNo = a.RO,
+                               });
+
+            var data = QueryReceipt.Union(QueryExpend).AsEnumerable();
+            var result= data.GroupBy(x=> new { x.POSerialNumber, x.id, x.ProductName, x.Colour, x.Rack, x.RoNo }, (key, group) => new PARackingViewModel
+            {
+                POSerialNumber = key.POSerialNumber,
+                QtyReceipt = group.Sum(x => x.QtyReceipt),
+                UomReceipt = group.FirstOrDefault().UomReceipt ,
+                Colour = key.Colour ?? "-",
+                Rack = key.Rack ?? "-",
+                ReceiptDate = group.FirstOrDefault().ReceiptDate ,
+                ExpenditureDate = group.FirstOrDefault().ExpenditureDate ?? "-",
+                QtyExpenditure = group.Sum(x => x.QtyExpenditure*-1),
+                QtyRemaining = group.Sum(x => x.QtyReceipt+ x.QtyExpenditure),
+                Description = group.FirstOrDefault().Description,
+                Supplier = group.FirstOrDefault().Supplier,
+                UomRemaining = group.FirstOrDefault().UomReceipt,
+                RoNo = key.RoNo,
+                Type = group.FirstOrDefault().Type,
+                UomExpenditure= group.FirstOrDefault().UomExpenditure ?? "-" ,
+                ProductName = key.ProductName,
+                id = key.id,
+            });
+            
+            return result.ToList();
+
         }
     }
 }
