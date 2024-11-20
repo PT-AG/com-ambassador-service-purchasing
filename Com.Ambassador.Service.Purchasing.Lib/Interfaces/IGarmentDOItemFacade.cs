@@ -17,5 +17,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Interfaces
         Task<List<StellingEndViewModels>> GetStellingQuery(int id, int offset);
         MemoryStream GenerateExcel(string productcode, string po, string unitcode);
         MemoryStream GeneratePdf(List<StellingEndViewModels> stellingEndViewModels);
+        Task<List<PARackingViewModel>> GetPARackingQuery(string Keyword = null);
     }
 }
