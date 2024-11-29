@@ -124,7 +124,19 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
 
                         GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
                         if (garmentDOItems != null)
-                            garmentDOItems.RemainingQuantity -= (decimal)garmentUnitDeliveryOrderItem.Quantity;
+                        {
+                            var diffQty = garmentDOItems.RemainingQuantity - (decimal)garmentUnitDeliveryOrderItem.Quantity;
+                            if (diffQty < 0)
+                            {
+                                throw new Exception("Jumlah barang yang dimasukkan melebihi sisa barang yang ada");
+                            }
+                            else
+                            {
+                                garmentDOItems.RemainingQuantity -= (decimal)garmentUnitDeliveryOrderItem.Quantity;
+                                dbContext.GarmentDOItems.Update(garmentDOItems);
+                            }
+                        }
+                            
                     }
 
                     dbSet.Add(garmentUnitDeliveryOrder);
@@ -192,7 +204,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
 
                         GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
                         if (garmentDOItems != null)
+                        { 
                             garmentDOItems.RemainingQuantity += (decimal)garmentUnitDeliveryOrderItem.Quantity;
+                            dbContext.GarmentDOItems.Update(garmentDOItems);
+                        }
                     }
 
                     Deleted = await dbContext.SaveChangesAsync();
@@ -252,8 +267,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
 
                             GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
                             if (garmentDOItems != null)
+                            {
                                 garmentDOItems.RemainingQuantity = garmentDOItems.RemainingQuantity + (decimal)oldGarmentUnitDeliveryOrderItem.Quantity - (decimal)garmentUnitDeliveryOrderItem.Quantity;
-
+                                dbContext.GarmentDOItems.Update(garmentDOItems);
+                            }
                             oldGarmentUnitDeliveryOrderItem.Quantity = garmentUnitDeliveryOrderItem.Quantity;
                             oldGarmentUnitDeliveryOrderItem.ReturQuantity = garmentUnitDeliveryOrderItem.ReturQuantity;
                             oldGarmentUnitDeliveryOrderItem.DefaultDOQuantity = garmentUnitDeliveryOrderItem.DefaultDOQuantity;
@@ -273,8 +290,18 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
 
                             GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == garmentUnitDeliveryOrderItem.URNItemId);
                             if (garmentDOItems != null)
-                                garmentDOItems.RemainingQuantity = garmentDOItems.RemainingQuantity - (decimal)garmentUnitDeliveryOrderItem.Quantity;
-
+                            {
+                                var diffQty = garmentDOItems.RemainingQuantity - (decimal)garmentUnitDeliveryOrderItem.Quantity;
+                                if (diffQty < 0)
+                                {
+                                    throw new Exception("Jumlah barang yang dimasukkan melebihi sisa barang yang ada");
+                                }
+                                else
+                                {
+                                    garmentDOItems.RemainingQuantity -= (decimal)garmentUnitDeliveryOrderItem.Quantity;
+                                    dbContext.GarmentDOItems.Update(garmentDOItems);
+                                }
+                            }
                         }
                     }
 
@@ -294,8 +321,10 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitDeliveryOrder
 
                             GarmentDOItems garmentDOItems = dbContext.GarmentDOItems.SingleOrDefault(x => x.URNItemId == oldGarmentUnitDeliveryOrderItem.URNItemId);
                             if (garmentDOItems != null)
-                                garmentDOItems.RemainingQuantity = garmentDOItems.RemainingQuantity + (decimal)oldGarmentUnitDeliveryOrderItem.Quantity;
-
+                            {
+                                garmentDOItems.RemainingQuantity += (decimal)oldGarmentUnitDeliveryOrderItem.Quantity;
+                                dbContext.GarmentDOItems.Update(garmentDOItems);
+                            }
                         }
                     }
 
