@@ -12,7 +12,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentUnitRec
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/garment-do-items")]
-    //[Authorize]
+    [Authorize]
     public class GarmentDOItemController : Controller
     {
         private string ApiVersion = "1.0.0";
@@ -256,7 +256,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentUnitRec
                 //var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
 
                 int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
-                //identityService.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
+                identityService.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
                 var result = facade.GetPARackingNonFabricQuery(keyword);
 
                 Dictionary<string, object> Result =
