@@ -225,7 +225,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                              && a.UnitCode != "SMP1"
                              select new GarmentStockReportViewModelTemp
                              {
-                                 BeginningBalanceQty = Math.Round((decimal)e.SmallQuantity, 2, MidpointRounding.AwayFromZero),
+                                 BeginningBalanceQty = g.CorrectionType != "Konversi" ? Math.Round((decimal)e.SmallQuantity, 2, MidpointRounding.AwayFromZero) : Math.Round((decimal)e.SmallQuantity - b.SmallQuantity),
                                  BeginningBalanceUom = b.SmallUomUnit.Trim(),
                                  Buyer = prs != null ? prs.BuyerCode.Trim() : "-",
                                  EndingBalanceQty = 0,
@@ -413,7 +413,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentReports
                                PlanPo = b.POSerialNumber,
                                ProductCode = b.ProductCode,
                                //ProductName = b.ProductName,
-                               ReceiptCorrectionQty = (decimal)e.SmallQuantity,
+                               ReceiptCorrectionQty = g.CorrectionType != "Konversi" ? Math.Round((decimal)e.SmallQuantity, 2, MidpointRounding.AwayFromZero) : Math.Round((decimal)e.SmallQuantity - b.SmallQuantity),
                                ReceiptQty = 0,
                                ReceiptUom = b.SmallUomUnit,
                                RO = b.RONo
