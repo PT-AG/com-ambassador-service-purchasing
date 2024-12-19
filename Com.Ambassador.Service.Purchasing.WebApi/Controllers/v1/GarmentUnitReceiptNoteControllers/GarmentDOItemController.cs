@@ -16,7 +16,7 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentUnitRec
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/garment-do-items")]
-    [Authorize]
+    //[Authorize]
     public class GarmentDOItemController : Controller
     {
         private string ApiVersion = "1.0.0";
@@ -242,6 +242,32 @@ namespace Com.Ambassador.Service.Purchasing.WebApi.Controllers.v1.GarmentUnitRec
                     .Ok(result.Result);
                 return Ok(Result);
                 
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("garment-powerapps-racking/non-fabric")]
+        public IActionResult GetStellingNonFabric(string keyword)
+        {
+            try
+            {
+                //var indexAcceptPdf = Request.Headers["Accept"].ToList().IndexOf("application/pdf");
+
+                int offset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
+                //identityService.Token = Request.Headers["Authorization"].First().Replace("Bearer ", "");
+                var result = facade.GetPARackingNonFabricQuery(keyword);
+
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(result.Result);
+                return Ok(Result);
+
             }
             catch (Exception e)
             {
