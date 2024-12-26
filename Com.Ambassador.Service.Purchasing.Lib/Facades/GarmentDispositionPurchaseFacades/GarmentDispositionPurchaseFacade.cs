@@ -495,7 +495,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDispositionPurcha
                             {
                                 if (t.QTYRemains <= 0)
                                 {
-                                    var EPOItems2 = this.dbContext.GarmentExternalPurchaseOrderItems.AsNoTracking().Where(a => a.Id == t.EPO_POId).FirstOrDefault();
+                                    var EPOItems2 = this.dbContext.GarmentExternalPurchaseOrderItems.Where(a => a.Id == t.EPO_POId).FirstOrDefault();
                                     EPOItems2.IsDispositionCreatedAll = true;
                                     EntityExtension.FlagForUpdate(EPOItems2, identityService.Username, USER_AGENT);
                                     this.dbContext.GarmentExternalPurchaseOrderItems.Update(EPOItems2);
@@ -560,7 +560,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentDispositionPurcha
                         EntityExtension.FlagForDelete(EPOItems, identityService.Username, USER_AGENT);
                         var afterDeletedItems = this.dbContext.GarmentDispositionPurchaseItems.Update(EPOItems);
 
-                        var EPO = this.dbContext.GarmentExternalPurchaseOrderItems.AsNoTracking().Where(a => a.GarmentEPOId == t.EPOId).ToList();
+                        var EPO = this.dbContext.GarmentExternalPurchaseOrderItems.Where(a => a.GarmentEPOId == t.EPOId).ToList();
                         foreach (var item in EPO)
                         {
                             item.IsDispositionCreatedAll = false;
