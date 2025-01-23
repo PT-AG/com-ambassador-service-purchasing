@@ -391,6 +391,8 @@ namespace Com.Ambassador.Service.Purchasing.Lib.Facades.GarmentUnitExpenditureNo
                             SupplierName = garmentDeliveryOrder.SupplierName,
                             UseIncomeTax = (bool)garmentDeliveryOrder.UseIncomeTax,
                             UseVat = (bool)garmentDeliveryOrder.UseVat,
+                            VatId = garmentDeliveryOrder.UseVat == true ? Convert.ToString(garmentDeliveryOrder.VatId) : null,
+                            VatRate = garmentDeliveryOrder.UseVat == true ? Convert.ToString(garmentDeliveryOrder.VatRate) : null,
                             TotalCorrection = totalPrice,
                             Items = correctionNoteItems
                         };
