@@ -2,6 +2,7 @@
 using Com.Ambassador.Service.Purchasing.Lib.ViewModels.PurchasingDispositionViewModel;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -69,9 +70,19 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             double dpp = 0;
             foreach (var item in viewModel.Items)
             {
+                var rate = item.vatTax.rate;
                 foreach (var detail in item.Details)
                 {
-                    dpp += detail.PaidPrice;
+                    //dpp += detail.PaidPrice;
+
+                    if (rate == "12")
+                    {
+                        dpp += detail.PaidPrice * 11 / 12;
+                    }
+                    else
+                    {
+                        dpp += detail.PaidPrice;
+                    }
                 }
             }
 
@@ -82,6 +93,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
 
             foreach (var item in viewModel.Items)
             {
+                var rate = item.vatTax.rate;
                 if (!item.UseVat)
                 {
                     ppn = 0;
@@ -89,7 +101,16 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
                 else
                 {
                     ppnRate = (Convert.ToDouble(item.vatTax.rate) / 100);
-                    ppn = (dpp * (Convert.ToDouble(item.vatTax.rate) / 100));
+                    //ppn = (dpp * (Convert.ToDouble(item.vatTax.rate) / 100));
+                    if (item.vatTax.rate == "12")
+                    {
+                        ppn = (dpp * 0.12 * 11 / 12);
+                    }
+                    else
+                    {
+                        ppn = (dpp * (Convert.ToDouble(item.vatTax.rate) / 100));
+                    }
+
                 }
                 if (item.UseIncomeTax)
                 {
