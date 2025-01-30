@@ -108,7 +108,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
                     var vatRatDouble = Convert.ToDouble(item.VatRate) / 100;
                     if (item.VatRate == "12")
                     {
-                        ppn = dpp * 0.12 * 11 / 12;
+                        ppn = dpp * 0.12 ;
                     }
                     else
                     {
@@ -225,7 +225,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.PDFTemplates
             tableIdentity.AddCell(cellLeftNoBorder);
 
             cellLeftNoBorder.Colspan = 0;
-            cellLeftNoBorder.Phrase = new Phrase("(PPn)", normal_font);
+            cellLeftNoBorder.Phrase = new Phrase("DPP", normal_font);
             tableIdentity.AddCell(cellLeftNoBorder);
             cellLeftNoBorder.Phrase = new Phrase(":", normal_font);
             tableIdentity.AddCell(cellLeftNoBorder);
