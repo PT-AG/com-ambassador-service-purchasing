@@ -23,6 +23,7 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentReports
         public decimal EndingBalanceQty { get; set; }
         public string EndingUom { get; set; }
         public string PaymentMethod { get; set; }
+        public string Facilities { get; set; }
     }
 
     public class GarmentStockReportViewModelTemp
@@ -43,5 +44,6 @@ namespace Com.Ambassador.Service.Purchasing.Lib.ViewModels.GarmentReports
         public decimal EndingBalanceQty { get; set; }
         public string EndingUom { get; set; }
         public string PaymentMethod { get; set; }
+        public string Facilities { get; set; }
     }
 }
